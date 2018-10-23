@@ -1,6 +1,5 @@
-//testing all things
 
-#include "leit_comandos.h"
+#include "main.h"
 #include "comands.h"
 
 
