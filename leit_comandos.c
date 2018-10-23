@@ -1,7 +1,8 @@
 //testing all things
 
-
+#include "leit_comandos.h"
 #include "comands.h"
+
 
 int fd_global;
 login_t * h = NULL;
@@ -130,7 +131,7 @@ void comandos(jogo * g){
 						}
 			}
 			else
-				printf("There are no clientes connected!!!!\n");
+				printf("There are no clients connected!!!!\n");
       continue;
     }
 
