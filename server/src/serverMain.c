@@ -66,6 +66,18 @@ void commands() {
 		continue;
 	}
 
+	if (!strcmp("help", arg[0])) {
+		printf("You've selected help:\n");
+		printf("'settings' will display the current system settings.\n");
+		printf("'load <filename>' will load the content of <filename>.\n");
+		printf("'save <filename>' will save what's being editted in <filename>.\n");
+		printf("'free <linenumber>' erase contents of <linenumber>.\n");
+		printf("'statistics' will display some statistics by the second while waiting for another command.\n");
+		printf("'users' will a list of what users are logged in, by order of arrival.\n");
+		printf("'text' will the current text on client side.\n");
+		printf("'shutdown' will quit without saving.\n");
+		continue;
+	}
 
 
 }
