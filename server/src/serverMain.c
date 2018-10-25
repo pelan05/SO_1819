@@ -20,6 +20,54 @@ int findUser(char* user, char* filename) {
 
 void commands() {
 
+	/*
+	char cmd[50], *arg[3];
+	int argSize;
+	*/
+
+
+	if (!strcmp("settings", arg[0])) {
+		printf("You've select Settings\n");
+		continue;
+	}
+
+	if (!strcmp("load", arg[0])) {
+		printf("You've select Settings\n");
+		continue;
+	}
+
+	if (!strcmp("save", arg[0])) {
+		printf("You've select Settings\n");
+		continue;
+	}
+
+	if (!strcmp("free", arg[0])) {
+		printf("You've select free\n");
+		continue;
+	}
+
+	if (!strcmp("statistics", arg[0])) {
+		printf("You've select Settings\n");
+		continue;
+	}
+
+	if (!strcmp("users", arg[0])) {
+		printf("You've select Settings\n");
+		continue;
+	}
+
+	if (!strcmp("text", arg[0])) {
+		printf("You've select Settings\n");
+		continue;
+	}
+
+	if (!strcmp("shutdown", arg[0])) {
+		printf("You've select Settings\n");
+		continue;
+	}
+
+
+
 }
 
 
