@@ -2,16 +2,17 @@
 #define LEIT_COMANDOS
 
 //buffer de tamanho do username
-#DEFINE TAMBUFFER 8
+#define TAMBUFFER 8
 
 //defines de leitura de comandos
-#DEFINE CMDSIZE 50
-#DEFINE ARGSIZE 20
+#define CMDSIZE 50
+#define ARGSIZE 20
 
 //medit defines
 #define MEDIT_TIMEOUT 10
 #define MEDIT_MAXLINES 15
 #define MEDIT_MAXCOLUMNS 45
+#define MEDIT_DEFAULT_NAME "medit.db"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,5 +37,7 @@ typedef struct user{
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
+
+int findUser(char* user, char* filename);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
 
 #endif
