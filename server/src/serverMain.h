@@ -37,7 +37,7 @@ typedef struct user{
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
-
+void commands();
 int findUser(char* user, char* filename);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
 
 #endif

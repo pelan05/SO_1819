@@ -18,8 +18,12 @@ int findUser(char* user, char* filename) {
 	return 0;
 }
 
+void commands() {
 
-int main(int argc, char const *argv[]){
+}
+
+
+int main(int argc, char const *argv[], char* envp[]){
 
     
 
