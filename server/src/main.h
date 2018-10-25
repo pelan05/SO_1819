@@ -17,9 +17,13 @@
 typedef struct ecra{
     int MEDIT_MAXLINES;
     int MEDIT_MAXCOLUMNS;
-
-
 } ecra;
+
+typedef struct user{
+    char nome[];
+    char password[];
+
+}user;
 
 
 //---------------------------------------------------------------------------
