@@ -39,7 +39,7 @@ void commands(settings s) {
 		n = 0;
 
 		while (arg[n]) {
-			putchar(tolower(arg[n]));
+			arg[n] = tolower(arg[n]));
 			n++;
 	}
 			
@@ -47,10 +47,12 @@ void commands(settings s) {
 		if (!strcmp("settings", arg[0])) {
 			printf("Text editor settings:\n");
 			printf("Timeout: %d\n", s.timeout);
+			printf("Maximum amount of user pipes: %d\n", s.maxPipes);
 			printf("Maximum amount of users: %d\n", s.maxUsers);
 			printf("Maximum amount of lines: %d\n", s.e.max_l);
 			printf("Maximum amount of columns: %d\n", s.e.max_c);
 			printf("Name of the database: %s", s.database);
+			printf("Name of the server pipe: %s", s.mainPipe);
 			continue;
 		}
 
@@ -108,11 +110,13 @@ void commands(settings s) {
 settings initSettings(settings s){
 
 	//Inicializar valores por defeito
-	strcpy(s.database, MEDIT_DEFAULT_NAME);
-	s.e.max_c = MEDIT_MAXCOLUMNS;
-	s.e.max_l = MEDIT_MAXLINES;
 	s.timeout = MEDIT_TIMEOUT;
 	s.maxUsers = MEDIT_MAXUSERS;
+	s.maxPipes = MEDIT_MAXPIPES;
+	s.e.max_c = MEDIT_MAXCOLUMNS;
+	s.e.max_l = MEDIT_MAXLINES;
+	strcpy(s.database, MEDIT_DEFAULT_NAME);
+	strcpy(s.mainPipe, MEDIT_MAIN_PIPE_DEFAULT_NAME);
 
 	//Substituir pelas variaveis de ambiente caso existam
 

@@ -10,10 +10,12 @@
 
 //medit defines
 #define MEDIT_TIMEOUT 10
+#define MEDIT_MAXPIPES 3
 #define MEDIT_MAXUSERS 3
 #define MEDIT_MAXLINES 15
 #define MEDIT_MAXCOLUMNS 45
 #define MEDIT_DEFAULT_NAME "medit.db"
+#define MEDIT_MAIN_PIPE_DEFAULT_NAME "serverPipe"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,8 +36,10 @@ typedef struct ecra{
 typedef struct settings {
 	int timeout;
 	int maxUsers;
+	int maxPipes;
 	ecra e;
 	char* database;
+	char* mainPipe;
 } settings;
 
 typedef struct user{
