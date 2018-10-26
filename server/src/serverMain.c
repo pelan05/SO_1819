@@ -109,6 +109,8 @@ void commands(settings s) {
 
 settings initSettings(settings s){
 
+	char* aux = NULL;
+
 	//Inicializar valores por defeito
 	s.timeout = MEDIT_TIMEOUT;
 	s.maxUsers = MEDIT_MAXUSERS;
@@ -120,6 +122,27 @@ settings initSettings(settings s){
 
 	//Substituir pelas variaveis de ambiente caso existam
 
+	if (aux = getenv("MEDIT_TIMEOUT")!= NULL) {
+		s.timeout = atoi(aux);
+		aux = NULL;
+	}
+
+	if (aux = getenv("MEDIT_MAXLINES") != NULL) {
+		s.e.max_l = atoi(aux);
+		aux = NULL;
+	}
+
+	if (aux = getenv("MEDIT_MAXCOLUMNS") != NULL) {
+		s.e.max_c = atoi(aux);
+		aux = NULL;
+	}
+
+	if (aux = getenv("MEDIT_USERS") != NULL) {
+		s.maxUsers = atoi(aux);
+		aux = NULL;
+	}
+
+	return s;
 }
 
 
