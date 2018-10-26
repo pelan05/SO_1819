@@ -1,11 +1,12 @@
 #include "serverMain.h"
 
+
 int findUser(char* user, char* filename) {
 
 
 	char buffer[TAMBUFFER];
 
-	File f = fopen(filename, "r");
+	FILE * f = fopen(filename, "r");
 	if (f == NULL) {
 		printf("Erro a abrir Ficheiro");
 		return 2;
@@ -39,7 +40,7 @@ void commands(settings s) {
 		n = 0;
 
 		while (arg[n]) {
-			arg[n] = tolower(arg[n]));
+			arg[n] = tolower(arg[n]);
 			n++;
 	}
 			
@@ -152,7 +153,7 @@ int main(int argc, char const *argv[], char* envp[]){
 
 	s = initSettings(s);
 
-	commands(settings s);
+	commands(s);
 
     return 0;
 }
