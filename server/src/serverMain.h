@@ -22,7 +22,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <ncurses.h>
 #include <signal.h>
 
 //---------------------------------------------------------------------------
