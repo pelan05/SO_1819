@@ -2,9 +2,12 @@
 
 
 
-void editMode(char * string, WINDOW ** window){
+void editMode(char * string, WINDOW ** window, int linha){
 
+curs_set(1);
+wmove(*window, linha, 1);//window, y, x
 int choice;
+int cursor = 1;
 
 do{
 		
@@ -13,10 +16,10 @@ do{
 
 		switch(choice){
 			case KEY_LEFT:
-			
+			cursor = (cursor < 2)? cursor: cursor -1;
 			break;
 			case KEY_RIGHT:
-			
+			cursor = (cursor < (TAMJANLINHASX-2))? cursor +1: cursor;
 			break;
 			case KEY_BACKSPACE:
 			
@@ -28,7 +31,11 @@ do{
 			break;
 		}
 
+wmove(*window, linha, cursor);
+
 }while(choice != 10);
+
+curs_set(0);
 
 }
 
@@ -49,7 +56,10 @@ int main(int argc, char *argv[], char* envp[]) {
 	//int ch; //character da keypress em numero int (ascii)
 	//char oldchar = ' ';
 	char * help; //para imprimir numeros nas linhas
-	
+	char username[8] = {"pedro"};
+
+
+
 	const char *linha[NUMLINHAS] = {"Este texto e muito bonito.",
 										"Este texto e mais bonito.", 
 											"Este texto e ainda mais bonito!", 
@@ -176,7 +186,9 @@ int main(int argc, char *argv[], char* envp[]) {
 			highlight = (highlight < (NUMLINHAS-1))? highlight+1: highlight;
 			break;
 			case 10://enter
-			editMode(linha[highlight], &linhas);
+			mvwprintw(nomes, highlight+1, 1, username);
+			wrefresh(nomes);
+			editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
 			break;
 			default:
 			break;
