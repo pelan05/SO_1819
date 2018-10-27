@@ -81,7 +81,7 @@ int main(int argc, char *argv[], char* envp[]) {
 			
 			////mvprintw(0, 0, "(%d, %d) ", posy, posx);
 			refresh();
-
+////teste pq o vaso é gay
 		}
 
 
