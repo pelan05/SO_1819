@@ -1,16 +1,12 @@
 #include "clientMain.h"
 
-
-
-
-
 int main(int argc, char *argv[], char* envp[]) {
 
 	int x, y;
 
 	int i = 0, j = 0;
 	int nrow, ncol, posx, posy, oposx, oposy; //num rows, num colunas, posx atual, posxy atual, old posx, old posy
-	int ch; //character da keypress em numero int (ascii?)
+	int ch; //character da keypress em numero int (ascii)
 	char oldchar = ' ';
 
 	initscr();//iniciar controlo do ncurses sobre a janela 'stdscr'
@@ -30,26 +26,25 @@ int main(int argc, char *argv[], char* envp[]) {
 
 	refresh();
 
-
+	curs_set(1);//cursor 0-invisivel, 1-normal, 2-high-vis mode
+	
 	noecho();
-	//cbreak();
+	cbreak();
 	keypad(linhas, TRUE);
 	refresh();
+	wrefresh(linhas);
+	wrefresh(nomes);
 	
-	//TODO fix neste bug, nao mostra as janelas se nao puxar o wgetch
-	wgetch(nomes);
-	wgetch(linhas);
-
-	posx = TAMJANNOMESX + 2;
+	posx = 1;//posiçao relativa à janela NOMES
 	posy = 1;
 
 	wmove(linhas, posx, posy);
 	refresh();
-	oldchar = wgetch(linhas);
+	oldchar = mvwgetch(linhas, posx, posy);
 	
 
 	do{
-		ch = getch();
+		ch = wgetch(linhas);
 		oposx = posx;
 		oposy = posy;
 
@@ -61,27 +56,27 @@ int main(int argc, char *argv[], char* envp[]) {
 				posy = (posy < (TAMJANY - 2))? posy + 1: posy;
 				break;
 			case KEY_LEFT:
-				posx = (posx > (TAMJANNOMESX + 2))? posx - 1: posx;
+				posx = (posx > 2)? posx - 1: posx;
 				break;
 			case KEY_RIGHT:
-				posx = (posx < (TAMJANLINHASX + TAMJANNOMESX - 1))? posx + 1: posx;
+				posx = (posx < (TAMJANLINHASX - 1))? posx + 1: posx;
 				break;
 			case KEY_ENTER:
-				//TODO mudar para "Enter to edit line"
-	
+				//TODO "Enter to edit line"
 				break;
 		}
 		if(ch == KEY_UP || ch == KEY_DOWN || ch == KEY_LEFT || ch == KEY_RIGHT){
 			
-			mvaddch(oposy, oposx, ' ');
-			oldchar = mvgetch(posy, posx);
+			mvwaddch(linhas, oposy, oposx, ' ');
+			//oldchar = mvwgetch(linhas, posy, posx);
 			//attron(COLOR_PAIR(1));
-			mvaddch(posy, posx, '*');/*cursor atual*/
+			mvwaddch(linhas, posy, posx, '*');/*cursor atual*/
 			//attroff(COLOR_PAIR(1));
 			
 			////mvprintw(0, 0, "(%d, %d) ", posy, posx);
 			refresh();
-////teste pq o vaso é gay
+			wrefresh(linhas);
+			wrefresh(nomes);
 		}
 
 
