@@ -94,21 +94,21 @@ int main(int argc, char *argv[], char* envp[]) {
 
 
 
-	const char *linha[NUMLINHAS] = {"Este texto e muito bonito.",
-										"Este texto e mais bonito.", 
-											"Este texto e ainda mais bonito!", 
-												"Este texto e muito bonito.",
-													"Este texto e mais bonito.", 
-														"Este texto e ainda mais bonito!", 
-															"Este texto e muito bonito.",
-																"Este texto e mais bonito.", 
-																	"Este texto e ainda mais bonito!", 
-																		"Este texto e muito bonito.",
-																			"Este texto e mais bonito.", 
-																				"Este texto e ainda mais bonito!",
-																					"Este texto e muito bonito.",
-																						"Este texto e mais bonito.", 
-																							"Este texto e ainda mais bonito!"};
+	const char *linha[NUMLINHAS] = {"Texto decente.",
+									"Mais texto decente.", 
+									"Muito mais texto decente", 
+									"Mais texto decente..",
+									"Mais texto decente.", 
+									"Mais texto decente.", 
+									"Mais texto decente.",
+									"Mais texto decente.", 
+									"Mais texto decente.", 
+									"Mais texto decente.",
+									"UwU what's this?", 
+									"Batatas e cebolas",
+									"Ui Ai.",
+									"Texto menos decente de seguida.", 
+									"Anticonstitucionalissimamente."};
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
 	
