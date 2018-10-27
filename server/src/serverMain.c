@@ -147,7 +147,7 @@ settings initSettings(settings s, int argc, char const *argv[], char* envp[]){
 		aux = NULL;
 	}
 
-	while((flag = getopt(argc, argv, "fpn:")) != -1)
+	while((flag = getopt(argc, argv, "f:p:n:")) != -1)
 		switch (flag) {
 		case 'f':
 			strcpy(s.database, optarg);
