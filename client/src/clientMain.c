@@ -12,9 +12,9 @@ int main(int argc, char *argv[], char* envp[]) {
 	//int i = 0, j = 0;
 	//int nrow, ncol, oposx, oposy; //num rows, num colunas, posx atual, posxy atual, old posx, old posy
 	int posx, posy;
-	int ch; //character da keypress em numero int (ascii)
+	//int ch; //character da keypress em numero int (ascii)
 	//char oldchar = ' ';
-	//char help; //para imprimir numeros nas linhas
+	char * help; //para imprimir numeros nas linhas
 	
 	const char *linha[NUMLINHAS] = {"Este texto e muito bonito.",
 										"Este texto e mais bonito.", 
@@ -45,13 +45,14 @@ int main(int argc, char *argv[], char* envp[]) {
 	scrollok(stdscr ,FALSE);//impede o auto-scroll na janela de cmd
 	clear();
 	start_color();
-	init_pair(1, COLOR_WHITE, COLOR_BLACK);
+	init_pair(2, COLOR_MAGENTA, COLOR_BLACK);
 	
 	
 	//getyx(stdscr, y, x);//coordenadas atuais do ponteiro
 
 	WINDOW * nomes = newwin(TAMJANY,TAMJANNOMESX,0,0);					/*altura, comprimento, yinicial, xinicial*/
-	WINDOW * linhas = newwin(TAMJANY,TAMJANLINHASX,0,TAMJANNOMESX + 1);	/*altura, comprimento, yinicial, xinicial*/
+	WINDOW * linhas = newwin(TAMJANY,TAMJANLINHASX,0,TAMJANNOMESX + 2);	/*altura, comprimento, yinicial, xinicial*/
+	WINDOW * numeros = newwin(15,2,1,TAMJANNOMESX);	/*altura, comprimento, yinicial, xinicial*/
 	
 	box(nomes, '|' , '-'); //janela, vert char, horiz char
 	box(linhas, '|' , '-'); //janela, vert char, horiz char
@@ -74,9 +75,49 @@ int main(int argc, char *argv[], char* envp[]) {
 
 	wmove(linhas, posx, posy);
 	refresh();*/
+					//imprimir numeros//not the prettiest solution but t'works
+					for(i = 0; i < 10; i++){
+						help = i+'0';
+						mvwaddch(numeros, i, 1, help);
+					}
+					for(i = 0; i < 10 ; i++){
+						help = 0+'0';
+						mvwaddch(numeros, i, 0, help);
+					}
+						help = 0+'0';
+						mvwaddch(numeros, 10, 1, help);
+						help = 1+'0';
+						mvwaddch(numeros, 10, 0, help);
+
+						help = 1+'0';
+						mvwaddch(numeros, 11, 1, help);
+						help = 1+'0';
+						mvwaddch(numeros, 11, 0, help);
+
+						help = 2+'0';
+						mvwaddch(numeros, 12, 1, help);
+						help = 1+'0';
+						mvwaddch(numeros, 12, 0, help);
+
+						help = 3+'0';
+						mvwaddch(numeros, 13, 1, help);
+						help = 1+'0';
+						mvwaddch(numeros, 13, 0, help);
+
+						help = 4+'0';
+						mvwaddch(numeros, 14, 1, help);
+						help = 1+'0';
+						mvwaddch(numeros, 14, 0, help);
+
+					wrefresh(numeros);
+
+
+
 
 	while(1){
 		for(i = 0; i < NUMLINHAS; i++){
+			
+
 			if(i == highlight){
 				wattron(linhas, A_REVERSE);
 				mvwprintw(linhas, i+1, 1, linha[i]);
@@ -85,7 +126,7 @@ int main(int argc, char *argv[], char* envp[]) {
 			
 			mvwprintw(linhas, i+1, 1, linha[i]);
 
-
+			
 			wrefresh(linhas);
 			wrefresh(nomes);
 			refresh();
