@@ -108,7 +108,7 @@ void commands(settings s) {
 
 }
 
-settings initSettings(settings s){
+settings initSettings(settings s, int argc, char const *argv[], char* envp[]){
 
 	char* aux = NULL;
 
@@ -180,7 +180,7 @@ int main(int argc, char const *argv[], char* envp[]){
 
 	settings s;
 
-	s = initSettings(s);
+	s = initSettings(s, argc, argv, envp);
 
 	commands(s);
 
