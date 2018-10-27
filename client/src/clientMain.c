@@ -63,6 +63,22 @@ void getUserEnv(int argc, char const *argv[], char* envp[], char * username){
 
 }
 
+void pedeUser(char *username){
+	int flagUserSuccess = 0;
+	
+	do{
+			printf("Username: ");
+			scanf("%s", &username);
+
+			//TODO checkar user no server
+			//flagUserSuccess = check();
+
+			flagUserSuccess = 1;//para testes
+
+	}while(!flagUserSuccess);
+}
+
+
 
 
 int main(int argc, char *argv[], char* envp[]) {
@@ -101,7 +117,7 @@ int main(int argc, char *argv[], char* envp[]) {
 																							"Este texto e ainda mais bonito!"};
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
-	int flagUserSuccess = 0;
+	
 	int i=0;
 
 	//
@@ -110,15 +126,7 @@ int main(int argc, char *argv[], char* envp[]) {
 			//TODO URGENTE bug a carregar enter depois de escrever o username
 	getUserEnv(argc, argv, envp, username);
 	if(!strcmp(username, " ")){
-			do{
-			printf("Username: ");
-			scanf("%s", &username);
-
-			//TODO checkar user no server
-			//flagUserSuccess = check();
-
-			flagUserSuccess = 1;//para testes
-			}while(!flagUserSuccess);
+		pedeUser(username);
 	}
 
 
