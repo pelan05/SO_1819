@@ -48,7 +48,7 @@ void commands(settings s) {
 		if (!strcmp("settings", arg[0])) {
 			printf("Text editor settings:\n");
 			printf("Timeout: %d\n", s.timeout);
-			printf("Maximum amount of user pipes: %d\n", s.maxPipes);
+			printf("Maximum amount of pipes: %d\n", s.maxPipes);
 			printf("Maximum amount of users: %d\n", s.maxUsers);
 			printf("Maximum amount of lines: %d\n", s.e.max_l);
 			printf("Maximum amount of columns: %d\n", s.e.max_c);
@@ -112,6 +112,10 @@ settings initSettings(settings s){
 
 	char* aux = NULL;
 
+	int flag;
+
+	opterr = 0;
+
 	//Inicializar valores por defeito
 	s.timeout = MEDIT_TIMEOUT;
 	s.maxUsers = MEDIT_MAXUSERS;
@@ -143,6 +147,31 @@ settings initSettings(settings s){
 		aux = NULL;
 	}
 
+	while((flag = getopt(argc, argv, "fpn:")) != -1)
+		switch (flag) {
+		case 'f':
+			strcpy(s.database, optarg);
+			break;
+		case 'p':
+			strcpy(s.mainPipe, optarg);
+			break;
+		case 'n':
+			s.maxUsers = atoi(optarg);
+			break;
+		case '?':
+			if (optopt == 'f')
+				fprintf(stderr, "Option -%c requires an argument, the filename.\n", optopt);
+			else if (optopt == 'p')
+				fprintf(stderr, "Option -%c requires an argument, the name for the pipe.\n", optopt);
+			else if (optopt == 'n')
+				fprintf(stderr, "Option -%c requires an argument, the number of pipes.\n", optopt);
+			else if (isprint(optopt))
+				fprintf(stderr, "Unknown option -%c.\n", optopt);
+			else
+				fprintf(stderr, "Unknown option character \\x%x.\n", optopt);
+		}
+
+	
 	return s;
 }
 
