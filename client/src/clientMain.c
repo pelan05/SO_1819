@@ -39,6 +39,30 @@ curs_set(0);
 
 }
 
+void getUserEnv(int argc, char const *argv[], char* envp[], char * username){
+
+	char* aux = NULL;
+
+	int flag;
+
+	opterr = 0;
+
+	while((flag = getopt(argc, argv, "u:")) != -1)
+		switch (flag) {
+		case 'u':
+			strcpy(username, optarg);
+			break;
+		case '?':
+			if (optopt == 'u')
+				fprintf(stderr, "Option -%c requires an argument, the UserName.\n", optopt);
+			else if (isprint(optopt))
+				fprintf(stderr, "Unknown option -%c.\n", optopt);
+			else
+				fprintf(stderr, "Unknown option character \\x%x.\n", optopt);
+		}
+
+}
+
 
 
 int main(int argc, char *argv[], char* envp[]) {
@@ -56,7 +80,7 @@ int main(int argc, char *argv[], char* envp[]) {
 	//int ch; //character da keypress em numero int (ascii)
 	//char oldchar = ' ';
 	char * help; //para imprimir numeros nas linhas
-	char username[8] = {"pedro"};
+	char username[8] = {" "};
 
 
 
@@ -77,13 +101,31 @@ int main(int argc, char *argv[], char* envp[]) {
 																							"Este texto e ainda mais bonito!"};
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
-
+	int flagUserSuccess = 0;
 	int i=0;
+
+	//
+	//Codigo do username
+	//
+			//TODO URGENTE bug a carregar enter depois de escrever o username
+	getUserEnv(argc, argv, envp, username);
+	if(!strcmp(username, " ")){
+			do{
+			printf("Username: ");
+			scanf("%s", &username);
+
+			//TODO checkar user no server
+			//flagUserSuccess = check();
+
+			flagUserSuccess = 1;//para testes
+			}while(!flagUserSuccess);
+	}
+
+
 
 	//
 	//Inicio Codigo nCurses
 	//
-
 
 	initscr();//iniciar controlo do ncurses sobre a janela 'stdscr'
 	scrollok(stdscr ,FALSE);//impede o auto-scroll na janela de cmd
