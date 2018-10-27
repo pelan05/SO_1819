@@ -12,6 +12,11 @@
 #include <curses.h>
 #include <signal.h>
 
+
+#define TAMJANLINHASX 45
+#define TAMJANY 17
+#define TAMJANNOMESX 10
+
 //---------------------------------------------------------------------------
 //------------------------------Estruturas-----------------------------------
 
