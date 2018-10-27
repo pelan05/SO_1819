@@ -5,6 +5,7 @@
 #define TAMJANLINHASX 47
 #define TAMJANY 17
 #define TAMJANNOMESX (USERSIZE + 2) 
+#define NUMLINHAS (TAMJANY-2)
 
 #include <stdio.h>
 #include <stdlib.h>

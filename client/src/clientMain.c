@@ -2,13 +2,44 @@
 
 int main(int argc, char *argv[], char* envp[]) {
 
-	int x, y;
 
-	int i = 0, j = 0;
-	int nrow, ncol, posx, posy, oposx, oposy; //num rows, num colunas, posx atual, posxy atual, old posx, old posy
+	//
+	//Variáveis
+	//
+
+	//int x, y;
+
+	//int i = 0, j = 0;
+	//int nrow, ncol, oposx, oposy; //num rows, num colunas, posx atual, posxy atual, old posx, old posy
+	int posx, posy;
 	int ch; //character da keypress em numero int (ascii)
-	char oldchar = ' ';
-	char help; //para imprimir numeros nas linhas
+	//char oldchar = ' ';
+	//char help; //para imprimir numeros nas linhas
+	
+	const char *linha[NUMLINHAS] = {"Este texto e muito bonito.",
+										"Este texto e mais bonito.", 
+											"Este texto e ainda mais bonito!", 
+												"Este texto e muito bonito.",
+													"Este texto e mais bonito.", 
+														"Este texto e ainda mais bonito!", 
+															"Este texto e muito bonito.",
+																"Este texto e mais bonito.", 
+																	"Este texto e ainda mais bonito!", 
+																		"Este texto e muito bonito.",
+																			"Este texto e mais bonito.", 
+																				"Este texto e ainda mais bonito!",
+																					"Este texto e muito bonito.",
+																						"Este texto e mais bonito.", 
+																							"Este texto e ainda mais bonito!"};
+	int choice;//vars para selecionar linha
+	int highlight = 0;//1-15//a linha 1 começa selecionada
+
+	int i=0;
+
+	//
+	//Inicio Codigo nCurses
+	//
+
 
 	initscr();//iniciar controlo do ncurses sobre a janela 'stdscr'
 	scrollok(stdscr ,FALSE);//impede o auto-scroll na janela de cmd
@@ -29,7 +60,7 @@ int main(int argc, char *argv[], char* envp[]) {
 
 	refresh();
 
-	curs_set(1);//cursor 0-invisivel, 1-normal, 2-high-vis mode
+	curs_set(0);//cursor 0-invisivel, 1-normal, 2-high-vis mode
 	
 	noecho();
 	cbreak();
@@ -38,14 +69,52 @@ int main(int argc, char *argv[], char* envp[]) {
 	wrefresh(linhas);
 	wrefresh(nomes);
 	
-	posx = 1;//posiçao relativa à janela NOMES
+	/*posx = 1;//posiçao relativa à janela NOMES
 	posy = 1;
 
 	wmove(linhas, posx, posy);
-	refresh();
+	refresh();*/
+
+	while(1){
+		for(i = 0; i < NUMLINHAS; i++){
+			if(i == highlight){
+				wattron(linhas, A_REVERSE);
+				mvwprintw(linhas, i+1, 1, linha[i]);
+				wattroff(linhas, A_REVERSE);
+			}else
+			
+			mvwprintw(linhas, i+1, 1, linha[i]);
+
+
+			wrefresh(linhas);
+			wrefresh(nomes);
+			refresh();
+		}
+
+		choice = wgetch(linhas);
+
+		switch(choice){
+			case KEY_UP:
+			highlight = (highlight > 0)? highlight-1: highlight;
+			break;
+			case KEY_DOWN:
+			highlight = (highlight < (NUMLINHAS-1))? highlight+1: highlight;
+			break;
+			default:
+			break;
+		}
+
+	}
+
+
+
+
+
+	// mexer asterisco pelo ecra - a funcionar - ~exemplo 2
+	/*
+
 	oldchar = mvwgetch(linhas, posx, posy);
 	
-
 	do{
 		ch = wgetch(linhas);
 		oposx = posx;
@@ -53,6 +122,7 @@ int main(int argc, char *argv[], char* envp[]) {
 
 		switch(ch){
 			case KEY_UP:
+
 				posy = (posy > 1)? posy - 1 : posy;
 				break;
 			case KEY_DOWN:
@@ -74,7 +144,7 @@ int main(int argc, char *argv[], char* envp[]) {
 			mvwaddch(linhas, oposy, oposx, ' ');
 			//oldchar = mvwgetch(linhas, posy, posx);
 			//attron(COLOR_PAIR(1));
-			mvwaddch(linhas, posy, posx, '*');/*cursor atual*/
+			mvwaddch(linhas, posy, posx, '*');//cursor atual
 			//attroff(COLOR_PAIR(1));
 			
 			////mvprintw(0, 0, "(%d, %d) ", posy, posx);
@@ -90,6 +160,11 @@ int main(int argc, char *argv[], char* envp[]) {
 
 
 	}while(ch != KEY_EXIT);
+	*/
+
+
+
+
 
 
 	endwin();//fechar ncurses control
