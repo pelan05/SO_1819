@@ -68,8 +68,9 @@ void pedeUser(char *username){
 	
 	do{
 			printf("Username: ");
-			scanf("%s", &username);
-
+			do{//TODO condiçao de verificar tam <= 8 
+			scanf(" %s", username);
+			}while(sizeof(username));
 			//TODO checkar user no server
 			//flagUserSuccess = check();
 
@@ -228,6 +229,8 @@ int main(int argc, char *argv[], char* envp[]) {
 			mvwprintw(nomes, highlight+1, 1, username);
 			wrefresh(nomes);
 			editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
+			pvwprintw(nomes, highlight+1, 1, "        ");
+			wrefresh(nomes);
 			break;
 			default:
 			break;
