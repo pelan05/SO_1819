@@ -8,6 +8,7 @@ int main(int argc, char *argv[], char* envp[]) {
 	int nrow, ncol, posx, posy, oposx, oposy; //num rows, num colunas, posx atual, posxy atual, old posx, old posy
 	int ch; //character da keypress em numero int (ascii)
 	char oldchar = ' ';
+	char help; //para imprimir numeros nas linhas
 
 	initscr();//iniciar controlo do ncurses sobre a janela 'stdscr'
 	scrollok(stdscr ,FALSE);//impede o auto-scroll na janela de cmd
@@ -18,11 +19,13 @@ int main(int argc, char *argv[], char* envp[]) {
 	
 	//getyx(stdscr, y, x);//coordenadas atuais do ponteiro
 
-	WINDOW * nomes = newwin(TAMJANY,TAMJANNOMESX,0,1);		/*altura, comprimento, yinicial, xinicial*/
+	WINDOW * nomes = newwin(TAMJANY,TAMJANNOMESX,0,0);					/*altura, comprimento, yinicial, xinicial*/
 	WINDOW * linhas = newwin(TAMJANY,TAMJANLINHASX,0,TAMJANNOMESX + 1);	/*altura, comprimento, yinicial, xinicial*/
 	
 	box(nomes, '|' , '-'); //janela, vert char, horiz char
 	box(linhas, '|' , '-'); //janela, vert char, horiz char
+
+	
 
 	refresh();
 
@@ -56,13 +59,14 @@ int main(int argc, char *argv[], char* envp[]) {
 				posy = (posy < (TAMJANY - 2))? posy + 1: posy;
 				break;
 			case KEY_LEFT:
-				posx = (posx > 2)? posx - 1: posx;
+				posx = (posx > 1)? posx - 1: posx;
 				break;
 			case KEY_RIGHT:
-				posx = (posx < (TAMJANLINHASX - 1))? posx + 1: posx;
+				posx = (posx < (TAMJANLINHASX - 2))? posx + 1: posx;
 				break;
 			case KEY_ENTER:
 				//TODO "Enter to edit line"
+				//posy é igual ao numero da linha
 				break;
 		}
 		if(ch == KEY_UP || ch == KEY_DOWN || ch == KEY_LEFT || ch == KEY_RIGHT){
@@ -77,6 +81,11 @@ int main(int argc, char *argv[], char* envp[]) {
 			refresh();
 			wrefresh(linhas);
 			wrefresh(nomes);
+			for(i = 1; i < (TAMJANY-2)+1; i++){
+				help = i + '0'; //transforma i em char
+				mvwaddch(stdscr, i, TAMJANNOMESX, help);//ecra, y, x, char
+			}
+
 		}
 
 
