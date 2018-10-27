@@ -1,5 +1,39 @@
 #include "clientMain.h"
 
+
+
+void editMode(char * string, WINDOW ** window){
+
+int choice;
+
+do{
+		
+
+		choice = wgetch(*window);
+
+		switch(choice){
+			case KEY_LEFT:
+			
+			break;
+			case KEY_RIGHT:
+			
+			break;
+			case KEY_BACKSPACE:
+			
+			break;
+			case KEY_DC://delete
+
+			break;
+			default:
+			break;
+		}
+
+}while(choice != 10);
+
+}
+
+
+
 int main(int argc, char *argv[], char* envp[]) {
 
 
@@ -114,7 +148,7 @@ int main(int argc, char *argv[], char* envp[]) {
 
 
 
-	while(1){
+	do{
 		for(i = 0; i < NUMLINHAS; i++){
 			
 
@@ -141,11 +175,14 @@ int main(int argc, char *argv[], char* envp[]) {
 			case KEY_DOWN:
 			highlight = (highlight < (NUMLINHAS-1))? highlight+1: highlight;
 			break;
+			case 10://enter
+			editMode(linha[highlight], &linhas);
+			break;
 			default:
 			break;
 		}
 
-	}
+	}while(choice != 27);//esc
 
 
 
