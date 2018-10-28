@@ -272,6 +272,25 @@ int main(int argc, char *argv[], char* envp[]) {
 			editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
 			mvwprintw(nomes, highlight+1, 1, "        ");
 			wrefresh(nomes);
+
+			for(i = 0; i < NUMLINHAS; i++){
+			
+
+			if(i == highlight){
+				wattron(linhas, A_REVERSE);
+				mvwprintw(linhas, i+1, 1, linha[i]);
+				wattroff(linhas, A_REVERSE);
+			}else
+			
+			mvwprintw(linhas, i+1, 1, linha[i]);
+
+			
+			wrefresh(linhas);
+			wrefresh(nomes);
+			refresh();
+			}
+
+
 			break;
 			default:
 			break;
