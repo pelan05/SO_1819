@@ -6,7 +6,6 @@
 
 //defines de leitura de comandos
 #define CMDSIZE 50
-#define ARGSIZE 20
 
 //medit defines
 #define MEDIT_TIMEOUT 10
@@ -55,6 +54,5 @@ typedef struct user {
 int findUser(char* user, char* filename);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
 void commands(settings s);
 settings initSettings(settings s, int argc, char * const argv[], char* envp[]);
-
 
 #endif
