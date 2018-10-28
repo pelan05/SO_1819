@@ -1,7 +1,7 @@
 #include "clientMain.h"
 
 int temEspaco(char * string){
-	if(string[43]==' ')
+	if(string[44]==' ')
 		return 1;
 	else 
 		return 0;
@@ -16,7 +16,7 @@ int apagaCarat(char * string, int val){
 	return 1;
 }
 int adicionaCarat(char * string, char adicao, int val){
-	int index = 43;
+	int index = 44;
 	if(temEspaco(string)){
 	//descobrir a começar pelo fim onde acabam as celulas vazias ' '
 	//na ultima celula vazia preencher com as cheias até o slot pretendido estar vazio		
@@ -73,7 +73,7 @@ do{
 
 			default:
 			ch = choice;
-			adicionaCarat(string, ch, cursor);
+			adicionaCarat(string, ch, cursor-1);
 			break;
 		}
 
@@ -155,21 +155,21 @@ int main(int argc, char * const argv[]) {
 	}
 	
 
-		strcpy(linha[0], "Texto decente.");
-		strcpy(linha[1], "Mais texto decente.");
-		strcpy(linha[2], "Mais texto decente.");
-		strcpy(linha[3], "Muito mais texto decente ");
-		strcpy(linha[4], "Texto nor ");
-		strcpy(linha[5], "Esta linha tem quarenta e ");
-		strcpy(linha[6], "Esta linha tem quarenta e");
-		strcpy(linha[7], "Esta linha tem quarenta e");
-		strcpy(linha[8], "Esta linha tem quarenta e");
-		strcpy(linha[9], "Esta linha tem quarenta ");
-		strcpy(linha[10], "Esta linha tem quarenta");
-		strcpy(linha[11], "Esta linha tem quarenta");
-		strcpy(linha[12], "Esta linha tem quarenta");
-		strcpy(linha[13], "Esta linha tem quarent");
-		strcpy(linha[14], "Esta linha tem quarent Esta linha tem ");
+		strcpy(linha[0], "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(linha[1], "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(linha[2], "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(linha[3], "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(linha[4], "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(linha[5], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[6], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[7], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[8], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[9], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[10], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[11], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[12], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[13], "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(linha[14], "Esta linha tem quarenta caracteres e pronto k");
 
 
 	int choice;//vars para selecionar linha
