@@ -1,12 +1,32 @@
 #include "clientMain.h"
 
+int temEspaco(char * string){
+	if(string[43]==' ')
+		return 1;
+	else return 0;
+}
+int apagaCarat(char * string, int val){
 
+	return 1;
+}
+int apagaCaratFrente(char * string, int val){
+	
+	return 1;
+}
+int adicionaCarat(char * string, char adicao, int val){
+	if(temEspaco(string)){
+		
+
+		return 1;
+	}else return 0;
+}
 
 void editMode(char * string, WINDOW ** window, int linha){
 
 curs_set(1);
 wmove(*window, linha, 1);//window, y, x
 int choice;
+char ch;
 int cursor = 1;
 
 do{
@@ -21,13 +41,22 @@ do{
 			case KEY_RIGHT:
 			cursor = (cursor < (TAMJANLINHASX-2))? cursor +1: cursor;
 			break;
+			//TODO edit mode here
+			//------------------------------------------------------------------------------------------------
+			//------------------------------------------------------------------------------------------------
 			case KEY_BACKSPACE:
-			
-			break;
-			case KEY_DC://delete
+			//apagaCarat(string, cursor);			
 
 			break;
+			case KEY_DC://delete
+			//apagaCaratFrente(string, cursor+1);
+			
+			break;
 			default:
+			ch = choice;
+			//adicionaCarat(string, ch, cursor);
+
+
 			break;
 		}
 
