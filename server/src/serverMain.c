@@ -40,7 +40,7 @@ void commands(settings s) {
 		n = 0;
 
 		while (arg[n]) {
-			arg[n] = tolower(arg[n]);
+			tolower(arg[n]);
 			n++;
 	}
 			
@@ -89,7 +89,7 @@ void commands(settings s) {
 
 		if (!strcmp("shutdown", arg[0])) {
 			printf("You've select 'shutdown'.\n");
-			continue;
+			abort();
 		}
 
 		if (!strcmp("help", arg[0])) {
