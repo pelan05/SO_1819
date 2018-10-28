@@ -12,8 +12,8 @@ int findUser(char* user, char* filename) {
 		return 2;
 	}
 
-	while (fgts(buffer, sizeof(buffer), f) != NULL)
-		if (!str(user, buffer))
+	while (fgets(buffer, sizeof(buffer), f) != NULL)
+		if (!strcmp(user, buffer))
 			return 1;
 
 	return 0;
@@ -23,8 +23,8 @@ void commands(settings s) {
 
 	
 	char cmd[CMDSIZE], *arg[1];
-	int n, i;
-	int argSize;
+	int n;//, i;
+	//int argSize;
 	while (1) {
 
 		printf("> ");
@@ -127,24 +127,28 @@ settings initSettings(settings s, int argc, char const *argv[], char* envp[]){
 
 	//Substituir pelas variaveis de ambiente caso existam
 
-	if (aux = getenv("MEDIT_TIMEOUT")!= NULL) {
+	aux = NULL;
+	aux = getenv("MEDIT_TIMEOUT");
+	if (aux != NULL) {
 		s.timeout = atoi(aux);
-		aux = NULL;
 	}
 
-	if (aux = getenv("MEDIT_MAXLINES") != NULL) {
+	aux = NULL;
+	aux = getenv("MEDIT_MAXLINES");
+	if (aux != NULL) {
 		s.e.max_l = atoi(aux);
-		aux = NULL;
 	}
 
-	if (aux = getenv("MEDIT_MAXCOLUMNS") != NULL) {
+	aux = NULL;
+	aux = getenv("MEDIT_MAXCOLUMNS");
+	if (aux != NULL) {
 		s.e.max_c = atoi(aux);
-		aux = NULL;
 	}
 
-	if (aux = getenv("MEDIT_USERS") != NULL) {
+	aux = NULL;
+	aux = getenv("MEDIT_USERS");
+	if (aux != NULL) {
 		s.maxUsers = atoi(aux);
-		aux = NULL;
 	}
 
 	while((flag = getopt(argc, argv, "f:p:n:")) != -1)
