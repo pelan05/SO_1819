@@ -30,12 +30,12 @@
 //---------------------------------------------------------------------------
 //------------------------------Estruturas-----------------------------------
 
-typedef struct ecra{
+typedef struct ecra {
 	int max_l;
 	int max_c;
 } ecra;
 
-typedef struct settings {
+typedef struct setting {
 	int timeout;
 	int maxUsers;
 	int maxPipes;
@@ -44,8 +44,8 @@ typedef struct settings {
 	char* mainPipe;
 } settings;
 
-typedef struct user{
-    char nome[TAMBUFFER];
+typedef struct user {
+	char nome[TAMBUFFER];
 }user;
 
 
@@ -53,7 +53,8 @@ typedef struct user{
 //---------------------------------------------------------------------------
 
 int findUser(char* user, char* filename);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
-void commands();
+void commands(settings s);
 settings initSettings(settings s, int argc, char * const argv[], char* envp[]);
+
 
 #endif

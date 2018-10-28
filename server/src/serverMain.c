@@ -21,10 +21,10 @@ int findUser(char* user, char* filename) {
 
 void commands(settings s) {
 
-	
+
 	char cmd[CMDSIZE], *arg[1];
 	int n;//, i;
-	//int argSize;
+		  //int argSize;
 	while (1) {
 
 		printf("> ");
@@ -40,10 +40,10 @@ void commands(settings s) {
 		n = 0;
 
 		while (arg[n]) {
-			tolower(arg[n]);
+			tolower((int)arg[n]);
 			n++;
-	}
-			
+		}
+
 
 		if (!strcmp("settings", arg[0])) {
 			printf("Text editor settings:\n");
@@ -108,7 +108,7 @@ void commands(settings s) {
 
 }
 
-settings initSettings(settings s, int argc, char * const argv[], char* envp[]){
+settings initSettings(settings s, int argc, char * const argv[], char* envp[]) {
 
 	char* aux = NULL;
 
@@ -151,7 +151,7 @@ settings initSettings(settings s, int argc, char * const argv[], char* envp[]){
 		s.maxUsers = atoi(aux);
 	}
 
-	while((flag = getopt(argc, argv, "f:p:n:")) != -1)
+	while ((flag = getopt(argc, argv, "f:p:n:")) != -1)
 		switch (flag) {
 		case 'f':
 			strcpy(s.database, optarg);
@@ -175,18 +175,21 @@ settings initSettings(settings s, int argc, char * const argv[], char* envp[]){
 				fprintf(stderr, "Unknown option character \\x%x.\n", optopt);
 		}
 
-	
+
 	return s;
 }
 
 
-int main(int argc, char const *argv[], char* envp[]){
+int main(int argc, char * const argv[], char* envp[]) {
+
+	printf("oi");
 
 	settings s;
+
+	printf("\nafter oi");
 
 	s = initSettings(s, argc, argv, envp);
 
 	commands(s);
 
-    return 0;
-}
+	return 0;
