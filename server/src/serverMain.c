@@ -40,7 +40,7 @@ void commands(settings s) {
 		n = 0;
 
 		while (arg[n]) {
-			arg[n] = tolower(arg[n]);
+			tolower(arg[n]);
 			n++;
 	}
 			
