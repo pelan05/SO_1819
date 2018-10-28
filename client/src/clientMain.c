@@ -6,16 +6,28 @@ int temEspaco(char * string){
 	else return 0;
 }
 int apagaCarat(char * string, int val){
-
-	return 1;
-}
-int apagaCaratFrente(char * string, int val){
-	
+	int i = 0;
+	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
+	for(i = val; i < 44; i++){
+		string[i] = string[i+1];
+	}
+	string[43] = ' ';
 	return 1;
 }
 int adicionaCarat(char * string, char adicao, int val){
+	int index = 43;
 	if(temEspaco(string)){
-		
+	//descobrir a começar pelo fim onde acabam as celulas vazias ' '
+	//na ultima celula vazia preencher com as cheias até o slot pretendido estar vazio		
+		for(index = TAMJANLINHASX-3; index > 0; index--){
+			if(string[index] == ' ')
+			continue;
+			else break;
+		}
+		for(;index > val; index--){
+			string[index] = string [index -1];
+		}
+		string[val] = adicao;
 
 		return 1;
 	}else return 0;
@@ -44,17 +56,17 @@ do{
 			//TODO edit mode here
 			//------------------------------------------------------------------------------------------------
 			//------------------------------------------------------------------------------------------------
-			case KEY_BACKSPACE:
-			//apagaCarat(string, cursor);			
+			case 8://backspace
+			apagaCarat(string, cursor);			
 
 			break;
-			case KEY_DC://delete
-			//apagaCaratFrente(string, cursor+1);
+			case 127://delete
+			apagaCarat(string, cursor+1);
 			
 			break;
 			default:
 			ch = choice;
-			//adicionaCarat(string, ch, cursor);
+			adicionaCarat(string, ch, cursor);
 
 
 			break;
@@ -62,7 +74,7 @@ do{
 
 wmove(*window, linha, cursor);
 
-}while(choice != 10);
+}while(choice != 10);//enter
 
 curs_set(0);
 
@@ -92,7 +104,7 @@ void getUserEnv(int argc, char const *argv[], char* envp[], char * username){
 
 }
 
-void pedeUser(char *username){
+void pedeUser(char * username){
 	int flagUserSuccess = 0;
 	
 	do{
@@ -135,10 +147,10 @@ int main(int argc, char *argv[], char* envp[]) {
 									"Mais texto decente.", 
 									"Mais texto decente.",
 									"UwU what's this?", 
-									"Batatas e cebolas",
-									"Ui Ai.",
-									"Texto menos decente de seguida.", 
-									"Anticonstitucionalissimamente."};
+									"Anticonstitucionalissimamente.Anticonstitucio",
+									"Anticonstitucionalissimamente.Anticonstitucio",
+									"Anticonstitucionalissimamente.Anticonstitucio", 
+									"Anticonstitucionalissimamente.Anticonstitucio"};
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
 	
