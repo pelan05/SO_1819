@@ -6,9 +6,9 @@ int temEspaco(char * string){
 	else return 0;
 }
 int apagaCarat(char * string, int val){
-	int i = 0;
+	int i = val;
 	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
-	for(i = val; i < 44; i++){
+	for(i; i < 44; i++){		
 		string[i] = string[i+1];
 	}
 	string[43] = ' ';
@@ -130,13 +130,13 @@ int main(int argc, char *argv[], char* envp[]) {
 	//Variáveis
 	//
 
-	int posx, posy;
-	char * help; //para imprimir numeros nas linhas
+	//int posx, posy;
+	char help; //para imprimir numeros nas linhas
 	char username[8] = {" "};
 
 
 
-	const char *linha[NUMLINHAS] = {"Texto decente.",
+	char *linha[NUMLINHAS] = {"Texto decente.",
 									"Mais texto decente.", 
 									"Muito mais texto decente", 
 									"Mais texto decente..",
@@ -202,36 +202,36 @@ int main(int argc, char *argv[], char* envp[]) {
 	
 					//imprimir numeros//not the prettiest solution but t'works
 					for(i = 0; i < 10; i++){
-						help = i+'0';
+						help = (char ) i+'0';
 						mvwaddch(numeros, i, 1, help);
 					}
 					for(i = 0; i < 10 ; i++){
-						help = 0+'0';
+						help = (char) 0+'0';
 						mvwaddch(numeros, i, 0, help);
 					}
-						help = 0+'0';
+						help = (char) 0+'0';
 						mvwaddch(numeros, 10, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 10, 0, help);
 
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 11, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 11, 0, help);
 
-						help = 2+'0';
+						help = (char) 2+'0';
 						mvwaddch(numeros, 12, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 12, 0, help);
 
-						help = 3+'0';
+						help = (char) 3+'0';
 						mvwaddch(numeros, 13, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 13, 0, help);
 
-						help = 4+'0';
+						help = (char) 4+'0';
 						mvwaddch(numeros, 14, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 14, 0, help);
 
 					wrefresh(numeros);
@@ -269,6 +269,7 @@ int main(int argc, char *argv[], char* envp[]) {
 			case 10://enter
 			mvwprintw(nomes, highlight+1, 1, username);
 			wrefresh(nomes);
+			//editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
 			editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
 			mvwprintw(nomes, highlight+1, 1, "        ");
 			wrefresh(nomes);
