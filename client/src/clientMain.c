@@ -11,7 +11,7 @@ int apagaCarat(char * string, int val){
 	for(int i = val; i < 44; i++){		
 		string[i] = string[i + 1];
 	}
-	//string[43] = ' ';
+	string[strlen(string)] = ' ';
 
 	return 1;
 }
@@ -51,26 +51,24 @@ do{
 
 		switch(choice){
 			case KEY_LEFT:
-			cursor = (cursor < 2)? cursor: cursor -1;
+			cursor = (cursor < 2)? cursor : cursor - 1;
 			break;
+			
 			case KEY_RIGHT:
 			cursor = (cursor < (TAMJANLINHASX-2)) ? cursor + 1 : cursor;
 			break;
-			//TODO edit mode here
-			//------------------------------------------------------------------------------------------------
-			//------------------------------------------------------------------------------------------------
+			
 			case 8://backspace
-			apagaCarat(string, cursor);			
+			apagaCarat(string, cursor-2);			
 
 			break;
-			case 127://delete
-			apagaCarat(string, cursor+1);
+			case KEY_DC://delete(127)
+			apagaCarat(string, cursor);
 			
 			break;
 			default:
 			ch = choice;
 			adicionaCarat(string, ch, cursor);
-
 
 			break;
 		}
@@ -140,40 +138,24 @@ int main(int argc, char * const argv[]) {
 	
 	linha = malloc(sizeof(char *) * 15);
 	if(!linha){
-		printf("E agora?\n");
+		printf("Erro a alocar mem linha145 clientmain\n");
 	}
 	for(int i = 0; i < 15; i++)
 	{
 		linha[i] = malloc(sizeof(char) * 45);
 		if(!linha[i])
 		{
-			printf("Deu moerda\n");
+			printf("Erro a alocar mem linha150 clientmain\n");
 		}
 	}
-	/*
-	char str1[15][45] = {,
-									"Mais texto decente.", 
-									, 
-									"Mais texto decente..",
-									, 
-									"Mais texto decente.", 
-									"   tres espacos   e chega",
-									"Mais texto decente.", 
-									"Texto Bonito aqui escrito.", 
-									"Mais texto Reticente.",
-									"UwU what's this?", 
-									"Esta linha tem quarenta e cinco caracteres de",
-									"Esta linha tem quarenta e cinco caracteres de",
-									"Esta linha tem quarenta e cinco caracteres de", 
-									"Anticonstitucionalissimamente.Anticonstitucio"};
-*/
+	
 
 		strcpy(linha[0], "Texto decente.");
 		strcpy(linha[1], "Mais texto decente.");
 		strcpy(linha[2], "Mais texto decente.");
-		strcpy(linha[3], "Muito mais texto decente");
-		strcpy(linha[4], "Texto nor");
-		strcpy(linha[5], "Esta linha tem quarenta e");
+		strcpy(linha[3], "Muito mais texto decente ");
+		strcpy(linha[4], "Texto nor ");
+		strcpy(linha[5], "Esta linha tem quarenta e ");
 		strcpy(linha[6], "Esta linha tem quarenta e");
 		strcpy(linha[7], "Esta linha tem quarenta e");
 		strcpy(linha[8], "Esta linha tem quarenta e");
@@ -182,7 +164,8 @@ int main(int argc, char * const argv[]) {
 		strcpy(linha[11], "Esta linha tem quarenta");
 		strcpy(linha[12], "Esta linha tem quarenta");
 		strcpy(linha[13], "Esta linha tem quarent");
-		strcpy(linha[14], "Esta linha tem quarent ");
+		strcpy(linha[14], "Esta linha tem quarent Esta linha tem ");
+
 
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
