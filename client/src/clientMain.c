@@ -44,45 +44,34 @@ int choice;
 char ch;
 int cursor = 0;
 
-do{
-		
-
-		choice = wgetch(*window);
+do{		choice = wgetch(*window);
 
 		switch(choice){
 			case KEY_LEFT:
-			cursor = (cursor < 2)? cursor : cursor - 1;
-			break;
-			
+				cursor = (cursor < 2)? cursor : cursor - 1;
+				break;
 			case KEY_RIGHT:
-			cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
-			break;
-			
+				cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
+				break;
 			case 8://backspace(8)
-			apagaCarat(string, cursor-3);			
-			break;
-
+				apagaCarat(string, cursor-3);			
+				break;
 			case 127://delete(127)
-			apagaCarat(string, cursor-2);
-			break;
-			
+				apagaCarat(string, cursor-2);
+				break;
 			case 10:
-			break;
+				break;
 			case 27:
-			break;
-
+				break;
 			default:
-			ch = choice;
-			adicionaCarat(string, ch, cursor-1);
-			break;
+				ch = choice;
+				adicionaCarat(string, ch, cursor-1);
+				break;
 		}
-
 wmove(*window, linha, cursor);
-
 }while(choice != 10 && choice != 27);//enter
 
 curs_set(0);
-
 }
 
 void getUserEnv(int argc, char * const argv[], char * username){
