@@ -137,16 +137,16 @@ int main(int argc, char *argv[]) {
 									"Mais texto decente.", 
 									"Muito mais texto decente", 
 									"Mais texto decente..",
+									"Texto normal e decente", 
 									"Mais texto decente.", 
+									"   tres espacos   e chega",
 									"Mais texto decente.", 
-									"Mais texto decente.",
-									"Mais texto decente.", 
-									"Mais texto decente.", 
-									"Mais texto decente.",
+									"Texto Bonito aqui escrito.", 
+									"Mais texto Reticente.",
 									"UwU what's this?", 
-									"Anticonstitucionalissimamente.Anticonstitucio",
-									"Anticonstitucionalissimamente.Anticonstitucio",
-									"Anticonstitucionalissimamente.Anticonstitucio", 
+									"Esta linha tem quarenta e cinco caracteres de",
+									"Esta linha tem quarenta e cinco caracteres de",
+									"Esta linha tem quarenta e cinco caracteres de", 
 									"Anticonstitucionalissimamente.Anticonstitucio"};
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
