@@ -122,8 +122,8 @@ settings initSettings(settings s, int argc, char * const argv[], char* envp[]) {
 	s.maxPipes = MEDIT_MAXPIPES;
 	s.e.max_c = MEDIT_MAXCOLUMNS;
 	s.e.max_l = MEDIT_MAXLINES;
-	strcpy(s.database, MEDIT_DEFAULT_NAME);
-	strcpy(s.mainPipe, MEDIT_MAIN_PIPE_DEFAULT_NAME);
+	s.database = MEDIT_DEFAULT_NAME;
+	s.mainPipe = MEDIT_MAIN_PIPE_DEFAULT_NAME;
 
 	//Substituir pelas variaveis de ambiente caso existam
 
