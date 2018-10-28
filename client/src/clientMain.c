@@ -7,6 +7,7 @@ int temEspaco(char * string){
 }
 int apagaCarat(char * string, int val){
 	int i = val;
+	printf("\n\n\n\n%s\n", string);
 	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
 	for(; i < 44; i++){		
 		string[i] = string[i+1];
@@ -120,7 +121,7 @@ void pedeUser(char * username){
 
 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char * const argv[]) {
 
 
 	//
@@ -258,40 +259,39 @@ int main(int argc, char *argv[]) {
 
 		switch(choice){
 			case KEY_UP:
-			highlight = (highlight > 0)? highlight-1: highlight;
-			break;
+				highlight = (highlight > 0)? highlight-1: highlight;
+				break;
 			case KEY_DOWN:
-			highlight = (highlight < (NUMLINHAS-1))? highlight+1: highlight;
-			break;
+				highlight = (highlight < (NUMLINHAS-1))? highlight+1: highlight;
+				break;
 			case 10://enter
-			mvwprintw(nomes, highlight+1, 1, username);
-			wrefresh(nomes);
-			//editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
-			editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
-			mvwprintw(nomes, highlight+1, 1, "        ");
-			wrefresh(nomes);
+				mvwprintw(nomes, highlight+1, 1, username);
+				wrefresh(nomes);
+				//editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
+				editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
+				mvwprintw(nomes, highlight+1, 1, "        ");
+				wrefresh(nomes);
 
-			for(i = 0; i < NUMLINHAS; i++){
+				for(i = 0; i < NUMLINHAS; i++){
 			
+					if(i == highlight){
+						wattron(linhas, A_REVERSE);
+						mvwprintw(linhas, i+1, 1, linha[i]);
+						wattroff(linhas, A_REVERSE);
+					}else
+					
+					mvwprintw(linhas, i+1, 1, linha[i]);
 
-			if(i == highlight){
-				wattron(linhas, A_REVERSE);
-				mvwprintw(linhas, i+1, 1, linha[i]);
-				wattroff(linhas, A_REVERSE);
-			}else
-			
-			mvwprintw(linhas, i+1, 1, linha[i]);
-
-			
-			wrefresh(linhas);
-			wrefresh(nomes);
-			refresh();
-			}
+					
+					wrefresh(linhas);
+					wrefresh(nomes);
+					refresh();
+				}
 
 
-			break;
+				break;
 			default:
-			break;
+				break;
 		}
 
 	}while(choice != 27);//esc
