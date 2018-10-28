@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
 #include <getopt.h>
 #include <pthread.h>
 #include <signal.h>
@@ -53,6 +54,6 @@ typedef struct user{
 
 int findUser(char* user, char* filename);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
 void commands();
-settings initSettings(settings s, int argc, char const *argv[], char* envp[]);
+settings initSettings(settings s, int argc, char * const argv[], char* envp[]);
 
 #endif

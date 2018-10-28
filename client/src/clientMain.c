@@ -1,12 +1,44 @@
 #include "clientMain.h"
 
+int temEspaco(char * string){
+	if(string[43]==' ')
+		return 1;
+	else return 0;
+}
+int apagaCarat(char * string, int val){
+	int i = val;
+	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
+	for(; i < 44; i++){		
+		string[i] = string[i+1];
+	}
+	string[43] = ' ';
+	return 1;
+}
+int adicionaCarat(char * string, char adicao, int val){
+	int index = 43;
+	if(temEspaco(string)){
+	//descobrir a começar pelo fim onde acabam as celulas vazias ' '
+	//na ultima celula vazia preencher com as cheias até o slot pretendido estar vazio		
+		for(index = TAMJANLINHASX-3; index > 0; index--){
+			if(string[index] == ' ')
+			continue;
+			else break;
+		}
+		for(;index > val; index--){
+			string[index] = string [index -1];
+		}
+		string[val] = adicao;
 
+		return 1;
+	}else return 0;
+}
 
 void editMode(char * string, WINDOW ** window, int linha){
 
 curs_set(1);
 wmove(*window, linha, 1);//window, y, x
 int choice;
+char ch;
 int cursor = 1;
 
 do{
@@ -21,28 +53,34 @@ do{
 			case KEY_RIGHT:
 			cursor = (cursor < (TAMJANLINHASX-2))? cursor +1: cursor;
 			break;
-			case KEY_BACKSPACE:
-			
-			break;
-			case KEY_DC://delete
+			//TODO edit mode here
+			//------------------------------------------------------------------------------------------------
+			//------------------------------------------------------------------------------------------------
+			case 8://backspace
+			apagaCarat(string, cursor);			
 
 			break;
+			case 127://delete
+			apagaCarat(string, cursor+1);
+			
+			break;
 			default:
+			ch = choice;
+			adicionaCarat(string, ch, cursor);
+
+
 			break;
 		}
 
 wmove(*window, linha, cursor);
 
-}while(choice != 10);
+}while(choice != 10);//enter
 
 curs_set(0);
 
 }
 
-void getUserEnv(int argc, char const *argv[], char* envp[], char * username){
-
-	char* aux = NULL;
-
+void getUserEnv(int argc, char * const argv[], char * username){
 	int flag;
 
 	opterr = 0;
@@ -63,14 +101,14 @@ void getUserEnv(int argc, char const *argv[], char* envp[], char * username){
 
 }
 
-void pedeUser(char *username){
+void pedeUser(char * username){
 	int flagUserSuccess = 0;
 	
 	do{
 			printf("Username: ");
-			do{//TODO condiçao de verificar tam <= 8 
+			do{ 
 			scanf(" %s", username);
-			}while(sizeof(username));
+			}while(strlen(username) > 8 || strlen(username) < 1);
 			//TODO checkar user no server
 			//flagUserSuccess = check();
 
@@ -82,20 +120,20 @@ void pedeUser(char *username){
 
 
 
-int main(int argc, char *argv[], char* envp[]) {
+int main(int argc, char *argv[]) {
 
 
 	//
 	//Variáveis
 	//
 
-	int posx, posy;
-	char * help; //para imprimir numeros nas linhas
+	//int posx, posy;
+	char help; //para imprimir numeros nas linhas
 	char username[8] = {" "};
 
 
 
-	const char *linha[NUMLINHAS] = {"Texto decente.",
+	char *linha[NUMLINHAS] = {"Texto decente.",
 									"Mais texto decente.", 
 									"Muito mais texto decente", 
 									"Mais texto decente..",
@@ -106,10 +144,10 @@ int main(int argc, char *argv[], char* envp[]) {
 									"Mais texto decente.", 
 									"Mais texto decente.",
 									"UwU what's this?", 
-									"Batatas e cebolas",
-									"Ui Ai.",
-									"Texto menos decente de seguida.", 
-									"Anticonstitucionalissimamente."};
+									"Anticonstitucionalissimamente.Anticonstitucio",
+									"Anticonstitucionalissimamente.Anticonstitucio",
+									"Anticonstitucionalissimamente.Anticonstitucio", 
+									"Anticonstitucionalissimamente.Anticonstitucio"};
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
 	
@@ -118,8 +156,8 @@ int main(int argc, char *argv[], char* envp[]) {
 	//
 	//Codigo do username
 	//
-			//TODO URGENTE bug a carregar enter depois de escrever o username
-	getUserEnv(argc, argv, envp, username);
+	
+	getUserEnv(argc, argv, username);
 	if(!strcmp(username, " ")){
 		pedeUser(username);
 	}
@@ -161,36 +199,36 @@ int main(int argc, char *argv[], char* envp[]) {
 	
 					//imprimir numeros//not the prettiest solution but t'works
 					for(i = 0; i < 10; i++){
-						help = i+'0';
+						help = (char ) i+'0';
 						mvwaddch(numeros, i, 1, help);
 					}
 					for(i = 0; i < 10 ; i++){
-						help = 0+'0';
+						help = (char) 0+'0';
 						mvwaddch(numeros, i, 0, help);
 					}
-						help = 0+'0';
+						help = (char) 0+'0';
 						mvwaddch(numeros, 10, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 10, 0, help);
 
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 11, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 11, 0, help);
 
-						help = 2+'0';
+						help = (char) 2+'0';
 						mvwaddch(numeros, 12, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 12, 0, help);
 
-						help = 3+'0';
+						help = (char) 3+'0';
 						mvwaddch(numeros, 13, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 13, 0, help);
 
-						help = 4+'0';
+						help = (char) 4+'0';
 						mvwaddch(numeros, 14, 1, help);
-						help = 1+'0';
+						help = (char) 1+'0';
 						mvwaddch(numeros, 14, 0, help);
 
 					wrefresh(numeros);
@@ -228,9 +266,29 @@ int main(int argc, char *argv[], char* envp[]) {
 			case 10://enter
 			mvwprintw(nomes, highlight+1, 1, username);
 			wrefresh(nomes);
+			//editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
 			editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
-			pvwprintw(nomes, highlight+1, 1, "        ");
+			mvwprintw(nomes, highlight+1, 1, "        ");
 			wrefresh(nomes);
+
+			for(i = 0; i < NUMLINHAS; i++){
+			
+
+			if(i == highlight){
+				wattron(linhas, A_REVERSE);
+				mvwprintw(linhas, i+1, 1, linha[i]);
+				wattroff(linhas, A_REVERSE);
+			}else
+			
+			mvwprintw(linhas, i+1, 1, linha[i]);
+
+			
+			wrefresh(linhas);
+			wrefresh(nomes);
+			refresh();
+			}
+
+
 			break;
 			default:
 			break;
