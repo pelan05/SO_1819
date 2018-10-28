@@ -68,9 +68,9 @@ void pedeUser(char *username){
 	
 	do{
 			printf("Username: ");
-			do{//TODO condiçao de verificar tam <= 8 
+			do{ 
 			scanf(" %s", username);
-			}while(sizeof(username));
+			}while(strlen(username) > 8 || strlen(username) < 1);
 			//TODO checkar user no server
 			//flagUserSuccess = check();
 
@@ -118,7 +118,7 @@ int main(int argc, char *argv[], char* envp[]) {
 	//
 	//Codigo do username
 	//
-			//TODO URGENTE bug a carregar enter depois de escrever o username
+	
 	getUserEnv(argc, argv, envp, username);
 	if(!strcmp(username, " ")){
 		pedeUser(username);
@@ -229,7 +229,7 @@ int main(int argc, char *argv[], char* envp[]) {
 			mvwprintw(nomes, highlight+1, 1, username);
 			wrefresh(nomes);
 			editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
-			pvwprintw(nomes, highlight+1, 1, "        ");
+			mvwprintw(nomes, highlight+1, 1, "        ");
 			wrefresh(nomes);
 			break;
 			default:
