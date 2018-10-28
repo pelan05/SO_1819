@@ -108,7 +108,7 @@ void commands(settings s) {
 
 }
 
-settings initSettings(settings s, int argc, char const *argv[], char* envp[]){
+settings initSettings(settings s, int argc, char * const argv[], char* envp[]){
 
 	char* aux = NULL;
 

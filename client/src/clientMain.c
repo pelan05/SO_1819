@@ -80,7 +80,7 @@ curs_set(0);
 
 }
 
-void getUserEnv(int argc, char * const argv[], char* envp[], char * username){
+void getUserEnv(int argc, char * const argv[], char * username){
 	int flag;
 
 	opterr = 0;
@@ -120,7 +120,7 @@ void pedeUser(char * username){
 
 
 
-int main(int argc, char *argv[], char* envp[]) {
+int main(int argc, char *argv[]) {
 
 
 	//
@@ -157,7 +157,7 @@ int main(int argc, char *argv[], char* envp[]) {
 	//Codigo do username
 	//
 	
-	getUserEnv(argc, argv, envp, username);
+	getUserEnv(argc, argv, username);
 	if(!strcmp(username, " ")){
 		pedeUser(username);
 	}

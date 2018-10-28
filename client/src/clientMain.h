@@ -32,7 +32,7 @@ int temEspaco(char * string);
 int apagaCarat(char * string, int val);
 int adicionaCarat(char * string, char adicao, int val);
 void editMode(char * string, WINDOW ** window, int linha);
-void getUserEnv(int argc, char * const argv[], char* envp[], char * username);
+void getUserEnv(int argc, char * const argv[], char * username);
 void pedeUser(char * username);
 
 
