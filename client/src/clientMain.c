@@ -8,7 +8,7 @@ int temEspaco(char * string){
 int apagaCarat(char * string, int val){
 	int i = val;
 	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
-	for(i; i < 44; i++){		
+	for(; i < 44; i++){		
 		string[i] = string[i+1];
 	}
 	string[43] = ' ';
@@ -80,10 +80,7 @@ curs_set(0);
 
 }
 
-void getUserEnv(int argc, char const *argv[], char* envp[], char * username){
-
-	char* aux = NULL;
-
+void getUserEnv(int argc, char * const argv[], char* envp[], char * username){
 	int flag;
 
 	opterr = 0;
