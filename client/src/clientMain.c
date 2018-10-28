@@ -3,15 +3,16 @@
 int temEspaco(char * string){
 	if(string[43]==' ')
 		return 1;
-	else return 0;
+	else 
+		return 0;
 }
 int apagaCarat(char * string, int val){
-	int i = val;
 	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
-	for(; i < 44; i++){		
-		string[i] = string[i+1];
+	for(int i = val; i < 44; i++){		
+		string[i] = string[i + 1];
 	}
-	string[43] = ' ';
+	//string[43] = ' ';
+
 	return 1;
 }
 int adicionaCarat(char * string, char adicao, int val){
@@ -21,8 +22,9 @@ int adicionaCarat(char * string, char adicao, int val){
 	//na ultima celula vazia preencher com as cheias até o slot pretendido estar vazio		
 		for(index = TAMJANLINHASX-3; index > 0; index--){
 			if(string[index] == ' ')
-			continue;
-			else break;
+				continue;
+			else 
+				break;
 		}
 		for(;index > val; index--){
 			string[index] = string [index -1];
@@ -30,7 +32,8 @@ int adicionaCarat(char * string, char adicao, int val){
 		string[val] = adicao;
 
 		return 1;
-	}else return 0;
+	}else 
+		return 0;
 }
 
 void editMode(char * string, WINDOW ** window, int linha){
@@ -39,7 +42,7 @@ curs_set(1);
 wmove(*window, linha, 1);//window, y, x
 int choice;
 char ch;
-int cursor = 1;
+int cursor = 0;
 
 do{
 		
@@ -51,7 +54,7 @@ do{
 			cursor = (cursor < 2)? cursor: cursor -1;
 			break;
 			case KEY_RIGHT:
-			cursor = (cursor < (TAMJANLINHASX-2))? cursor +1: cursor;
+			cursor = (cursor < (TAMJANLINHASX-2)) ? cursor + 1 : cursor;
 			break;
 			//TODO edit mode here
 			//------------------------------------------------------------------------------------------------
@@ -131,13 +134,28 @@ int main(int argc, char * const argv[]) {
 	char help; //para imprimir numeros nas linhas
 	char username[8] = {" "};
 
+	
 
-
-	char *linha[NUMLINHAS] = {"Texto decente.",
+	char **linha;
+	
+	linha = malloc(sizeof(char *) * 15);
+	if(!linha){
+		printf("E agora?\n");
+	}
+	for(int i = 0; i < 15; i++)
+	{
+		linha[i] = malloc(sizeof(char) * 45);
+		if(!linha[i])
+		{
+			printf("Deu moerda\n");
+		}
+	}
+	/*
+	char str1[15][45] = {,
 									"Mais texto decente.", 
-									"Muito mais texto decente", 
+									, 
 									"Mais texto decente..",
-									"Texto normal e decente", 
+									, 
 									"Mais texto decente.", 
 									"   tres espacos   e chega",
 									"Mais texto decente.", 
@@ -148,6 +166,24 @@ int main(int argc, char * const argv[]) {
 									"Esta linha tem quarenta e cinco caracteres de",
 									"Esta linha tem quarenta e cinco caracteres de", 
 									"Anticonstitucionalissimamente.Anticonstitucio"};
+*/
+
+		strcpy(linha[0], "Texto decente.");
+		strcpy(linha[1], "Mais texto decente.");
+		strcpy(linha[2], "Mais texto decente.");
+		strcpy(linha[3], "Muito mais texto decente");
+		strcpy(linha[4], "Texto nor");
+		strcpy(linha[5], "Esta linha tem quarenta e");
+		strcpy(linha[6], "Esta linha tem quarenta e");
+		strcpy(linha[7], "Esta linha tem quarenta e");
+		strcpy(linha[8], "Esta linha tem quarenta e");
+		strcpy(linha[9], "Esta linha tem quarenta ");
+		strcpy(linha[10], "Esta linha tem quarenta");
+		strcpy(linha[11], "Esta linha tem quarenta");
+		strcpy(linha[12], "Esta linha tem quarenta");
+		strcpy(linha[13], "Esta linha tem quarent");
+		strcpy(linha[14], "Esta linha tem quarent ");
+
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
 	
@@ -266,8 +302,7 @@ int main(int argc, char * const argv[]) {
 			case 10://enter
 				mvwprintw(nomes, highlight+1, 1, username);
 				wrefresh(nomes);
-				//editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
-				editMode(linha[highlight], &linhas, highlight+1);//frase, janela e num linha
+				editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
 				mvwprintw(nomes, highlight+1, 1, "        ");
 				wrefresh(nomes);
 
