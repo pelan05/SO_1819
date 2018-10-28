@@ -7,7 +7,6 @@ int temEspaco(char * string){
 }
 int apagaCarat(char * string, int val){
 	int i = val;
-	printf("\n\n\n\n%s\n", string);
 	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
 	for(; i < 44; i++){		
 		string[i] = string[i+1];

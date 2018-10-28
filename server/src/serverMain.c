@@ -192,4 +192,4 @@ int main(int argc, char * const argv[], char* envp[]) {
 
 	commands(s);
 
-	return 0;
+	return 0;}
