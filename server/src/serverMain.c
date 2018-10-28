@@ -182,11 +182,7 @@ settings initSettings(settings s, int argc, char * const argv[], char* envp[]) {
 
 int main(int argc, char * const argv[], char* envp[]) {
 
-	printf("oi");
-
 	settings s;
-
-	printf("\nafter oi");
 
 	s = initSettings(s, argc, argv, envp);
 
