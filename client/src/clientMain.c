@@ -55,27 +55,31 @@ do{
 			break;
 			
 			case KEY_RIGHT:
-			cursor = (cursor < (TAMJANLINHASX-2)) ? cursor + 1 : cursor;
+			cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
 			break;
 			
-			case 8://backspace
-			apagaCarat(string, cursor-2);			
+			case 8://backspace(8)
+			apagaCarat(string, cursor-3);			
+			break;
 
+			case 127://delete(127)
+			apagaCarat(string, cursor-2);
 			break;
-			case KEY_DC://delete(127)
-			apagaCarat(string, cursor);
 			
+			case 10:
 			break;
+			case 27:
+			break;
+
 			default:
 			ch = choice;
 			adicionaCarat(string, ch, cursor);
-
 			break;
 		}
 
 wmove(*window, linha, cursor);
 
-}while(choice != 10);//enter
+}while(choice != 10 && choice != 27);//enter
 
 curs_set(0);
 
@@ -128,7 +132,8 @@ int main(int argc, char * const argv[]) {
 	//Variáveis
 	//
 
-	//int posx, posy;
+
+
 	char help; //para imprimir numeros nas linhas
 	char username[8] = {" "};
 
