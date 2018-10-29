@@ -36,7 +36,27 @@ int adicionaCarat(char * string, char adicao, int val){
 		return 0;
 }
 
-void editMode(char * string, WINDOW ** window, int linha){
+
+void printLinhas(WINDOW *linhas, WINDOW *nomes, char **linha, int highlight){
+
+int i = 0;
+
+	for(i = 0; i < NUMLINHAS; i++){
+
+		if(i == highlight){
+			wattron(linhas, A_REVERSE);
+			mvwprintw(linhas, i+1, 1, linha[i]);
+			wattroff(linhas, A_REVERSE);
+		}else mvwprintw(linhas, i+1, 1, linha[i]);
+			
+		wrefresh(linhas);
+		wrefresh(nomes);
+		refresh();
+	}
+
+}
+
+void editMode(char * string, WINDOW ** window, int linha){ //frase, janela e num. linha
 
 curs_set(1);
 wmove(*window, linha, 1);//window, y, x
@@ -54,7 +74,9 @@ do{		choice = wgetch(*window);
 				cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
 				break;
 			case 8://backspace(8)
-				apagaCarat(string, cursor-3);			
+				apagaCarat(string, cursor-3);	
+				mvwprintw(*window, linha, 1, string);
+				wrefresh(*window);		
 				break;
 			case 127://delete(127)
 				apagaCarat(string, cursor-2);
@@ -110,7 +132,37 @@ void pedeUser(char * username){
 
 	}while(!flagUserSuccess);
 }
+/*
+void wRefreshAll(WINDOW *nomes, WINDOW *numeros, WINDOW *linhas){
 
+	wrefresh(nomes);
+	wrefresh(numeros);
+	wrefresh(linhas);
+	refresh();
+}*/
+
+void wPrintNumbers(WINDOW *numeros){
+
+	char help; //para imprimir numeros nas linhas
+	int i = 0, j = 10;
+
+	for(i = 0; i < 10; i++){//1-9
+		help = (char ) i+'0';
+		mvwaddch(numeros, i, 1, help);
+	}
+
+	for(i = 0; i < 10 ; i++){//'0' à esq dos numeros
+		mvwaddch(numeros, i, 0, '0');
+	}
+
+	for(i = 0; i < 5 ; i++){//10-14
+		help = (char ) i+'0';
+		mvwaddch(numeros, j, 0, '1');
+		mvwaddch(numeros, j, 1, help);
+		j++;
+	}
+	wrefresh(numeros);
+}
 
 
 
@@ -121,25 +173,20 @@ int main(int argc, char * const argv[]) {
 	//Variáveis
 	//
 
-
-
-	char help; //para imprimir numeros nas linhas
 	char username[8] = {" "};
-
-	
 
 	char **linha;
 	
 	linha = malloc(sizeof(char *) * 15);
 	if(!linha){
-		printf("Erro a alocar mem linha145 clientmain\n");
+		printf("Erro a alocar mem linha 191 clientmain\n");
 	}
 	for(int i = 0; i < 15; i++)
 	{
 		linha[i] = malloc(sizeof(char) * 45);
 		if(!linha[i])
 		{
-			printf("Erro a alocar mem linha150 clientmain\n");
+			printf("Erro a alocar mem linha 198 clientmain\n");
 		}
 	}
 	
@@ -164,16 +211,17 @@ int main(int argc, char * const argv[]) {
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
 	
-	int i=0;
+	//int i=0;
 
 	//
 	//Codigo do username
 	//
 	
-	getUserEnv(argc, argv, username);
-	if(!strcmp(username, " ")){
+	getUserEnv(argc, argv, username);//-u "nome"
+	if(!strcmp(username, " ")){//pede por linha de comandos
 		pedeUser(username);
 	}
+	//TODO verificação username do srv
 
 
 
@@ -197,8 +245,7 @@ int main(int argc, char * const argv[]) {
 	box(nomes, '|' , '-'); //janela, vert char, horiz char
 	box(linhas, '|' , '-'); //janela, vert char, horiz char
 
-	
-
+	//wRefreshAll(nomes, numeros, linhas); //not working
 	refresh();
 
 	curs_set(0);//cursor 0-invisivel, 1-normal, 2-high-vis mode
@@ -210,62 +257,15 @@ int main(int argc, char * const argv[]) {
 	wrefresh(linhas);
 	wrefresh(nomes);
 	
-					//imprimir numeros//not the prettiest solution but t'works
-					for(i = 0; i < 10; i++){
-						help = (char ) i+'0';
-						mvwaddch(numeros, i, 1, help);
-					}
-					for(i = 0; i < 10 ; i++){
-						help = (char) 0+'0';
-						mvwaddch(numeros, i, 0, help);
-					}
-						help = (char) 0+'0';
-						mvwaddch(numeros, 10, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 10, 0, help);
-
-						help = (char) 1+'0';
-						mvwaddch(numeros, 11, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 11, 0, help);
-
-						help = (char) 2+'0';
-						mvwaddch(numeros, 12, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 12, 0, help);
-
-						help = (char) 3+'0';
-						mvwaddch(numeros, 13, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 13, 0, help);
-
-						help = (char) 4+'0';
-						mvwaddch(numeros, 14, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 14, 0, help);
-
-					wrefresh(numeros);
+	//imprimir numeros//not the prettiest solution but t'works
+	wPrintNumbers(numeros);		
 
 
 
 
 	do{
-		for(i = 0; i < NUMLINHAS; i++){
-			
 
-			if(i == highlight){
-				wattron(linhas, A_REVERSE);
-				mvwprintw(linhas, i+1, 1, linha[i]);
-				wattroff(linhas, A_REVERSE);
-			}else
-			
-			mvwprintw(linhas, i+1, 1, linha[i]);
-
-			
-			wrefresh(linhas);
-			wrefresh(nomes);
-			refresh();
-		}
+		printLinhas(linhas, nomes, linha, highlight); //works 5*
 
 		choice = wgetch(linhas);
 
@@ -279,26 +279,13 @@ int main(int argc, char * const argv[]) {
 			case 10://enter
 				mvwprintw(nomes, highlight+1, 1, username);
 				wrefresh(nomes);
+
 				editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
+				
 				mvwprintw(nomes, highlight+1, 1, "        ");
 				wrefresh(nomes);
 
-				for(i = 0; i < NUMLINHAS; i++){
-			
-					if(i == highlight){
-						wattron(linhas, A_REVERSE);
-						mvwprintw(linhas, i+1, 1, linha[i]);
-						wattroff(linhas, A_REVERSE);
-					}else
-					
-					mvwprintw(linhas, i+1, 1, linha[i]);
-
-					
-					wrefresh(linhas);
-					wrefresh(nomes);
-					refresh();
-				}
-
+				printLinhas(linhas, nomes, linha, highlight);
 
 				break;
 			default:
@@ -306,6 +293,8 @@ int main(int argc, char * const argv[]) {
 		}
 
 	}while(choice != 27);//esc
+
+
 
 
 	//
