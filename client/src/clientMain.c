@@ -55,7 +55,7 @@ int i = 0;
 	}
 
 }
-
+/*
 void editMode(char * string, WINDOW ** window, int linha){ //frase, janela e num. linha
 
 curs_set(1);
@@ -74,27 +74,27 @@ do{		choice = wgetch(*window);
 				cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
 				break;
 			case 8://backspace(8)
-				apagaCarat(string, cursor-3);	
-				mvwprintw(*window, linha, 1, string);
-				wrefresh(*window);		
+				apagaCarat(string, cursor-3);
+
+
 				break;
 			case 127://delete(127)
 				apagaCarat(string, cursor-2);
 				break;
-			case 10:
+			case 10: //enter
 				break;
-			case 27:
+			case 27: //escape
 				break;
-			default:
+			default: //character para escrever
 				ch = choice;
 				adicionaCarat(string, ch, cursor-1);
 				break;
 		}
 wmove(*window, linha, cursor);
-}while(choice != 10 && choice != 27);//enter
+}while(choice != 10 && choice != 27);//enter ou escape
 
 curs_set(0);
-}
+}*/
 
 void getUserEnv(int argc, char * const argv[], char * username){
 	int flag;
@@ -132,14 +132,6 @@ void pedeUser(char * username){
 
 	}while(!flagUserSuccess);
 }
-/*
-void wRefreshAll(WINDOW *nomes, WINDOW *numeros, WINDOW *linhas){
-
-	wrefresh(nomes);
-	wrefresh(numeros);
-	wrefresh(linhas);
-	refresh();
-}*/
 
 void wPrintNumbers(WINDOW *numeros){
 
@@ -280,12 +272,50 @@ int main(int argc, char * const argv[]) {
 				mvwprintw(nomes, highlight+1, 1, username);
 				wrefresh(nomes);
 
-				editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
-				
+				//editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
+				//inicio editmode
+					curs_set(1);
+					wmove(linhas, highlight + 1, 1);//window, y, x
+					int choice;
+					char ch;
+					int cursor = 0;
+
+					do{	
+						
+						printLinhas(linhas, nomes, linha, highlight);	
+						choice = wgetch(linhas);
+
+							switch(choice){
+								case KEY_LEFT:
+									cursor = (cursor < 2)? cursor : cursor - 1;
+									break;
+								case KEY_RIGHT:
+									cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
+									break;
+								case 8://backspace(8)
+									apagaCarat(linha[highlight], cursor-3);
+									break;
+								case 127://delete(127)
+									apagaCarat(linha[highlight], cursor-2);
+									break;
+								case 10: //enter
+									break;
+								case 27: //escape
+									break;
+								default: //character para escrever
+									ch = choice;
+									adicionaCarat(linha[highlight], ch, cursor-1);
+									break;
+							}
+					wmove(linhas, highlight + 1, cursor);
+					}while(choice != 10 && choice != 27);//enter ou escape
+
+					curs_set(0);
+				//fim editmode
 				mvwprintw(nomes, highlight+1, 1, "        ");
 				wrefresh(nomes);
 
-				printLinhas(linhas, nomes, linha, highlight);
+				//printLinhas(linhas, nomes, linha, highlight);
 
 				break;
 			default:

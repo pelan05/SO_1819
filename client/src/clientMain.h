@@ -31,9 +31,10 @@
 int temEspaco(char * string);
 int apagaCarat(char * string, int val);
 int adicionaCarat(char * string, char adicao, int val);
+void printLinhas(WINDOW *linhas, WINDOW *nomes, char **linha, int highlight);
 void editMode(char * string, WINDOW ** window, int linha);
 void getUserEnv(int argc, char * const argv[], char * username);
 void pedeUser(char * username);
-
+void wPrintNumbers(WINDOW *numeros);
 
 #endif
