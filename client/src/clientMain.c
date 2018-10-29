@@ -7,11 +7,11 @@ int temEspaco(char * string){
 		return 0;
 }
 int apagaCarat(char * string, int val){
-	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
+	//preenche o slot 'val' com a celula seguinte, até chegar à 43*!!(nao puxar o \0!!!)
 	for(int i = val; i < 44; i++){		
 		string[i] = string[i + 1];
 	}
-	string[strlen(string)] = ' ';
+	string[45/*strlen(string)*/] = ' ';
 
 	return 1;
 }
@@ -275,6 +275,7 @@ int main(int argc, char * const argv[]) {
 				//editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
 				//inicio editmode
 					curs_set(1);
+					
 					wmove(linhas, highlight + 1, 1);//window, y, x
 					int choice;
 					char ch;
@@ -310,7 +311,7 @@ int main(int argc, char * const argv[]) {
 					wmove(linhas, highlight + 1, cursor);
 					}while(choice != 10 && choice != 27);//enter ou escape
 
-					curs_set(0);
+					//curs_set(0);
 				//fim editmode
 				mvwprintw(nomes, highlight+1, 1, "        ");
 				wrefresh(nomes);
