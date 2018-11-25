@@ -299,6 +299,15 @@ int main(int argc, char * const argv[]) {
 								case 127://delete(127)
 									apagaCarat(linha[highlight], cursor-2);
 									break;
+								case KEY_BACKSPACE://backspace(8)//---------
+									apagaCarat(linha[highlight], cursor-3);
+									break;
+								case KEY_DL://delete(127)//-----------------
+									apagaCarat(linha[highlight], cursor-2);
+									break;
+								case KEY_SDL://delete(127)//----------------
+									apagaCarat(linha[highlight], cursor-2);
+									break;
 								case 10: //enter
 									break;
 								case 27: //escape
