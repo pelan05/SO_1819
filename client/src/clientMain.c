@@ -270,7 +270,7 @@ int main(int argc, char * const argv[]) {
 
 				//editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
 				//inicio editmode
-				//TODO cursor nao aparece no editmode, delete escreve um 'J'
+				//TODO cursor no canto em editmode, delete é considerado 'default' escreve um 'J'
 					curs_set(1);
 					
 					wmove(linhas, highlight + 1, 1);//window, y, x
@@ -295,26 +295,31 @@ int main(int argc, char * const argv[]) {
 									break;
 								case 8://backspace(8)
 									apagaCarat(linha[highlight], cursor-3);
+									cursor = (cursor < 2)? cursor : cursor - 2;
 									break;
 								case 127://delete(127)
 									apagaCarat(linha[highlight], cursor-2);
 									break;
-								case KEY_BACKSPACE://backspace(8)//---------debugger
-									apagaCarat(linha[highlight], cursor-3);
-									break;
+									/*
 								case KEY_DL://delete(127)//-----------------debugger
 									apagaCarat(linha[highlight], cursor-2);
 									break;
 								case KEY_SDL://delete(127)//----------------debugger
 									apagaCarat(linha[highlight], cursor-2);
 									break;
+									*/
 								case 10: //enter
 									break;
 								case 27: //escape
 									break;
+								case KEY_UP://para nao irem ambos para 'default'
+									break;
+								case KEY_DOWN:
+									break;
 								default: //character para escrever
 									ch = choice;
-									adicionaCarat(linha[highlight], ch, cursor-1);
+									if(adicionaCarat(linha[highlight], ch, cursor-1))
+										cursor++;
 									break;
 							}
 					wmove(linhas, highlight + 1, cursor);
