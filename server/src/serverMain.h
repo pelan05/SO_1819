@@ -52,7 +52,7 @@ typedef struct user {
 //---------------------------------------------------------------------------
 
 int findUser(char* user, char* filename);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
-void commands(settings s);
-settings initSettings(settings s, int argc, char * const argv[], char* envp[]);
+void commands(settings *s);
+void initSettings(settings *s, int argc, char * const argv[], char* envp[]);
 
 #endif

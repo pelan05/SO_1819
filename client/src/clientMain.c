@@ -340,7 +340,7 @@ int main(int argc, char * const argv[]) {
 	//
 	//endGame
 	//
-
+	free(linha);
 	endwin();//fechar ncurses control
 	return EXIT_SUCCESS;
 
