@@ -44,9 +44,9 @@ int i = 0;
 	for(i = 0; i < NUMLINHAS; i++){
 
 		if(i == highlight){
-			wattron(linhas, A_REVERSE);
+			wattron(linhas, A_UNDERLINE);//A_REVERSE
 			mvwprintw(linhas, i+1, 1, linha[i]);
-			wattroff(linhas, A_REVERSE);
+			wattroff(linhas, A_UNDERLINE);//A_REVERSE
 		}else mvwprintw(linhas, i+1, 1, linha[i]);
 			
 		wrefresh(linhas);
@@ -138,15 +138,11 @@ void wPrintNumbers(WINDOW *numeros){
 	char help; //para imprimir numeros nas linhas
 	int i = 0, j = 10;
 
-	for(i = 0; i < 10; i++){//1-9
+	for(i = 0; i < 10; i++){//01-09
 		help = (char ) i+'0';
+		mvwaddch(numeros, i, 0, '0');
 		mvwaddch(numeros, i, 1, help);
 	}
-
-	for(i = 0; i < 10 ; i++){//'0' à esq dos numeros
-		mvwaddch(numeros, i, 0, '0');
-	}
-
 	for(i = 0; i < 5 ; i++){//10-14
 		help = (char ) i+'0';
 		mvwaddch(numeros, j, 0, '1');
@@ -260,7 +256,7 @@ int main(int argc, char * const argv[]) {
 		printLinhas(linhas, nomes, linha, highlight); //works 5*
 
 		choice = wgetch(linhas);
-
+		
 		switch(choice){
 			case KEY_UP:
 				highlight = (highlight > 0)? highlight-1: highlight;
@@ -274,9 +270,13 @@ int main(int argc, char * const argv[]) {
 
 				//editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
 				//inicio editmode
+				//TODO cursor nao aparece no editmode, delete escreve um 'J'
 					curs_set(1);
 					
 					wmove(linhas, highlight + 1, 1);//window, y, x
+					wrefresh(linhas);
+					refresh();
+
 					int choice;
 					char ch;
 					int cursor = 0;
@@ -299,13 +299,13 @@ int main(int argc, char * const argv[]) {
 								case 127://delete(127)
 									apagaCarat(linha[highlight], cursor-2);
 									break;
-								case KEY_BACKSPACE://backspace(8)//---------
+								case KEY_BACKSPACE://backspace(8)//---------debugger
 									apagaCarat(linha[highlight], cursor-3);
 									break;
-								case KEY_DL://delete(127)//-----------------
+								case KEY_DL://delete(127)//-----------------debugger
 									apagaCarat(linha[highlight], cursor-2);
 									break;
-								case KEY_SDL://delete(127)//----------------
+								case KEY_SDL://delete(127)//----------------debugger
 									apagaCarat(linha[highlight], cursor-2);
 									break;
 								case 10: //enter
@@ -320,7 +320,7 @@ int main(int argc, char * const argv[]) {
 					wmove(linhas, highlight + 1, cursor);
 					}while(choice != 10 && choice != 27);//enter ou escape
 
-					//curs_set(0);
+					curs_set(0);
 				//fim editmode
 				mvwprintw(nomes, highlight+1, 1, "        ");
 				wrefresh(nomes);
