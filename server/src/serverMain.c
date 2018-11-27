@@ -19,33 +19,31 @@ int findUser(char* user, char* filename) {
 	return 0;
 }
 
-void commands(settings *s) {
+void commands(settings * s) {
 
 
-	char cmd[CMDSIZE], *arg[1];
-	int n;//, i;
-		  //int argSize;
+	char input[CMDSIZE], *cmd, *arg;
+	int n;
+	char *delim = " ";
 	while (1) {
 
 		printf("> ");
 
-		fgets(cmd, CMDSIZE, stdin);
+		fgets(input, CMDSIZE, stdin);
 
-		n = 0;
-		arg[n] = strtok(cmd, " ");
-		n++;
-		while ((arg[n] = strtok(NULL, " ")) != NULL)
-			n++;
+		cmd = strtok(input, delim); //TODO: Corrigir, só aceita comandos de uma palavra caso tenha espaço no fim.
+		arg = strtok(NULL, delim);
 
 		n = 0;
 
-		while (arg[n]) {
-			tolower((int)arg[n]);
+		while (cmd[n]) {
+			cmd[n] = tolower((int)cmd[n]);
 			n++;
 		}
 
+		printf("%s", cmd);
 
-		if (!strcmp("settings", arg[0])) {
+		if (!strcmp("settings", arg)) {
 			printf("Text editor settings:\n");
 			printf("Timeout: %d\n", s->timeout);
 			printf("Maximum amount of pipes: %d\n", s->maxPipes);
@@ -57,42 +55,42 @@ void commands(settings *s) {
 			continue;
 		}
 
-		if (!strcmp("load", arg[0])) {
+		if (!strcmp("load", cmd)) {
 			printf("You've select 'load'.\n");
 			continue;
 		}
 
-		if (!strcmp("save", arg[0])) {
+		if (!strcmp("save", cmd)) {
 			printf("You've select 'save'.\n");
 			continue;
 		}
 
-		if (!strcmp("free", arg[0])) {
+		if (!strcmp("free", cmd)) {
 			printf("You've select 'free'.\n");
 			continue;
 		}
 
-		if (!strcmp("statistics", arg[0])) {
+		if (!strcmp("statistics", cmd)) {
 			printf("You've selected 'statistics'.\n");
 			continue;
 		}
 
-		if (!strcmp("users", arg[0])) {
+		if (!strcmp("users", cmd)) {
 			printf("You've select 'users'.\n");
 			continue;
 		}
 
-		if (!strcmp("text", arg[0])) {
+		if (!strcmp("text", cmd)) {
 			printf("You've select 'text'.\n");
 			continue;
 		}
 
-		if (!strcmp("shutdown", arg[0])) {
+		if (!strcmp("shutdown", cmd)) {
 			printf("You've select 'shutdown'.\n");
 			abort();
 		}
 
-		if (!strcmp("help", arg[0])) {
+		if (strcmp("help", cmd) == 0) {
 			printf("You've selected 'help':\n");
 			printf("'settings' will display the current system settings.\n");
 			printf("'load <filename>' will load the content of <filename>.\n");
