@@ -11,7 +11,7 @@ int apagaCarat(char * string, int val){
 	for(int i = val; i < 44; i++){		
 		string[i] = string[i + 1];
 	}
-	string[45/*strlen(string)*/] = ' ';
+	string[44/*strlen(string)*/] = ' ';
 
 	return 1;
 }
@@ -245,7 +245,7 @@ int main(int argc, char * const argv[]) {
 	wrefresh(linhas);
 	wrefresh(nomes);
 	
-	//imprimir numeros//not the prettiest solution but t'works
+	//imprimir numeros
 	wPrintNumbers(numeros);		
 
 
@@ -273,7 +273,8 @@ int main(int argc, char * const argv[]) {
 				//TODO cursor no canto em editmode, delete é considerado 'default' escreve um 'J'
 					curs_set(1);
 					
-					wmove(linhas, highlight + 1, 1);//window, y, x
+					//wmove(linhas, highlight + 1, 1);//window, y, x
+					wmove(linhas, 5, 5);
 					wrefresh(linhas);
 					refresh();
 
@@ -282,7 +283,7 @@ int main(int argc, char * const argv[]) {
 					int cursor = 0;
 
 					do{	
-						
+						choice = '0';
 						printLinhas(linhas, nomes, linha, highlight);	
 						choice = wgetch(linhas);
 
@@ -295,19 +296,19 @@ int main(int argc, char * const argv[]) {
 									break;
 								case 8://backspace(8)
 									apagaCarat(linha[highlight], cursor-3);
-									cursor = (cursor < 2)? cursor : cursor - 2;
+									cursor--;
+									//cursor = (cursor < 2)? cursor : cursor--;
 									break;
+									/*
 								case 127://delete(127)
 									apagaCarat(linha[highlight], cursor-2);
 									break;
-									/*
+									*/
+								/*
 								case KEY_DL://delete(127)//-----------------debugger
 									apagaCarat(linha[highlight], cursor-2);
 									break;
-								case KEY_SDL://delete(127)//----------------debugger
-									apagaCarat(linha[highlight], cursor-2);
-									break;
-									*/
+								*/
 								case 10: //enter
 									break;
 								case 27: //escape
@@ -340,13 +341,14 @@ int main(int argc, char * const argv[]) {
 	}while(choice != 27);//esc
 
 
-
-
 	//
 	//endGame
 	//
 	free(linha);
 	endwin();//fechar ncurses control
+	
+
+	
 	return EXIT_SUCCESS;
 
 }
