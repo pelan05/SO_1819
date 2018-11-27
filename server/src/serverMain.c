@@ -87,7 +87,7 @@ void commands(settings * s) {
 
 		if (!strcmp("shutdown", cmd)) {
 			printf("You've select 'shutdown'.\n");
-			abort();
+			return;
 		}
 
 		if (strcmp("help", cmd) == 0) {
@@ -182,6 +182,7 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 int main(int argc, char * const argv[], char* envp[]) {
 
+
 	settings *s;
 
 	printf("Debugger 1\n");
@@ -193,13 +194,22 @@ int main(int argc, char * const argv[], char* envp[]) {
 
 	initSettings(s, argc, argv, envp);
 
+	if(access(s->mainPipe, F_OK) == 0){
+        fprintf(stderr, "[ERROR] FIFO ja existe!!\n");
+        exit(1);
+    }
+	if(mkfifo(s->mainPipe, 0777)!=0) // 0666 read write a todos 0777 read write exe a todos
+		fprintf(stderr, "[ERROR] impossivel criar FIFO!!\n");
+
 	printf("Debugger 3\n");
 	commands(s);
 
 
 	printf("Debugger 4\n");
 
+	unlink(s->mainPipe);
 	free(s);
+
 	return EXIT_SUCCESS;
 
 }
