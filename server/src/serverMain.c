@@ -43,60 +43,60 @@ void commands(settings * s) {
 
 		printf("%s", cmd);
 
-		if (!strcmp("settings", arg)) {
-			printf("Text editor settings:\n");
+		if (!strcmp("settings", cmd)) {
+			printf("\nText editor settings:\n");
 			printf("Timeout: %d\n", s->timeout);
 			printf("Maximum amount of pipes: %d\n", s->maxPipes);
 			printf("Maximum amount of users: %d\n", s->maxUsers);
 			printf("Maximum amount of lines: %d\n", s->e.max_l);
 			printf("Maximum amount of columns: %d\n", s->e.max_c);
-			printf("Name of the database: %s", s->database);
-			printf("Name of the server pipe: %s", s->mainPipe);
+			printf("Name of the database: %s\n", s->database);
+			printf("Name of the server pipe: %s\n", s->mainPipe);
 			continue;
 		}
 
 		if (!strcmp("load", cmd)) {
-			printf("You've select 'load'.\n");
+			printf("\nYou've select 'load'.\n");
 			continue;
 		}
 
 		if (!strcmp("save", cmd)) {
-			printf("You've select 'save'.\n");
+			printf("\nYou've select 'save'.\n");
 			continue;
 		}
 
 		if (!strcmp("free", cmd)) {
-			printf("You've select 'free'.\n");
+			printf("\nYou've select 'free'.\n");
 			continue;
 		}
 
 		if (!strcmp("statistics", cmd)) {
-			printf("You've selected 'statistics'.\n");
+			printf("\nYou've selected 'statistics'.\n");
 			continue;
 		}
 
 		if (!strcmp("users", cmd)) {
-			printf("You've select 'users'.\n");
+			printf("\nYou've select 'users'.\n");
 			continue;
 		}
 
 		if (!strcmp("text", cmd)) {
-			printf("You've select 'text'.\n");
+			printf("\nYou've select 'text'.\n");
 			continue;
 		}
 
 		if (!strcmp("shutdown", cmd)) {
-			printf("You've select 'shutdown'.\n");
+			printf("\nYou've select 'shutdown'.\n");
 			return;
 		}
 
 		if (strcmp("help", cmd) == 0) {
-			printf("You've selected 'help':\n");
+			printf("\nYou've selected 'help':\n");
 			printf("'settings' will display the current system settings.\n");
 			printf("'load <filename>' will load the content of <filename>.\n");
 			printf("'save <filename>' will save what's being editted in <filename>.\n");
 			printf("'free <linenumber>' erase contents of <linenumber>.\n");
-			printf("'statistics' will display some statistics by the second while waiting for another command.\n");
+			printf("'statistics' will display some statistics by the second whilst waiting for another command.\n");
 			printf("'users' will a list of what users are logged in, by order of arrival.\n");
 			printf("'text' will the current text on client side.\n");
 			printf("'shutdown' will quit without saving.\n");
@@ -195,11 +195,11 @@ int main(int argc, char * const argv[], char* envp[]) {
 	initSettings(s, argc, argv, envp);
 
 	if(access(s->mainPipe, F_OK) == 0){
-        fprintf(stderr, "[ERROR] FIFO ja existe!!\n");
+        fprintf(stderr, "[ERROR] FIFO exists already!!\n");
         exit(1);
     }
 	if(mkfifo(s->mainPipe, 0777)!=0) // 0666 read write a todos 0777 read write exe a todos
-		fprintf(stderr, "[ERROR] impossivel criar FIFO!!\n");
+		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
 	printf("Debugger 3\n");
 	commands(s);
