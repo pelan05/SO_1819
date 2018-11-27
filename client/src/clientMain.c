@@ -309,7 +309,7 @@ int main(int argc, char * const argv[]) {
 									apagaCarat(linha[highlight], cursor-2);
 									cursor--;
 									break;
-								case KEY_DL://delete(127)//----------------
+								case KEY_DL://delete(127)//----------------//TODO delete nao funciona na minha versao -pedro
 									apagaCarat(linha[highlight], cursor-1);
 									break;
 								case 10: //enter
