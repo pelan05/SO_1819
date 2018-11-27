@@ -16,19 +16,25 @@ int apagaCarat(char * string, int val){
 	return 1;
 }
 int adicionaCarat(char * string, char adicao, int val){
-	int index = 44;
-	if(temEspaco(string)){
+
+	int index = 44;//ultima celula da string
+	//int valAux = val;
+
 	//descobrir a começar pelo fim onde acabam as celulas vazias ' '
-	//na ultima celula vazia preencher com as cheias até o slot pretendido estar vazio		
+	//na ultima celula vazia preencher com as cheias até o slot pretendido estar vazio	
+	if(temEspaco(string)){	
 		for(index = TAMJANLINHASX-3; index > 0; index--){
 			if(string[index] == ' ')
 				continue;
 			else 
 				break;
 		}
+
+		index++;
 		for(;index > val; index--){
-			string[index] = string [index -1];
+			string[index] = string [index - 1];
 		}
+		
 		string[val] = adicao;
 
 		return 1;
@@ -295,20 +301,17 @@ int main(int argc, char * const argv[]) {
 									cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
 									break;
 								case 8://backspace(8)
-									apagaCarat(linha[highlight], cursor-3);
+									apagaCarat(linha[highlight], cursor-2);
 									cursor--;
 									//cursor = (cursor < 2)? cursor : cursor--;
 									break;
-									/*
-								case 127://delete(127)
+								case 127://delete(127)//o backspace está a mandar 127 nesta versao do linux (Pedro - Manjaro);
 									apagaCarat(linha[highlight], cursor-2);
+									cursor--;
 									break;
-									*/
-								/*
-								case KEY_DL://delete(127)//-----------------debugger
-									apagaCarat(linha[highlight], cursor-2);
+								case KEY_DL://delete(127)//----------------
+									apagaCarat(linha[highlight], cursor-1);
 									break;
-								*/
 								case 10: //enter
 									break;
 								case 27: //escape
