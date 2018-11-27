@@ -19,80 +19,78 @@ int findUser(char* user, char* filename) {
 	return 0;
 }
 
-void commands(settings s) {
+void commands(settings * s) {
 
 
-	char cmd[CMDSIZE], *arg[1];
-	int n;//, i;
-		  //int argSize;
+	char input[CMDSIZE], *cmd, *arg;
+	int n;
+	char *delim = " ";
 	while (1) {
 
 		printf("> ");
 
-		fgets(cmd, CMDSIZE, stdin);
+		fgets(input, CMDSIZE, stdin);
 
-		n = 0;
-		arg[n] = strtok(cmd, " ");
-		n++;
-		while ((arg[n] = strtok(NULL, " ")) != NULL)
-			n++;
+		cmd = strtok(input, delim); //TODO: Corrigir, só aceita comandos de uma palavra caso tenha espaço no fim.
+		arg = strtok(NULL, delim);
 
 		n = 0;
 
-		while (arg[n]) {
-			tolower((int)arg[n]);
+		while (cmd[n]) {
+			cmd[n] = tolower((int)cmd[n]);
 			n++;
 		}
 
+		printf("%s", cmd);
 
-		if (!strcmp("settings", arg[0])) {
+		if (!strcmp("settings", arg)) {
 			printf("Text editor settings:\n");
-			printf("Timeout: %d\n", s.timeout);
-			printf("Maximum amount of pipes: %d\n", s.maxPipes);
-			printf("Maximum amount of users: %d\n", s.maxUsers);
-			printf("Maximum amount of lines: %d\n", s.e.max_l);
-			printf("Maximum amount of columns: %d\n", s.e.max_c);
-			printf("Name of the database: %s", s.database);
-			printf("Name of the server pipe: %s", s.mainPipe);
+			printf("Timeout: %d\n", s->timeout);
+			printf("Maximum amount of pipes: %d\n", s->maxPipes);
+			printf("Maximum amount of users: %d\n", s->maxUsers);
+			printf("Maximum amount of lines: %d\n", s->e.max_l);
+			printf("Maximum amount of columns: %d\n", s->e.max_c);
+			printf("Name of the database: %s", s->database);
+			printf("Name of the server pipe: %s", s->mainPipe);
 			continue;
 		}
 
-		if (!strcmp("load", arg[0])) {
+		if (!strcmp("load", cmd)) {
 			printf("You've select 'load'.\n");
 			continue;
 		}
 
-		if (!strcmp("save", arg[0])) {
+		if (!strcmp("save", cmd)) {
 			printf("You've select 'save'.\n");
 			continue;
 		}
 
-		if (!strcmp("free", arg[0])) {
+		if (!strcmp("free", cmd)) {
 			printf("You've select 'free'.\n");
 			continue;
 		}
 
-		if (!strcmp("statistics", arg[0])) {
+		if (!strcmp("statistics", cmd)) {
 			printf("You've selected 'statistics'.\n");
 			continue;
 		}
 
-		if (!strcmp("users", arg[0])) {
+		if (!strcmp("users", cmd)) {
 			printf("You've select 'users'.\n");
 			continue;
 		}
 
-		if (!strcmp("text", arg[0])) {
+		if (!strcmp("text", cmd)) {
 			printf("You've select 'text'.\n");
 			continue;
 		}
 
-		if (!strcmp("shutdown", arg[0])) {
+		if (!strcmp("shutdown", cmd)) {
 			printf("You've select 'shutdown'.\n");
 			abort();
 		}
 
-		if (!strcmp("help", arg[0])) {
+		if (strcmp("help", cmd) == 0) {
 			printf("You've selected 'help':\n");
 			printf("'settings' will display the current system settings.\n");
 			printf("'load <filename>' will load the content of <filename>.\n");
@@ -108,7 +106,7 @@ void commands(settings s) {
 
 }
 
-settings initSettings(settings s, int argc, char * const argv[], char* envp[]) {
+void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 	char* aux = NULL;
 
@@ -116,51 +114,54 @@ settings initSettings(settings s, int argc, char * const argv[], char* envp[]) {
 
 	opterr = 0;
 
+	
+
 	//Inicializar valores por defeito
-	s.timeout = MEDIT_TIMEOUT;
-	s.maxUsers = MEDIT_MAXUSERS;
-	s.maxPipes = MEDIT_MAXPIPES;
-	s.e.max_c = MEDIT_MAXCOLUMNS;
-	s.e.max_l = MEDIT_MAXLINES;
-	s.database = MEDIT_DEFAULT_NAME;
-	s.mainPipe = MEDIT_MAIN_PIPE_DEFAULT_NAME;
+	s->timeout = MEDIT_TIMEOUT;
+	s->maxUsers = MEDIT_MAXUSERS;
+	s->maxPipes = MEDIT_MAXPIPES;
+	s->e.max_c = MEDIT_MAXCOLUMNS;
+	s->e.max_l = MEDIT_MAXLINES;
+	s->database = MEDIT_DEFAULT_NAME;
+	s->mainPipe = MEDIT_MAIN_PIPE_DEFAULT_NAME;
 
 	//Substituir pelas variaveis de ambiente caso existam
 
 	aux = NULL;
 	aux = getenv("MEDIT_TIMEOUT");
 	if (aux != NULL) {
-		s.timeout = atoi(aux);
+		s->timeout = atoi(aux);
 	}
 
 	aux = NULL;
 	aux = getenv("MEDIT_MAXLINES");
 	if (aux != NULL) {
-		s.e.max_l = atoi(aux);
+		s->e.max_l = atoi(aux);
 	}
 
 	aux = NULL;
 	aux = getenv("MEDIT_MAXCOLUMNS");
 	if (aux != NULL) {
-		s.e.max_c = atoi(aux);
+		s->e.max_c = atoi(aux);
 	}
 
 	aux = NULL;
 	aux = getenv("MEDIT_USERS");
 	if (aux != NULL) {
-		s.maxUsers = atoi(aux);
+		s->maxUsers = atoi(aux);
 	}
+
 
 	while ((flag = getopt(argc, argv, "f:p:n:")) != -1)
 		switch (flag) {
 		case 'f':
-			strcpy(s.database, optarg);
+			strcpy(s->database, optarg);
 			break;
 		case 'p':
-			strcpy(s.mainPipe, optarg);
+			strcpy(s->mainPipe, optarg);
 			break;
 		case 'n':
-			s.maxUsers = atoi(optarg);
+			s->maxUsers = atoi(optarg);
 			break;
 		case '?':
 			if (optopt == 'f')
@@ -176,16 +177,29 @@ settings initSettings(settings s, int argc, char * const argv[], char* envp[]) {
 		}
 
 
-	return s;
 }
 
 
 int main(int argc, char * const argv[], char* envp[]) {
 
-	settings s;
+	settings *s;
 
-	s = initSettings(s, argc, argv, envp);
+	printf("Debugger 1\n");
+	s = malloc(sizeof(settings));
+		if(s == NULL)
+			printf("Erro na alocação mem linha 188 serverMain.c");
 
+	printf("Debugger 2\n");
+
+	initSettings(s, argc, argv, envp);
+
+	printf("Debugger 3\n");
 	commands(s);
 
-	return 0;}
+
+	printf("Debugger 4\n");
+
+	free(s);
+	return EXIT_SUCCESS;
+
+}

@@ -7,28 +7,34 @@ int temEspaco(char * string){
 		return 0;
 }
 int apagaCarat(char * string, int val){
-	//preenche o slot 'val' com a celula seguinto, até chegar à 43*!!(nao puxar o \0!!!)
+	//preenche o slot 'val' com a celula seguinte, até chegar à 43*!!(nao puxar o \0!!!)
 	for(int i = val; i < 44; i++){		
 		string[i] = string[i + 1];
 	}
-	string[strlen(string)] = ' ';
+	string[44/*strlen(string)*/] = ' ';
 
 	return 1;
 }
 int adicionaCarat(char * string, char adicao, int val){
-	int index = 44;
-	if(temEspaco(string)){
+
+	int index = 44;//ultima celula da string
+	//int valAux = val;
+
 	//descobrir a começar pelo fim onde acabam as celulas vazias ' '
-	//na ultima celula vazia preencher com as cheias até o slot pretendido estar vazio		
+	//na ultima celula vazia preencher com as cheias até o slot pretendido estar vazio	
+	if(temEspaco(string)){	
 		for(index = TAMJANLINHASX-3; index > 0; index--){
 			if(string[index] == ' ')
 				continue;
 			else 
 				break;
 		}
+
+		index++;
 		for(;index > val; index--){
-			string[index] = string [index -1];
+			string[index] = string [index - 1];
 		}
+		
 		string[val] = adicao;
 
 		return 1;
@@ -36,7 +42,27 @@ int adicionaCarat(char * string, char adicao, int val){
 		return 0;
 }
 
-void editMode(char * string, WINDOW ** window, int linha){
+
+void printLinhas(WINDOW *linhas, WINDOW *nomes, char **linha, int highlight){
+
+int i = 0;
+
+	for(i = 0; i < NUMLINHAS; i++){
+
+		if(i == highlight){
+			wattron(linhas, A_UNDERLINE);//A_REVERSE
+			mvwprintw(linhas, i+1, 1, linha[i]);
+			wattroff(linhas, A_UNDERLINE);//A_REVERSE
+		}else mvwprintw(linhas, i+1, 1, linha[i]);
+			
+		wrefresh(linhas);
+		wrefresh(nomes);
+		refresh();
+	}
+
+}
+/*
+void editMode(char * string, WINDOW ** window, int linha){ //frase, janela e num. linha
 
 curs_set(1);
 wmove(*window, linha, 1);//window, y, x
@@ -54,25 +80,27 @@ do{		choice = wgetch(*window);
 				cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
 				break;
 			case 8://backspace(8)
-				apagaCarat(string, cursor-3);			
+				apagaCarat(string, cursor-3);
+
+
 				break;
 			case 127://delete(127)
 				apagaCarat(string, cursor-2);
 				break;
-			case 10:
+			case 10: //enter
 				break;
-			case 27:
+			case 27: //escape
 				break;
-			default:
+			default: //character para escrever
 				ch = choice;
 				adicionaCarat(string, ch, cursor-1);
 				break;
 		}
 wmove(*window, linha, cursor);
-}while(choice != 10 && choice != 27);//enter
+}while(choice != 10 && choice != 27);//enter ou escape
 
 curs_set(0);
-}
+}*/
 
 void getUserEnv(int argc, char * const argv[], char * username){
 	int flag;
@@ -111,6 +139,24 @@ void pedeUser(char * username){
 	}while(!flagUserSuccess);
 }
 
+void wPrintNumbers(WINDOW *numeros){
+
+	char help; //para imprimir numeros nas linhas
+	int i = 0, j = 10;
+
+	for(i = 0; i < 10; i++){//01-09
+		help = (char ) i+'0';
+		mvwaddch(numeros, i, 0, '0');
+		mvwaddch(numeros, i, 1, help);
+	}
+	for(i = 0; i < 5 ; i++){//10-14
+		help = (char ) i+'0';
+		mvwaddch(numeros, j, 0, '1');
+		mvwaddch(numeros, j, 1, help);
+		j++;
+	}
+	wrefresh(numeros);
+}
 
 
 
@@ -121,25 +167,20 @@ int main(int argc, char * const argv[]) {
 	//Variáveis
 	//
 
-
-
-	char help; //para imprimir numeros nas linhas
 	char username[8] = {" "};
-
-	
 
 	char **linha;
 	
 	linha = malloc(sizeof(char *) * 15);
 	if(!linha){
-		printf("Erro a alocar mem linha145 clientmain\n");
+		printf("Erro a alocar mem linha 191 clientmain\n");
 	}
 	for(int i = 0; i < 15; i++)
 	{
 		linha[i] = malloc(sizeof(char) * 45);
 		if(!linha[i])
 		{
-			printf("Erro a alocar mem linha150 clientmain\n");
+			printf("Erro a alocar mem linha 198 clientmain\n");
 		}
 	}
 	
@@ -164,16 +205,17 @@ int main(int argc, char * const argv[]) {
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
 	
-	int i=0;
+	//int i=0;
 
 	//
 	//Codigo do username
 	//
 	
-	getUserEnv(argc, argv, username);
-	if(!strcmp(username, " ")){
+	getUserEnv(argc, argv, username);//-u "nome"
+	if(!strcmp(username, " ")){//pede por linha de comandos
 		pedeUser(username);
 	}
+	//TODO verificação username do srv
 
 
 
@@ -197,8 +239,7 @@ int main(int argc, char * const argv[]) {
 	box(nomes, '|' , '-'); //janela, vert char, horiz char
 	box(linhas, '|' , '-'); //janela, vert char, horiz char
 
-	
-
+	//wRefreshAll(nomes, numeros, linhas); //not working
 	refresh();
 
 	curs_set(0);//cursor 0-invisivel, 1-normal, 2-high-vis mode
@@ -210,65 +251,18 @@ int main(int argc, char * const argv[]) {
 	wrefresh(linhas);
 	wrefresh(nomes);
 	
-					//imprimir numeros//not the prettiest solution but t'works
-					for(i = 0; i < 10; i++){
-						help = (char ) i+'0';
-						mvwaddch(numeros, i, 1, help);
-					}
-					for(i = 0; i < 10 ; i++){
-						help = (char) 0+'0';
-						mvwaddch(numeros, i, 0, help);
-					}
-						help = (char) 0+'0';
-						mvwaddch(numeros, 10, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 10, 0, help);
-
-						help = (char) 1+'0';
-						mvwaddch(numeros, 11, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 11, 0, help);
-
-						help = (char) 2+'0';
-						mvwaddch(numeros, 12, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 12, 0, help);
-
-						help = (char) 3+'0';
-						mvwaddch(numeros, 13, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 13, 0, help);
-
-						help = (char) 4+'0';
-						mvwaddch(numeros, 14, 1, help);
-						help = (char) 1+'0';
-						mvwaddch(numeros, 14, 0, help);
-
-					wrefresh(numeros);
+	//imprimir numeros
+	wPrintNumbers(numeros);		
 
 
 
 
 	do{
-		for(i = 0; i < NUMLINHAS; i++){
-			
 
-			if(i == highlight){
-				wattron(linhas, A_REVERSE);
-				mvwprintw(linhas, i+1, 1, linha[i]);
-				wattroff(linhas, A_REVERSE);
-			}else
-			
-			mvwprintw(linhas, i+1, 1, linha[i]);
-
-			
-			wrefresh(linhas);
-			wrefresh(nomes);
-			refresh();
-		}
+		printLinhas(linhas, nomes, linha, highlight); //works 5*
 
 		choice = wgetch(linhas);
-
+		
 		switch(choice){
 			case KEY_UP:
 				highlight = (highlight > 0)? highlight-1: highlight;
@@ -279,26 +273,68 @@ int main(int argc, char * const argv[]) {
 			case 10://enter
 				mvwprintw(nomes, highlight+1, 1, username);
 				wrefresh(nomes);
-				editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
+
+				//editMode(linha[highlight], &linhas, highlight + 1);//frase, janela e num linha
+				//inicio editmode
+				//TODO cursor no canto em editmode, delete é considerado 'default' escreve um 'J'
+					curs_set(1);
+					
+					//wmove(linhas, highlight + 1, 1);//window, y, x
+					wmove(linhas, 5, 5);
+					wrefresh(linhas);
+					refresh();
+
+					int choice;
+					char ch;
+					int cursor = 0;
+
+					do{	
+						choice = '0';
+						printLinhas(linhas, nomes, linha, highlight);	
+						choice = wgetch(linhas);
+
+							switch(choice){
+								case KEY_LEFT:
+									cursor = (cursor < 2)? cursor : cursor - 1;
+									break;
+								case KEY_RIGHT:
+									cursor = (cursor < (TAMJANLINHASX-2))? cursor + 1 : cursor;
+									break;
+								case 8://backspace(8)
+									apagaCarat(linha[highlight], cursor-2);
+									cursor--;
+									//cursor = (cursor < 2)? cursor : cursor--;
+									break;
+								case 127://delete(127)//o backspace está a mandar 127 nesta versao do linux (Pedro - Manjaro);
+									apagaCarat(linha[highlight], cursor-2);
+									cursor--;
+									break;
+								case KEY_DL://delete(127)//----------------//TODO delete nao funciona na minha versao -pedro
+									apagaCarat(linha[highlight], cursor-1);
+									break;
+								case 10: //enter
+									break;
+								case 27: //escape
+									break;
+								case KEY_UP://para nao irem ambos para 'default'
+									break;
+								case KEY_DOWN:
+									break;
+								default: //character para escrever
+									ch = choice;
+									if(adicionaCarat(linha[highlight], ch, cursor-1))
+										cursor++;
+									break;
+							}
+					wmove(linhas, highlight + 1, cursor);
+					}while(choice != 10 && choice != 27);//enter ou escape
+
+					curs_set(0);
+				//fim editmode
 				mvwprintw(nomes, highlight+1, 1, "        ");
 				wrefresh(nomes);
 
-				for(i = 0; i < NUMLINHAS; i++){
-			
-					if(i == highlight){
-						wattron(linhas, A_REVERSE);
-						mvwprintw(linhas, i+1, 1, linha[i]);
-						wattroff(linhas, A_REVERSE);
-					}else
-					
-					mvwprintw(linhas, i+1, 1, linha[i]);
-
-					
-					wrefresh(linhas);
-					wrefresh(nomes);
-					refresh();
-				}
-
+				//printLinhas(linhas, nomes, linha, highlight);
 
 				break;
 			default:
@@ -311,8 +347,11 @@ int main(int argc, char * const argv[]) {
 	//
 	//endGame
 	//
-
+	free(linha);
 	endwin();//fechar ncurses control
+	
+
+	
 	return EXIT_SUCCESS;
 
 }
