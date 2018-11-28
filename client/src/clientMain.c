@@ -1,5 +1,13 @@
 #include "clientMain.h"
 
+int verificaServidor(char * path){
+
+	if(!access( path , F_OK ) == 0){
+        printf("Servidor não foi executado!\n");
+		return 0;
+	}else return 1;
+}
+
 int temEspaco(char * string){
 	if(string[44]==' ')
 		return 1;
@@ -226,11 +234,9 @@ int main(int argc, char * const argv[]) {
 	getUserEnv(argc, argv, username, file);//-u "nome" e -p "path do main pipe"
 
 	strcpy(path, strcat(path, file));//compila string de path e verifica se pip existe
-	if(!access( path , F_OK ) == 0){
-        printf("Servidor não foi executado!\n");
-        exit(1);
-    }
-
+	if(!verificaServidor(path)){
+		exit(1);
+	}
 	if(!strcmp(username, " ")){//pede por linha de comandos
 		pedeUser(username);
 	}

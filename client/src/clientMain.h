@@ -34,6 +34,7 @@ typedef struct user {
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
+int verificaServidor(char * path);
 int temEspaco(char * string);
 int apagaCarat(char * string, int val);
 int adicionaCarat(char * string, char adicao, int val);
