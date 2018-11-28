@@ -1,4 +1,4 @@
-#include "serverMain.h"
+    #include "serverMain.h"
 
 
 int findUser(char* user, char* filename) {
@@ -24,15 +24,14 @@ void commands(settings * s) {
 
 	char input[CMDSIZE], *cmd, *arg;
 	int n;
-	char *delim = " ";
 	while (1) {
 
 		printf("> ");
 
 		fgets(input, CMDSIZE, stdin);
 
-		cmd = strtok(input, delim); //TODO: Corrigir, só aceita comandos de uma palavra caso tenha espaço no fim.
-		arg = strtok(NULL, delim);
+		cmd = strtok(input, " "); //TODO: Corrigir, só aceita comandos de uma palavra caso tenha espaço no fim.
+		arg = strtok(NULL, " ");
 
 		n = 0;
 
