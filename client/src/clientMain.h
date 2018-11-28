@@ -18,8 +18,9 @@
 #include <ncurses.h>
 #include <curses.h>
 #include <signal.h>
-
-
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 //---------------------------------------------------------------------------
 //------------------------------Estruturas-----------------------------------

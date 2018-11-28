@@ -117,6 +117,40 @@ void wPrintNumbers(WINDOW *numeros){
 	wrefresh(numeros);
 }
 
+char * leFifo(char * path, char * String){
+	
+	int fd = open( path , O_RDONLY );
+	if(fd == -1)
+		printf("Erro a abrir o fifo %s \n", path);
+
+	read(fd, String, sizeof(String));
+
+	close(fd);
+	return String;
+}
+
+void escreveFifo(char * path, char * String){
+	
+	int fd = open( path , O_WRONLY );
+	if(fd == -1)
+		printf("Erro a abrir o fifo %s \n", path);
+	
+	write(fd, String, sizeof(String));
+
+	close(fd);
+}
+
+
+
+
+///----------------------------------------
+///MAIN
+///
+///
+///
+///----------------------------------------
+
+
 
 
 int main(int argc, char * const argv[]) {
@@ -126,6 +160,10 @@ int main(int argc, char * const argv[]) {
 	//Variáveis
 	//
 
+
+	//TODO nome do pipe
+	//char path[20] = {"../../server/bin/"};
+	
 	char username[8] = {" "};
 
 	char **linha;
