@@ -241,6 +241,7 @@ int main(int argc, char * const argv[]) {
 		pedeUser(username);
 	}
 
+	//TODO verificação username do srv
 	/*
 	if(!usernameExists(username)){
 		printf("Username não encontrado!");
@@ -248,7 +249,6 @@ int main(int argc, char * const argv[]) {
 	}
 	*/
 
-	//TODO verificação username do srv
 
 
 
