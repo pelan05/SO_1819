@@ -38,8 +38,13 @@ int temEspaco(char * string);
 int apagaCarat(char * string, int val);
 int adicionaCarat(char * string, char adicao, int val);
 void printLinhas(WINDOW *linhas, WINDOW *nomes, char **linha, int highlight);
-void getUserEnv(int argc, char * const argv[], char * username);
+void getUserEnv(int argc, char * const argv[], char * username, char * path);
 void pedeUser(char * username);
 void wPrintNumbers(WINDOW *numeros);
+int usernameExists(char * username);
+/*
+char * leFifo(char * path, char * String);
+void escreveFifo(char * path, char * String);
+*/
 
 #endif

@@ -185,6 +185,7 @@ int main(int argc, char * const argv[], char* envp[]) {
 
 
 	settings *s;
+	char filename[MAXFILENAME] = {"medit.db"}; //path da bd de usernames
 
 	s = malloc(sizeof(settings));
 		if(s == NULL)
@@ -210,7 +211,20 @@ int main(int argc, char * const argv[], char* envp[]) {
 	//read(int fd, buffer, size_t size);
 
 
+	//TODO finish the function below //(todo linha ~120 clienteMain.c)
+	/*
+	//receber username pelo serverPipe
+	if(findUser(username, filename) == 1){
+		//abrir novo pipe e passar ao cliente
+	}else{
+		//enviar erro ao cliente
+	}
+	*/
+
+
 	commands(s);
+
+
 
 	unlink(s->mainPipe);
 	free(s);

@@ -7,6 +7,9 @@
 //defines de leitura de comandos
 #define CMDSIZE 50
 
+//define de tamanho de filename
+#define MAXFILENAME 20
+
 //medit defines
 #define MEDIT_TIMEOUT 10
 #define MEDIT_MAXPIPES 3

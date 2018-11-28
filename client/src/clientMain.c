@@ -61,15 +61,18 @@ int i = 0;
 
 }
 
-void getUserEnv(int argc, char * const argv[], char * username){
+void getUserEnv(int argc, char * const argv[], char * username, char * path){
 	int flag;
 
 	opterr = 0;
 
-	while((flag = getopt(argc, argv, "u:")) != -1)
+	while((flag = getopt(argc, argv, "u:p:")) != -1)
 		switch (flag) {
 		case 'u':
 			strcpy(username, optarg);
+			break;
+		case 'p':
+			strcpy(path, optarg);
 			break;
 		case '?':
 			if (optopt == 'u')
@@ -117,6 +120,18 @@ void wPrintNumbers(WINDOW *numeros){
 	wrefresh(numeros);
 }
 
+//TODO USERNAME srvr verification
+int usernameExists(char * username){
+
+//ON Success 
+return 1;
+
+//else return 0;
+
+}
+
+
+/*
 char * leFifo(char * path, char * String){
 	
 	int fd = open( path , O_RDONLY );
@@ -139,7 +154,7 @@ void escreveFifo(char * path, char * String){
 
 	close(fd);
 }
-
+*/
 
 
 
@@ -161,18 +176,10 @@ int main(int argc, char * const argv[]) {
 	//
 
 
-	//TODO nome do pipe
-	char path[50] = {"../../server/bin/"};
-	char file[20] = {"serverPipe"};
-	strcpy(path, strcat(path, file));
-
-	if(!access( path , F_OK ) == 0){
-        printf("Servidor não foi executado!\n");
-        exit(1);
-    }
-
 
 	char username[8] = {" "};
+	char path[50] = {"../../server/bin/"};
+	char file[20] = {"serverPipe"};
 
 	char **linha;
 	
@@ -216,10 +223,25 @@ int main(int argc, char * const argv[]) {
 	//Codigo do username
 	//
 	
-	getUserEnv(argc, argv, username);//-u "nome"
+	getUserEnv(argc, argv, username, file);//-u "nome" e -p "path do main pipe"
+
+	strcpy(path, strcat(path, file));//compila string de path e verifica se pip existe
+	if(!access( path , F_OK ) == 0){
+        printf("Servidor não foi executado!\n");
+        exit(1);
+    }
+
 	if(!strcmp(username, " ")){//pede por linha de comandos
 		pedeUser(username);
 	}
+
+	/*
+	if(!usernameExists(username)){
+		printf("Username não encontrado!");
+		exit(1);
+	}
+	*/
+
 	//TODO verificação username do srv
 
 
