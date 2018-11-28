@@ -182,14 +182,15 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 int main(int argc, char * const argv[], char* envp[]) {
 
 
-	settings *s;
 
-	printf("Debugger 1\n");
+	settings *s;
+	char filename[MAXFILENAME] = {"medit.db"}; //path da bd de usernames
+
 	s = malloc(sizeof(settings));
 		if(s == NULL)
-			printf("Erro na alocação mem linha 188 serverMain.c");
+			printf("Erro na alocação memoria para struct 'Settings' \n");
 
-	printf("Debugger 2\n");
+
 
 	initSettings(s, argc, argv, envp);
 
@@ -200,11 +201,29 @@ int main(int argc, char * const argv[], char* envp[]) {
 	if(mkfifo(s->mainPipe, 0777)!=0) // 0666 read write a todos 0777 read write exe a todos
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
-	printf("Debugger 3\n");
+
+	//unlink(cont char * filename); //Remove um FIFO/Ficheiro
+	//fontl(int fd, int command, long arg); //Manipula as propriedades do FIFO/Ficheiro
+
+	//open(filename, flags);
+	//write(int fd, buffer, size_t size);
+	//read(int fd, buffer, size_t size);
+
+
+	//TODO finish the function below //(todo linha ~120 clienteMain.c)
+	/*
+	//receber username pelo serverPipe
+	if(findUser(username, filename) == 1){
+		//abrir novo pipe e passar ao cliente
+	}else{
+		//enviar erro ao cliente
+	}
+	*/
+
+
 	commands(s);
 
 
-	printf("Debugger 4\n");
 
 	unlink(s->mainPipe);
 	free(s);

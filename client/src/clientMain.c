@@ -1,5 +1,13 @@
 #include "clientMain.h"
 
+int verificaServidor(char * path){
+
+	if(!access( path , F_OK ) == 0){
+        printf("Servidor não foi executado!\n");
+		return 0;
+	}else return 1;
+}
+
 int temEspaco(char * string){
 	if(string[44]==' ')
 		return 1;
@@ -61,15 +69,18 @@ int i = 0;
 
 }
 
-void getUserEnv(int argc, char * const argv[], char * username){
+void getUserEnv(int argc, char * const argv[], char * username, char * path){
 	int flag;
 
 	opterr = 0;
 
-	while((flag = getopt(argc, argv, "u:")) != -1)
+	while((flag = getopt(argc, argv, "u:p:")) != -1)
 		switch (flag) {
 		case 'u':
 			strcpy(username, optarg);
+			break;
+		case 'p':
+			strcpy(path, optarg);
 			break;
 		case '?':
 			if (optopt == 'u')
@@ -117,6 +128,52 @@ void wPrintNumbers(WINDOW *numeros){
 	wrefresh(numeros);
 }
 
+//TODO USERNAME srvr verification
+int usernameExists(char * username){
+
+//ON Success 
+return 1;
+
+//else return 0;
+
+}
+
+
+/*
+char * leFifo(char * path, char * String){
+	
+	int fd = open( path , O_RDONLY );
+	if(fd == -1)
+		printf("Erro a abrir o fifo %s \n", path);
+
+	read(fd, String, sizeof(String));
+
+	close(fd);
+	return String;
+}
+
+void escreveFifo(char * path, char * String){
+	
+	int fd = open( path , O_WRONLY );
+	if(fd == -1)
+		printf("Erro a abrir o fifo %s \n", path);
+	
+	write(fd, String, sizeof(String));
+
+	close(fd);
+}
+*/
+
+
+
+///----------------------------------------
+///MAIN
+///
+///
+///
+///----------------------------------------
+
+
 
 
 int main(int argc, char * const argv[]) {
@@ -126,7 +183,11 @@ int main(int argc, char * const argv[]) {
 	//Variáveis
 	//
 
+
+
 	char username[8] = {" "};
+	char path[50] = {"../../server/bin/"};
+	char file[20] = {"serverPipe"};
 
 	char **linha;
 	
@@ -170,11 +231,24 @@ int main(int argc, char * const argv[]) {
 	//Codigo do username
 	//
 	
-	getUserEnv(argc, argv, username);//-u "nome"
+	getUserEnv(argc, argv, username, file);//-u "nome" e -p "path do main pipe"
+
+	strcpy(path, strcat(path, file));//compila string de path e verifica se pip existe
+	if(!verificaServidor(path)){
+		exit(1);
+	}
 	if(!strcmp(username, " ")){//pede por linha de comandos
 		pedeUser(username);
 	}
+
 	//TODO verificação username do srv
+	/*
+	if(!usernameExists(username)){
+		printf("Username não encontrado!");
+		exit(1);
+	}
+	*/
+
 
 
 
