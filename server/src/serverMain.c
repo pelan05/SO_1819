@@ -183,8 +183,6 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 int main(int argc, char * const argv[], char* envp[]) {
 
 
-	//TODO nome do pipe
-	//char path[20] = {"../../server/bin/"};
 
 	settings *s;
 
@@ -202,6 +200,7 @@ int main(int argc, char * const argv[], char* envp[]) {
     }
 	if(mkfifo(s->mainPipe, 0777)!=0) // 0666 read write a todos 0777 read write exe a todos
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
+
 
 	//unlink(cont char * filename); //Remove um FIFO/Ficheiro
 	//fontl(int fd, int command, long arg); //Manipula as propriedades do FIFO/Ficheiro

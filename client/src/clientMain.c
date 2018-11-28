@@ -162,8 +162,16 @@ int main(int argc, char * const argv[]) {
 
 
 	//TODO nome do pipe
-	//char path[20] = {"../../server/bin/"};
-	
+	char path[50] = {"../../server/bin/"};
+	char file[20] = {"serverPipe"};
+	strcpy(path, strcat(path, file));
+
+	if(!access( path , F_OK ) == 0){
+        printf("Servidor não foi executado!\n");
+        exit(1);
+    }
+
+
 	char username[8] = {" "};
 
 	char **linha;
