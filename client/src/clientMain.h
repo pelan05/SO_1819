@@ -46,7 +46,7 @@ int usernameExists(char * username);
 /*
 char * leFifo(char * path, char * String);
 */
-void olaFifo(char * path, char * String, int pid);
+void olaFifo(char * path, char * String, int * pid);
 
 
 #endif

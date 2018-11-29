@@ -154,7 +154,7 @@ char * leFifo(char * path, char * String){
 	return String;
 }
 */
-void olaFifo(char * path, char * String, int pid){
+void olaFifo(char * path, char * String, int  * pid){
 	
 	int fd = open( path , O_WRONLY );
 	if(fd == -1)
@@ -245,7 +245,8 @@ int main(int argc, char * const argv[]) {
 	}
 
 	//TODO verificaçã
-	olaFifo(path, username, getpid());
+	int pid = getpid();
+	olaFifo(path, username, &pid);
 
 
 
