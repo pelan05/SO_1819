@@ -16,10 +16,15 @@ int findUser(char * username, settings *s) {
 	while (fgets(buffer, TAMBUFFER + 1, f) != NULL){
 		buffer[strlen(buffer)-1] = 0;
 		
-
-		if (!strcmp(username, buffer))
+		if (!strcmp(username, buffer)){
+			fclose(f);
 			return 1;
+		}
 	}
+
+	printf("vou sair\n");
+
+	fclose(f);
 
 	return 0;
 }
@@ -53,22 +58,29 @@ void commands(settings * s) {
 	int fdr;
 	user novo;
 
+	int logged = 0;
+
 	user users[s->maxUsers];
 
-	fdr = open(s->mainPipe, O_RDONLY);
-	if (fdr == -1)
-		fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
-	fdw = open(s->mainPipe, O_WRONLY);
+	printf("before loop\n");
 
-	if (fdr == -1)
-		fprintf(stderr, "[ERROR] Can't CENAS in ze pipe!\n");
+	do{
+		fdr = open(s->mainPipe, O_RDONLY);
+		if (fdr == -1)
+			fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
+		fdw = open(s->mainPipe, O_WRONLY);
 
-	int r = read(fdr, &novo, sizeof(user));
+		if (fdw == -1)
+			fprintf(stderr, "[ERROR] Can't CENAS in ze pipe!\n");
 
-	if(findUser(novo.nome, s))
-		printf("nice\n\n");
+		int r = read(fdr, &novo, sizeof(user));
 
-	exit(1);
+		if(findUser(novo.nome, s))
+			logged = 1;
+		
+		printf("\n %d \n", logged);
+
+	}while(logged == 0);
 
 	while (1) {
 
