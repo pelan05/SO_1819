@@ -219,6 +219,13 @@ int main(int argc, char * const argv[], char* envp[]) {
 	if(mkfifo(s->mainPipe, 0600)!=0) // 0666 read write a todos 0777 read write exe a todos
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
+	int fd = open(s->mainPipe, O_WRONLY);
+	if (fd == -1)
+		fprintf(stderr, "[ERROR] Can't write in ze pipe!\n");
+
+	write(fd, 'C', sizeof(char));
+	close(fd);
+
 	user users[s->maxUsers];
 
 	user novo = recebeUser(s->mainPipe);
