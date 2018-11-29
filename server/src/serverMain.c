@@ -200,35 +200,46 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 int main(int argc, char * const argv[], char* envp[]) {
 
-
+	int fdw;
+	int fdr;
+	user novo;
 
 	settings *s;
+
+	printf("will alloc settings\n\n");
 
 	s = malloc(sizeof(settings));
 		if(s == NULL)
 			printf("Erro na alocação memoria para struct 'Settings' \n");
 
-
+	printf("will initSettings\n\n");
 
 	initSettings(s, argc, argv, envp);
 
+	printf("memes\n\n");
+
 	if(access(s->mainPipe, F_OK) == 0){
         fprintf(stderr, "[ERROR] FIFO exists already!!\n");
-        exit(1);
-    }
-	if(mkfifo(s->mainPipe, 0600)!=0) // 0666 read write a todos 0777 read write exe a todos
+        exit(1);}
+	if(mkfifo(s->mainPipe, 0777)!=0) // 0666 read write a todos 0777 read write exe a todos
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
-	int fd = open(s->mainPipe, O_WRONLY);
-	if (fd == -1)
-		fprintf(stderr, "[ERROR] Can't write in ze pipe!\n");
+	printf("fifo was created\n\n");
 
-	write(fd, 'C', sizeof(char));
-	close(fd);
+	fdr = open(s->mainPipe, O_RDONLY);
+	if (fdr == -1)
+		fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
+	fdw = open(s->mainPipe, O_WRONLY);
+
+	if (fdr == -1)
+		fprintf(stderr, "[ERROR] Can't CENAS in ze pipe!\n");
+
+	int r = read(fdr, &novo, sizeof(user));
+	printf("Recebi user: %s %d", novo.nome, novo.pid);
 
 	user users[s->maxUsers];
 
-	user novo = recebeUser(s->mainPipe);
+	//user novo = recebeUser(s->mainPipe);
 
 	//TODO: verificar se existe o novo
 
@@ -261,5 +272,5 @@ int main(int argc, char * const argv[], char* envp[]) {
 	free(s);
 
 	return EXIT_SUCCESS;
-
+	
 }

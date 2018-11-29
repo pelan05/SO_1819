@@ -156,8 +156,8 @@ char * leFifo(char * path, char * String){
 */
 void olaFifo(char * path, char * String, int  * pid){
 	
-	char teste;
-	int fd = open( path , O_WRONLY );
+	char * teste = " ";
+	int fd = open( path , O_WRONLY); 
 	if(fd == -1)
 		printf("Erro a abrir o fifo %s \n", path);
 
@@ -240,9 +240,28 @@ int main(int argc, char * const argv[]) {
 	getUserEnv(argc, argv, username, file);//-u "nome" e -p "path do main pipe"
 
 	strcpy(path, strcat(path, file));//compila string de path e verifica se pip existe
+	printf("%s", path);
 	if(!verificaServidor(path)){
 		exit(1);
 	}
+
+	printf("\n\nFIM DE TESTE\n");
+
+	int fdsrv;
+	user novo;
+
+	fdsrv = open(path, O_WRONLY);
+
+	printf("Scan name: ");
+	scanf("%s", &novo.nome);
+	novo.pid = getpid();
+
+	write(fdsrv, &novo, sizeof(user));
+
+
+	
+	printf("FIM DE TESTE\n\n");
+	
 	if(!strcmp(username, " ")){//pede por linha de comandos
 		pedeUser(username);
 	}
