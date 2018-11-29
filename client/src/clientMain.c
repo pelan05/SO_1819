@@ -156,11 +156,14 @@ char * leFifo(char * path, char * String){
 */
 void olaFifo(char * path, char * String, int  * pid){
 	
+	char teste;
 	int fd = open( path , O_WRONLY );
 	if(fd == -1)
 		printf("Erro a abrir o fifo %s \n", path);
+
+	read(fd, teste, sizeof(char));
 	
-	write(fd, String, sizeof(String));
+	write(fd, String, sizeof(char) * USERSIZE);
 	write(fd, pid, sizeof(int));
 
 	close(fd);
@@ -246,7 +249,8 @@ int main(int argc, char * const argv[]) {
 
 	//TODO verificaçã
 	int pid = getpid();
-	olaFifo(path, username, &pid);
+	olaFifo(path, username, &pid
+	);
 
 
 
