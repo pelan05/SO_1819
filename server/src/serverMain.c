@@ -1,5 +1,6 @@
     #include "serverMain.h"
 
+int usersLogged = 0;
 
 int findUser(char* user, char* filename) {
 
@@ -17,6 +18,24 @@ int findUser(char* user, char* filename) {
 			return 1;
 
 	return 0;
+}
+
+
+user recebeUser(char * path){
+	
+	user u;
+
+	int fd = open( path , O_RDONLY );
+	if(fd == -1)
+		printf("Erro a abrir o fifo %s \n", path);
+
+	read(fd, u.nome, sizeof(char)*TAMBUFFER);
+	read(fd, u.pid, sizeof(int));
+
+	printf("%d", u.pid);
+
+	close(fd);
+	return u;
 }
 
 void commands(settings * s) {
@@ -184,7 +203,6 @@ int main(int argc, char * const argv[], char* envp[]) {
 
 
 	settings *s;
-	char filename[MAXFILENAME] = {"medit.db"}; //path da bd de usernames
 
 	s = malloc(sizeof(settings));
 		if(s == NULL)
@@ -200,6 +218,13 @@ int main(int argc, char * const argv[], char* envp[]) {
     }
 	if(mkfifo(s->mainPipe, 0600)!=0) // 0666 read write a todos 0777 read write exe a todos
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
+
+	user users[s->maxUsers];
+
+	user novo = recebeUser(s->mainPipe);
+
+	//TODO: verificar se existe o novo
+
 
 
 	//unlink(cont char * filename); //Remove um FIFO/Ficheiro
