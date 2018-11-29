@@ -64,7 +64,7 @@ void commands(settings * s) {
 
 	printf("before loop\n");
 
-	do{
+	//do{
 		fdr = open(s->mainPipe, O_RDONLY);
 		if (fdr == -1)
 			fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
@@ -80,7 +80,7 @@ void commands(settings * s) {
 		
 		printf("\n %d \n", logged);
 
-	}while(logged == 0);
+	//}while(logged == 0);
 
 	while (1) {
 
