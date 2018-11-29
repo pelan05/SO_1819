@@ -127,7 +127,7 @@ void wPrintNumbers(WINDOW *numeros){
 	}
 	wrefresh(numeros);
 }
-
+/*
 //TODO USERNAME srvr verification
 int usernameExists(char * username){
 
@@ -136,8 +136,9 @@ return 1;
 
 //else return 0;
 
-}
 
+}
+*/
 
 /*
 char * leFifo(char * path, char * String){
@@ -147,22 +148,24 @@ char * leFifo(char * path, char * String){
 		printf("Erro a abrir o fifo %s \n", path);
 
 	read(fd, String, sizeof(String));
+	read(fd, pid, sizeof(int));
 
 	close(fd);
 	return String;
 }
-
-void escreveFifo(char * path, char * String){
+*/
+void olaFifo(char * path, char * String, int pid){
 	
 	int fd = open( path , O_WRONLY );
 	if(fd == -1)
 		printf("Erro a abrir o fifo %s \n", path);
 	
 	write(fd, String, sizeof(String));
+	write(fd, pid, sizeof(int));
 
 	close(fd);
 }
-*/
+
 
 
 
@@ -241,7 +244,11 @@ int main(int argc, char * const argv[]) {
 		pedeUser(username);
 	}
 
-	//TODO verificação username do srv
+	//TODO verificaçã
+	olaFifo(path, username, getpid());
+
+
+
 	/*
 	if(!usernameExists(username)){
 		printf("Username não encontrado!");
@@ -286,6 +293,7 @@ int main(int argc, char * const argv[]) {
 	
 	//imprimir numeros
 	wPrintNumbers(numeros);		
+
 
 
 

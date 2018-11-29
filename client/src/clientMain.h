@@ -45,7 +45,8 @@ void wPrintNumbers(WINDOW *numeros);
 int usernameExists(char * username);
 /*
 char * leFifo(char * path, char * String);
-void escreveFifo(char * path, char * String);
 */
+void olaFifo(char * path, char * String, int pid);
+
 
 #endif
