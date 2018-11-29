@@ -2,26 +2,30 @@
 
 int usersLogged = 0;
 
-int findUser(char* user, char* filename) {
+int findUser(char * username, settings *s) {
 
 
 	char buffer[TAMBUFFER];
 
-	FILE * f = fopen(filename, "r");
+	FILE * f = fopen(s->database, "r");
 	if (f == NULL) {
 		printf("Erro a abrir Ficheiro");
 		return 2;
 	}
 
-	while (fgets(buffer, sizeof(buffer), f) != NULL)
-		if (!strcmp(user, buffer))
+	while (fgets(buffer, TAMBUFFER + 1, f) != NULL){
+		buffer[strlen(buffer)-1] = 0;
+		
+
+		if (!strcmp(username, buffer))
 			return 1;
+	}
 
 	return 0;
 }
 
 
-user recebeUser(char * path){
+/*user recebeUser(char * path){			
 	
 	user u;
 
@@ -30,19 +34,42 @@ user recebeUser(char * path){
 		printf("Erro a abrir o fifo %s \n", path);
 
 	read(fd, u.nome, sizeof(char)*TAMBUFFER);
-	read(fd, u.pid, sizeof(int));
+	read(fd, &u.pid, sizeof(int));
 
 	printf("%d", u.pid);
 
 	close(fd);
 	return u;
-}
+}*/
 
 void commands(settings * s) {
 
 
 	char input[CMDSIZE], *cmd, *arg;
 	int n;
+
+
+	int fdw;
+	int fdr;
+	user novo;
+
+	user users[s->maxUsers];
+
+	fdr = open(s->mainPipe, O_RDONLY);
+	if (fdr == -1)
+		fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
+	fdw = open(s->mainPipe, O_WRONLY);
+
+	if (fdr == -1)
+		fprintf(stderr, "[ERROR] Can't CENAS in ze pipe!\n");
+
+	int r = read(fdr, &novo, sizeof(user));
+
+	if(findUser(novo.nome, s))
+		printf("nice\n\n");
+
+	exit(1);
+
 	while (1) {
 
 		printf("> ");
@@ -200,23 +227,16 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 int main(int argc, char * const argv[], char* envp[]) {
 
-	int fdw;
-	int fdr;
-	user novo;
-
 	settings *s;
 
-	printf("will alloc settings\n\n");
 
 	s = malloc(sizeof(settings));
 		if(s == NULL)
 			printf("Erro na alocação memoria para struct 'Settings' \n");
 
-	printf("will initSettings\n\n");
 
 	initSettings(s, argc, argv, envp);
 
-	printf("memes\n\n");
 
 	if(access(s->mainPipe, F_OK) == 0){
         fprintf(stderr, "[ERROR] FIFO exists already!!\n");
@@ -225,19 +245,6 @@ int main(int argc, char * const argv[], char* envp[]) {
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
 	printf("fifo was created\n\n");
-
-	fdr = open(s->mainPipe, O_RDONLY);
-	if (fdr == -1)
-		fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
-	fdw = open(s->mainPipe, O_WRONLY);
-
-	if (fdr == -1)
-		fprintf(stderr, "[ERROR] Can't CENAS in ze pipe!\n");
-
-	int r = read(fdr, &novo, sizeof(user));
-	printf("Recebi user: %s %d", novo.nome, novo.pid);
-
-	user users[s->maxUsers];
 
 	//user novo = recebeUser(s->mainPipe);
 
@@ -263,7 +270,7 @@ int main(int argc, char * const argv[], char* envp[]) {
 	}
 	*/
 
-
+	printf("entering comands\n\n");
 	commands(s);
 
 

@@ -100,7 +100,7 @@ void pedeUser(char * username){
 			printf("Username: ");
 			do{ 
 			scanf(" %s", username);
-			}while(strlen(username) > 8 || strlen(username) < 1);
+			}while(strlen(username) > USERSIZE || strlen(username) < 1);
 			//TODO checkar user no server
 			//flagUserSuccess = check();
 
@@ -191,7 +191,7 @@ int main(int argc, char * const argv[]) {
 
 
 
-	char username[8] = {" "};
+	char username[USERSIZE] = {" "};
 	char path[50] = {"../../server/bin/"};
 	char file[20] = {"serverPipe"};
 
@@ -245,7 +245,7 @@ int main(int argc, char * const argv[]) {
 		exit(1);
 	}
 
-	printf("\n\nFIM DE TESTE\n");
+	printf("\n\nINIT DE TESTE\n");
 
 	int fdsrv;
 	user novo;
@@ -253,7 +253,7 @@ int main(int argc, char * const argv[]) {
 	fdsrv = open(path, O_WRONLY);
 
 	printf("Scan name: ");
-	scanf("%s", &novo.nome);
+	scanf("%s", novo.nome);
 	novo.pid = getpid();
 
 	write(fdsrv, &novo, sizeof(user));
