@@ -198,7 +198,7 @@ int main(int argc, char * const argv[], char* envp[]) {
         fprintf(stderr, "[ERROR] FIFO exists already!!\n");
         exit(1);
     }
-	if(mkfifo(s->mainPipe, 0777)!=0) // 0666 read write a todos 0777 read write exe a todos
+	if(mkfifo(s->mainPipe, 0600)!=0) // 0666 read write a todos 0777 read write exe a todos
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
 
