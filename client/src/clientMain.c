@@ -3,7 +3,7 @@
 int verificaServidor(char * path){
 
 	if(!access( path , F_OK ) == 0){
-        printf("Servidor não foi executado!\n");
+        printf("\n \nServidor não foi executado! \n");
 		return 0;
 	}else return 1;
 }
@@ -93,21 +93,6 @@ void getUserEnv(int argc, char * const argv[], char * username, char * path){
 
 }
 
-void pedeUser(char * username){
-	int flagUserSuccess = 0;
-	
-	do{
-			printf("Username: ");
-			do{ 
-			scanf(" %s", username);
-			}while(strlen(username) > USERSIZE || strlen(username) < 1);
-			//TODO checkar user no server
-			//flagUserSuccess = check();
-
-			flagUserSuccess = 1;//para testes
-
-	}while(!flagUserSuccess);
-}
 
 void wPrintNumbers(WINDOW *numeros){
 
@@ -240,38 +225,57 @@ int main(int argc, char * const argv[]) {
 	getUserEnv(argc, argv, username, file);//-u "nome" e -p "path do main pipe"
 
 	strcpy(path, strcat(path, file));//compila string de path e verifica se pip existe
-	printf("%s", path);
-	if(!verificaServidor(path)){
+	//printf("%s", path);
+	if(!verificaServidor(path)){//se pipe nao existe exit(1);
 		exit(1);
 	}
-
-	printf("\n\nINIT DE TESTE\n");
 
 	int fdsrv;
 	user novo;
 
 	fdsrv = open(path, O_WRONLY);
 
-	printf("Scan name: ");
-	scanf("%s", novo.nome);
-	novo.pid = getpid();
-
-	write(fdsrv, &novo, sizeof(user));
 
 
 	
-	printf("FIM DE TESTE\n\n");
 	
 	if(!strcmp(username, " ")){//pede por linha de comandos
-		pedeUser(username);
+		int flagUserSuccess = 0;
+	
+			do{
+				printf("Username: \n");
+				do{ 
+				scanf(" %s", novo.nome);
+				}while(strlen(username) > USERSIZE || strlen(username) < 1);
+				//TODO checkar user no server
+				//flagUserSuccess = check();
+
+				flagUserSuccess = 1;//para testes
+
+			}while(!flagUserSuccess);
+	}else strcpy(novo.nome , username);
+
+
+	int logged = 0;
+
+	novo.pid = getpid();
+
+	printf("\npre-write");
+	write(fdsrv, &novo, sizeof(user));
+	//olaFifo(path, username, &novo.pid);
+	printf("\npre-read");
+	read(fdsrv, &logged, sizeof(int));
+	printf("\npos-read");
+	printf("\nlogged: %d", logged);
+
+	if(logged == 0){
+		printf("Erro a logar no servidor, tente outra vez. (user?)");
+		exit(1);
 	}
 
-	//TODO verificaçã
-	int pid = getpid();
-	olaFifo(path, username, &pid
-	);
 
 
+	scanf("%s", &username);
 
 	/*
 	if(!usernameExists(username)){
@@ -411,6 +415,9 @@ int main(int argc, char * const argv[]) {
 	//
 	//endGame
 	//
+
+	close(fdsrv);
+
 	free(linha);
 	endwin();//fechar ncurses control
 	

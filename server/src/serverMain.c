@@ -22,7 +22,6 @@ int findUser(char * username, settings *s) {
 		}
 	}
 
-	printf("vou sair\n");
 
 	fclose(f);
 
@@ -61,10 +60,10 @@ void commands(settings * s) {
 	int logged = 0;
 
 	user users[s->maxUsers];
+	//TODO multi user conection 4 next meta
+	printf("Awaiting single user conection\n");
 
-	printf("before loop\n");
-
-	//do{
+	do{
 		fdr = open(s->mainPipe, O_RDONLY);
 		if (fdr == -1)
 			fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
@@ -78,9 +77,24 @@ void commands(settings * s) {
 		if(findUser(novo.nome, s))
 			logged = 1;
 		
-		printf("\n %d \n", logged);
+		printf("\nlogged: %d \n", logged);
 
-	//}while(logged == 0);
+	}while(logged == 0);
+
+printf("pre-write\n");
+	write(fdr, &logged, sizeof(int));
+printf("\npos-write\n");
+	//close(fdr);
+
+
+
+
+	printf("User %s logged in with pid %d \n", novo.nome, novo.pid);
+
+	//char * path = {""};
+	//itoa(novo.pid, path, 10);
+
+	//mkfifo( novo.pid ,0777);
 
 	while (1) {
 
@@ -286,7 +300,7 @@ int main(int argc, char * const argv[], char* envp[]) {
 	commands(s);
 
 
-
+	
 	unlink(s->mainPipe);
 	free(s);
 
