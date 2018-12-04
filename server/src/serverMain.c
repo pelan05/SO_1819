@@ -30,9 +30,12 @@ int findUser(char * username, settings *s) {
 
 void* commandsThread(void *args){
 
-		settings *s;
-		s = (settings *) args;
+printf("Entrei no commandsthread 1");
 
+		settings *s;
+		s = (settings *) &args;
+
+printf("commandsthread 2");
 		char input[CMDSIZE], *cmd, *arg;
 		int n;
 
@@ -49,9 +52,11 @@ void* commandsThread(void *args){
 			cmd[n] = tolower((int)cmd[n]);
 			n++;
 		}
+		
 
 		printf("%s", cmd);
 
+printf("commandsthread 3");
 		if (!strcmp("settings", cmd)) {
 			printf("\nText editor settings:\n");
 			printf("Timeout: %d\n", s->timeout);
@@ -168,11 +173,13 @@ void server(settings * s) {
 
 		//thread  que corre a função commandsThread();
 
-
+		
+		printf("antes ptread");
 
 		pthread_create(&threadCommands, NULL, commandsThread, s);
 
 
+		pthread_join(threadCommands, NULL); 
 
 
 
@@ -236,7 +243,7 @@ void server(settings * s) {
 		printf("\nlogged: %d \n", logged);
 
 
-	pthread_join(threadCommands, NULL);   //join thread com fim da função, sincronização da thread 
+	//pthread_join(threadCommands, NULL);   //join thread com fim da função, sincronização da thread 
 
 	}while(1);
 
