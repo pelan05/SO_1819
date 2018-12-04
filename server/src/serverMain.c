@@ -127,6 +127,7 @@ void server(settings * s) {
 	int fdw;
 	int fdr;
 	int fdg;
+	int fdfork1[2], fdfork2[2];	//unnamed pipes
 	int r, w;
 	user novo;
 
@@ -137,6 +138,8 @@ void server(settings * s) {
 
 	pthread_t threadCommands;
 
+	char text[s->e.max_l][s->e.max_c];		//TODO: mudar isto para pointer pointer global e estatico
+
 
 	struct timeval tempo;
 
@@ -146,6 +149,7 @@ void server(settings * s) {
 
 	int logged = 0;
 	int res;
+	int forkSpell;
 
 	user users[s->maxUsers];
 
@@ -237,8 +241,45 @@ void server(settings * s) {
 				//	}
 				//}
 
+				/* logica aspell
+						if(pipe(fdfork1) == -1)
+							printf("ERROR CREATING PIPE!\n");
+						if(pipe(fdfork2) == -1)
+							printf("ERROR CREATING PIPE!\n");
+
+						forkSpell = fork();
+
+						if(forkSpell<0){
+							printf("Error forking\n");
+							pthread_exit(0);
+						}
+						else if(forkSpell > 0){	// pai
+							close(fdfork1[0]);
+							close(fdfork2[1]);
+
+							//copiar linha 
+
+							write(fdfork1[1], //linha do cliente, //sizeof(linha) + tamanho da linha copiada);
+							close(fdfork1[1]);
+							wait(NULL); // espera pelo filho
+							if(respostaDoFilho == '*');
+								printf("\nNice!!");
+							else if(respostaDoFilho == '&')
+								printf("\nPalavra errada!!");
+						}
+						else{		// filho
+							close(fdfork1[1]);
+							dup2(fdfork1[0], STDIN_FILENO);
+							close(fdfork1[0]);
+							close(fdfork2[0]);
+							dup(fdfork2[1], STDIN_FILENO);
+							close(fdfork2[1]);
+							execlp("aspell", "aspell", "-a", NULL);
+						}
+				*/
+
 			}
-		
+
 		}
 		printf("\nlogged: %d \n", logged);
 
