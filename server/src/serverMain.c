@@ -28,132 +28,13 @@ int findUser(char * username, settings *s) {
 	return 0;
 }
 
+void* commandsThread(void *args){
 
-/*user recebeUser(char * path){			
-	
-	user u;
+		settings *s;
+		s = (settings *) args;
 
-	int fd = open( path , O_RDONLY );
-	if(fd == -1)
-		printf("Erro a abrir o fifo %s \n", path);
-
-	read(fd, u.nome, sizeof(char)*TAMBUFFER);
-	read(fd, &u.pid, sizeof(int));
-
-	printf("%d", u.pid);
-
-	close(fd);
-	return u;
-}*/
-
-void commands(settings * s) {
-
-
-	char input[CMDSIZE], *cmd, *arg;
-	int n;
-	fd_set fontes;
-
-	int fdw;
-	int fdr;
-	int fdg;
-	int r, w;
-	user novo;
-
-	int i;
-	int pos_c = -1; //cliente
-	int pos_l = -1; //livre
-	char pathTemp[15];
-
-
-	struct timeval tempo;
-
-
-	tempo.tv_sec = s->timeout;
-	tempo.tv_usec = 0;
-
-	int logged = 0;
-	int res;
-
-	user users[s->maxUsers];
-
-	int usersPID[s->maxUsers];
-	for(i = 0; i< s->maxUsers; i++)
-		usersPID[i] = -1;
-
-	//TODO multi user conection 4 next meta
-	printf("Awaiting single user conection\n");
-
-		fdr = open(s->mainPipe, O_RDONLY);
-		if (fdr == -1)
-			fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
-		fdg = open(s->mainPipe, O_WRONLY);
-	do{
-		FD_ZERO(&fontes);
-		FD_SET(0, &fontes);	//teclado
-		FD_SET(fdr, &fontes);	
-		res = select(fdr + 1, &fontes, NULL, NULL, &tempo);
-		if(res==0){
-			printf("There's no data.\n"); fflush(stdout);
-		}
-		if(res>0 && FD_ISSET(0, &fontes)){//comandos
-		}
-
-		if(res>0 && FD_ISSET(fdr, &fontes)){
-			//ler fifo
-
-			r = read(fdr, &novo, sizeof(user));
-
-			printf("USER: %s \tPID: %d", novo.nome, novo.pid);
-
-			if(findUser(novo.nome, s)){
-				logged = 1;
-				pos_c = -1; pos_l = -1;
-				for(i = 0; i < s->maxUsers; i++){
-					if(usersPID[i] == -1 && pos_l == -1)// primeira posiçao livre encontrada 
-						pos_l = i;
-					if(usersPID[i] == novo.pid)	// se user encontrado
-						pos_c = i;
-				}
-				if(pos_c == -1 && pos_l != -1){		// substituir posiçao livre por user recebido
-					usersPID[pos_l] = novo.pid;
-					users[pos_l] = novo;
-				}
-			}
-			if(logged == 0);
-				// kill cliente
-			else{
-				printf("Client logged in\n\n");
-				sprintf(pathTemp, FIFO_CLI, novo.pid);
-				fdw = open(pathTemp, O_WRONLY);
-				w = write(fdw, &novo, sizeof(user));
-				close(fdw);
-				//logica fifo
-				//for(i = 0; i<s->maxUsers; i++){
-				//	if(usersPID[i] != -1 && usersPID[i] != novo.pid){
-				//		//kill
-				//		sprintf(fdw,FIFO_CLI,usersPID[i]);
-				//	}
-				//}
-
-			}
-		
-		}
-		printf("\nlogged: %d \n", logged);
-
-	}while(1);
-
-
-
-
-
-	printf("User %s logged in with pid %d \n", novo.nome, novo.pid);
-
-	//char * path = {""};
-	//itoa(novo.pid, path, 10);
-
-	//mkfifo( novo.pid ,0777);
-
-	while (1) {
+		char input[CMDSIZE], *cmd, *arg;
+		int n;
 
 		printf("> ");
 
@@ -180,42 +61,36 @@ void commands(settings * s) {
 			printf("Maximum amount of columns: %d\n", s->e.max_c);
 			printf("Name of the database: %s\n", s->database);
 			printf("Name of the server pipe: %s\n", s->mainPipe);
-			continue;
 		}
 
 		if (!strcmp("load", cmd)) {
 			printf("\nYou've select 'load'.\n");
-			continue;
 		}
 
 		if (!strcmp("save", cmd)) {
 			printf("\nYou've select 'save'.\n");
-			continue;
 		}
 
 		if (!strcmp("free", cmd)) {
 			printf("\nYou've select 'free'.\n");
-			continue;
 		}
 
 		if (!strcmp("statistics", cmd)) {
 			printf("\nYou've selected 'statistics'.\n");
-			continue;
 		}
 
 		if (!strcmp("users", cmd)) {
 			printf("\nYou've select 'users'.\n");
-			continue;
 		}
 
 		if (!strcmp("text", cmd)) {
 			printf("\nYou've select 'text'.\n");
-			continue;
 		}
 
 		if (!strcmp("shutdown", cmd)) {
 			printf("\nYou've select 'shutdown'.\n");
-			return;
+			unlink(s->mainPipe);
+			exit(EXIT_SUCCESS);//'0'
 		}
 
 		if (strcmp("help", cmd) == 0) {
@@ -228,9 +103,146 @@ void commands(settings * s) {
 			printf("'users' will a list of what users are logged in, by order of arrival.\n");
 			printf("'text' will the current text on client side.\n");
 			printf("'shutdown' will quit without saving.\n");
-			continue;
 		}
+	
+
+
+
+		return s; //isto cala o warning de nao haver return (void *);
+
+}
+
+
+void server(settings * s) {
+
+
+
+	fd_set fontes;
+
+	int fdw;
+	int fdr;
+	int fdg;
+	int r, w;
+	user novo;
+
+	int i;
+	int pos_c = -1; //cliente
+	int pos_l = -1; //livre
+	char pathTemp[15];
+
+	pthread_t threadCommands;
+
+
+	struct timeval tempo;
+
+
+	tempo.tv_sec = s->timeout;
+	tempo.tv_usec = 0;
+
+	int logged = 0;
+	int res;
+
+	user users[s->maxUsers];
+
+	int usersPID[s->maxUsers];
+	for(i = 0; i< s->maxUsers; i++){
+		usersPID[i] = -1;
 	}
+
+		fdr = open(s->mainPipe, O_RDONLY);
+		if (fdr == -1)
+			fprintf(stderr, "[ERROR] Can't read pipe %s!\n", s->mainPipe);
+		fdg = open(s->mainPipe, O_WRONLY);
+		if (fdg == -1)
+			fprintf(stderr, "[ERROR] Can't write pipe %s!\n", s->mainPipe);
+	do{
+		FD_ZERO(&fontes);
+		FD_SET(0, &fontes);	//teclado
+		FD_SET(fdr, &fontes);	//fifo read
+		
+		res = select(fdr + 1, &fontes, NULL, NULL, &tempo);
+		if(res==0){
+			printf("There's no data.\n"); fflush(stdout);
+		}
+		if(res>0 && FD_ISSET(0, &fontes)){//comandos (cria thread para correr 'commandsThread() ao mesmo tempo que le fifo)
+
+		//thread  que corre a função commandsThread();
+
+
+
+		pthread_create(&threadCommands, NULL, commandsThread, s);
+
+
+
+
+
+
+		}
+
+		if(res>0 && FD_ISSET(fdr, &fontes)){
+
+			r = read(fdr, &novo, sizeof(user));
+
+
+			printf("\n\tBytes: %d\tUSER: %s \tPID: %d\n",r, novo.nome, novo.pid);
+
+			if(findUser(novo.nome, s)){
+
+				logged = 1; //se login com sucesso, var logged fica a 1
+				pos_c = -1; //posiçao cliente
+				pos_l = -1; //posição livre
+
+
+				//TODO se o array estiver cheio? (sig de maximo de clientes conectados)
+				for(i = 0; i < s->maxUsers; i++){
+					if(usersPID[i] == -1 && pos_l == -1)// primeira posiçao livre encontrada 
+						pos_l = i;
+					if(usersPID[i] == novo.pid)	// se user encontrado
+						pos_c = i;
+				}
+				if(pos_c == -1 && pos_l != -1){		// substituir posiçao livre por user recebido
+					usersPID[pos_l] = novo.pid;
+					users[pos_l] = novo;
+				}
+			}
+			if(logged == 0){
+			
+				// signal de kill cliente por nao existir username
+
+			
+			}
+			else{
+				printf("Client logged in\n\n");
+				sprintf(pathTemp, FIFO_CLI, novo.pid);
+				fdw = open(pathTemp, O_WRONLY);
+				w = write(fdw, &novo, sizeof(user));
+				printf("\n\tBytes written: %d\n", w);
+				close(fdw);
+
+
+
+
+				//logica fifo
+				//for(i = 0; i<s->maxUsers; i++){
+				//	if(usersPID[i] != -1 && usersPID[i] != novo.pid){
+				//		//kill
+				//		sprintf(fdw,FIFO_CLI,usersPID[i]);
+				//	}
+				//}
+
+			}
+		
+		}
+		printf("\nlogged: %d \n", logged);
+
+
+	pthread_join(threadCommands, NULL);   //join thread com fim da função, sincronização da thread 
+
+	}while(1);
+
+
+
+		
 
 }
 
@@ -327,38 +339,12 @@ int main(int argc, char * const argv[], char* envp[]) {
 	if(mkfifo(s->mainPipe, 0777)!=0) // 0666 read write a todos 0777 read write exe a todos
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
-	printf("fifo was created\n\n");
-
-
-	//user novo = recebeUser(s->mainPipe);
-
-	//TODO: verificar se existe o novo
-
-
-
-	//unlink(cont char * filename); //Remove um FIFO/Ficheiro
-	//fontl(int fd, int command, long arg); //Manipula as propriedades do FIFO/Ficheiro
-
-	//open(filename, flags);
-	//write(int fd, buffer, size_t size);
-	//read(int fd, buffer, size_t size);
-
-
-	//TODO finish the function below //(todo linha ~120 clienteMain.c)
-	/*
-	//receber username pelo serverPipe
-	if(findUser(username, filename) == 1){
-		//abrir novo pipe e passar ao cliente
-	}else{
-		//enviar erro ao cliente
-	}
-	*/
-
-	printf("entering comands\n\n");
-	commands(s);
+	server(s);
 
 
 	
+
+	//End of program
 	unlink(s->mainPipe);
 	free(s);
 

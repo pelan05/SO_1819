@@ -63,8 +63,8 @@ typedef struct user {
 //---------------------------------------------------------------------------
 
 int findUser(char * username, settings *s);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
-//user recebeUser(char * path);
-void commands(settings *s);
+void* commandsThread(void *args);
+void server(settings *s);
 void initSettings(settings *s, int argc, char * const argv[], char* envp[]);
 
 #endif

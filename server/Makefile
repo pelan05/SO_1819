@@ -4,7 +4,7 @@ C_FLAGS := -Wall -Wextra -g
 BIN		:= bin
 SRC		:= src
 
-LIBRARIES	:=
+LIBRARIES	:= -pthread
 
 EXECUTABLE	:= server
 
