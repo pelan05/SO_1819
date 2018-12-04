@@ -19,6 +19,8 @@
 #define MEDIT_DEFAULT_NAME "medit.db"
 #define MEDIT_MAIN_PIPE_DEFAULT_NAME "serverPipe"
 
+#define FIFO_CLI "pipe_%d"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,6 +32,8 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/select.h>
 
 
 //---------------------------------------------------------------------------

@@ -51,40 +51,97 @@ void commands(settings * s) {
 
 	char input[CMDSIZE], *cmd, *arg;
 	int n;
-
+	fd_set fontes;
 
 	int fdw;
 	int fdr;
+	int fdg;
+	int r, w;
 	user novo;
 
+	int i;
+	int pos_c = -1; //cliente
+	int pos_l = -1; //livre
+	char pathTemp[15];
+
+
+	struct timeval tempo;
+
+
+	tempo.tv_sec = s->timeout;
+	tempo.tv_usec = 0;
+
 	int logged = 0;
+	int res;
 
 	user users[s->maxUsers];
+
+	int usersPID[s->maxUsers];
+	for(i = 0; i< s->maxUsers; i++)
+		usersPID[i] = -1;
+
 	//TODO multi user conection 4 next meta
 	printf("Awaiting single user conection\n");
 
-	do{
 		fdr = open(s->mainPipe, O_RDONLY);
 		if (fdr == -1)
 			fprintf(stderr, "[ERROR] Can't read in ze pipe!\n");
-		fdw = open(s->mainPipe, O_WRONLY);
+		fdg = open(s->mainPipe, O_WRONLY);
+	do{
+		FD_ZERO(&fontes);
+		FD_SET(0, &fontes);	//teclado
+		FD_SET(fdr, &fontes);	
+		res = select(fdr + 1, &fontes, NULL, NULL, &tempo);
+		if(res==0){
+			printf("There's no data.\n"); fflush(stdout);
+		}
+		if(res>0 && FD_ISSET(0, &fontes)){//comandos
+		}
 
-		if (fdw == -1)
-			fprintf(stderr, "[ERROR] Can't CENAS in ze pipe!\n");
+		if(res>0 && FD_ISSET(fdr, &fontes)){
+			//ler fifo
 
-		int r = read(fdr, &novo, sizeof(user));
+			r = read(fdr, &novo, sizeof(user));
 
-		if(findUser(novo.nome, s))
-			logged = 1;
+			printf("USER: %s \tPID: %d", novo.nome, novo.pid);
+
+			if(findUser(novo.nome, s)){
+				logged = 1;
+				pos_c = -1; pos_l = -1;
+				for(i = 0; i < s->maxUsers; i++){
+					if(usersPID[i] == -1 && pos_l == -1)// primeira posiçao livre encontrada 
+						pos_l = i;
+					if(usersPID[i] == novo.pid)	// se user encontrado
+						pos_c = i;
+				}
+				if(pos_c == -1 && pos_l != -1){		// substituir posiçao livre por user recebido
+					usersPID[pos_l] = novo.pid;
+					users[pos_l] = novo;
+				}
+			}
+			if(logged == 0);
+				// kill cliente
+			else{
+				printf("Client logged in\n\n");
+				sprintf(pathTemp, FIFO_CLI, novo.pid);
+				fdw = open(pathTemp, O_WRONLY);
+				w = write(fdw, &novo, sizeof(user));
+				close(fdw);
+				//logica fifo
+				//for(i = 0; i<s->maxUsers; i++){
+				//	if(usersPID[i] != -1 && usersPID[i] != novo.pid){
+				//		//kill
+				//		sprintf(fdw,FIFO_CLI,usersPID[i]);
+				//	}
+				//}
+
+			}
 		
+		}
 		printf("\nlogged: %d \n", logged);
 
-	}while(logged == 0);
+	}while(1);
 
-printf("pre-write\n");
-	write(fdr, &logged, sizeof(int));
-printf("\npos-write\n");
-	//close(fdr);
 
 
 
@@ -271,6 +328,7 @@ int main(int argc, char * const argv[], char* envp[]) {
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
 	printf("fifo was created\n\n");
+
 
 	//user novo = recebeUser(s->mainPipe);
 

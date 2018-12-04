@@ -8,6 +8,8 @@
 #define TAMJANNOMESX (USERSIZE + 2) 
 #define NUMLINHAS (TAMJANY-2)
 
+#define FIFO_CLI "pipe_%d"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
