@@ -8,6 +8,9 @@
 #define TAMJANNOMESX (USERSIZE + 2) 
 #define NUMLINHAS (TAMJANY-2)
 
+#define MEDIT_MAXLINES 15
+#define MEDIT_MAXCOLUMNS 45
+
 #define FIFO_CLI "pipe_"
 
 #include <stdio.h>
@@ -32,6 +35,13 @@ typedef struct user {
 	char nome[USERSIZE];
 	int pid;
 }user;
+
+
+typedef struct linha{
+	char linha[MEDIT_MAXCOLUMNS];
+	int numLinha;
+}singleLinha;
+
 /*
 typedef struct ecra {
 	int max_l;

@@ -1,5 +1,8 @@
 #include "clientMain.h"
 
+
+char pathSigint[20] = {""};
+
 int verificaServidor(char * path){
 
 	if(!access( path , F_OK ) == 0){
@@ -7,6 +10,17 @@ int verificaServidor(char * path){
 		return 0;
 	}else return 1;
 }
+
+void sigintHandler(int sig_num){
+	signal(SIGINT, sigintHandler);
+	printf("A encerrar tudo..");
+
+	unlink(pathSigint);
+	fflush(stdout);
+
+	exit(1);
+}
+
 
 int temEspaco(char * string){
 	if(string[44]==' ')
@@ -208,6 +222,8 @@ int main(int argc, char * const argv[]) {
 	user novo;
 	settings s;
 
+	signal(SIGINT, sigintHandler);
+
 
 	fdSrv = open(path, O_RDWR);
 
@@ -248,17 +264,19 @@ int main(int argc, char * const argv[]) {
 
 	fdCli = open(pathClient, O_RDONLY);
 
+	sprintf(pathSigint, pathClient);//path do fifo na var. global
+
 	sleep(2);
 	
 	rw = read(fdCli, &s, sizeof(settings));
 		if(rw == 0)
 			printf("\nNada lido no fifo do cliente\n");
 
-
+/*
 
 	printf("\n%s\n", s.database);
 	printf("%s\n", s.mainPipe);
-
+*/
 
 
 
@@ -374,6 +392,9 @@ int main(int argc, char * const argv[]) {
 							}
 					wmove(linhas, highlight + 1, cursor);
 					}while(choice != 10 && choice != 27);//enter ou escape
+
+					//TODO: enviar linha alterada para o server
+					//receber texto completo do server
 
 					curs_set(0);
 					

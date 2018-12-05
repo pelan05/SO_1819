@@ -69,7 +69,7 @@ typedef struct user {
 }user;
 
 typedef struct linha{
-	char linha[MEDIT_MAXLINES];
+	char linha[MEDIT_MAXCOLUMNS];
 	int numLinha;
 }singleLinha;
 

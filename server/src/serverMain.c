@@ -1,6 +1,9 @@
   #include "serverMain.h"
 
 int usersLogged = 0;
+char pathSigint[20] = {""};
+
+user users[MEDIT_MAXUSERS];//TODO: corrigir isto -vasco
 /*
 void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
 		strcpy(texto->linha1, "Esta linha tem quarenta caracteres e pronto  ");
@@ -20,6 +23,21 @@ void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
 		strcpy(texto->linha15, "Esta linha tem quarenta caracteres e pronto k");
 
 }*/
+
+void sigintHandler(int sig_num){
+	signal(SIGINT, sigintHandler);
+	printf("A encerrar tudo..");
+	int i;
+	for(i = 0; i< MEDIT_MAXUSERS; i++)
+		kill(users[i].pid , SIGINT);
+	
+	
+	unlink(pathSigint);
+	fflush(stdout);
+
+	exit(1);
+}
+
 
 int findUser(char * username, settings *s) {
 
@@ -171,7 +189,6 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 	int res;
 	int forkSpell;
 
-	user users[s->maxUsers];
 
 	int usersPID[s->maxUsers];
 	for(i = 0; i< s->maxUsers; i++){
@@ -269,30 +286,17 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 				w = write(fdw, &(*s) , sizeof(settings));
 				if(w == 0)
 					printf("nao consegui escrever no fifo do cliente");
+					/*
 				printf("\n\t\t BYTES TEXTO: %d\n\n", w);
 
+					for(i = 0; i < MEDIT_MAXLINES; i++){
+						
+
+					}
+					*/
 				close(fdw);
 
-				
-
-
-
 				sleep(2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 				//logica fifo
 				//for(i = 0; i<s->maxUsers; i++){
@@ -434,6 +438,10 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 int main(int argc, char * const argv[], char* envp[]) {
 
+	signal(SIGINT, sigintHandler);
+
+
+
 	settings *s;
 	s = malloc(sizeof(settings));
 		if(s == NULL)
@@ -445,7 +453,8 @@ int main(int argc, char * const argv[], char* envp[]) {
 			printf("Erro na alocação memória para struct 'textoCompleto' \n");
 	*/
 	initSettings(s, argc, argv, envp);
-
+	
+	sprintf(pathSigint, s->mainPipe);//path do fifo na var. global
 	/*
 	inicializarTexto(texto);
 	*/
@@ -466,6 +475,10 @@ int main(int argc, char * const argv[], char* envp[]) {
 	
 
 	//End of program
+
+	int i;
+	for(i = 0; i< MEDIT_MAXUSERS; i++)
+		kill(users[i].pid , SIGINT);
 	unlink(s->mainPipe);
 	free(s);
 
