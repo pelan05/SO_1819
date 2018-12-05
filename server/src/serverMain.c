@@ -30,16 +30,16 @@ int findUser(char * username, settings *s) {
 
 void* commandsThread(void *args){
 
-printf("Entrei no commandsthread 1");
 
 		settings *s;
 		s = (settings *) &args;
 
-printf("commandsthread 2");
+		printf("%s %s", s->mainPipe, s->database);
+
 		char input[CMDSIZE], *cmd, *arg;
 		int n;
 
-		printf("> ");
+		//printf("> ");
 
 		fgets(input, CMDSIZE, stdin);
 
@@ -54,9 +54,8 @@ printf("commandsthread 2");
 		}
 		
 
-		printf("%s", cmd);
+		//printf("%s", cmd);
 
-printf("commandsthread 3");
 		if (!strcmp("settings", cmd)) {
 			printf("\nText editor settings:\n");
 			printf("Timeout: %d\n", s->timeout);
@@ -93,8 +92,9 @@ printf("commandsthread 3");
 		}
 
 		if (!strcmp("shutdown", cmd)) {
-			printf("\nYou've select 'shutdown'.\n");
+			printf("\nShutting down.");
 			unlink(s->mainPipe);
+			printf("\nPIPE1?: %s \n", s->mainPipe);//TODO teste
 			exit(EXIT_SUCCESS);//'0'
 		}
 
@@ -165,26 +165,35 @@ void server(settings * s) {
 		if (fdg == -1)
 			fprintf(stderr, "[ERROR] Can't write pipe %s!\n", s->mainPipe);
 	do{
+		logged = 0;//logged volta a 0
 		FD_ZERO(&fontes);
 		FD_SET(0, &fontes);	//teclado
 		FD_SET(fdr, &fontes);	//fifo read
 		
+
+		tempo.tv_sec = s->timeout;
+		tempo.tv_usec = 0;
+
+
+		//todo timeout is working?
 		res = select(fdr + 1, &fontes, NULL, NULL, &tempo);
 		if(res==0){
-			printf("There's no data.\n"); fflush(stdout);
+			//printf("There's no data.\n"); 
+			fflush(stdout);
 		}
 		if(res>0 && FD_ISSET(0, &fontes)){//comandos (cria thread para correr 'commandsThread() ao mesmo tempo que le fifo)
-
+			
 		//thread  que corre a função commandsThread();
 
 		
-		printf("antes ptread");
+		//printf("antes ptread");
 
 		pthread_create(&threadCommands, NULL, commandsThread, s);
 
 
-		pthread_join(threadCommands, NULL); 
-
+		/*int numeros = */pthread_join(threadCommands, NULL);//tentativa
+		//printf("\n\n\n\t\tVALOR DE PTHREAD: \t %d\n\n\n", numeros); 
+		
 
 
 
@@ -195,7 +204,7 @@ void server(settings * s) {
 			r = read(fdr, &novo, sizeof(user));
 
 
-			printf("\n\tBytes: %d\tUSER: %s \tPID: %d\n",r, novo.nome, novo.pid);
+			printf("\tBytes: %d\tUSER: %s \tPID: %d\n",r, novo.nome, novo.pid);
 
 			if(findUser(novo.nome, s)){
 
@@ -217,17 +226,17 @@ void server(settings * s) {
 				}
 			}
 			if(logged == 0){
-			
+				//todo
 				// signal de kill cliente por nao existir username
 
 			
 			}
 			else{
-				printf("Client logged in\n\n");
+				//printf("Client logged in\n\n");
 				sprintf(pathTemp, FIFO_CLI, novo.pid);
 				fdw = open(pathTemp, O_WRONLY);
 				w = write(fdw, &novo, sizeof(user));
-				printf("\n\tBytes written: %d\n", w);
+				//printf("\n\tBytes written: %d\n", w);
 				close(fdw);
 
 
@@ -241,7 +250,7 @@ void server(settings * s) {
 				//	}
 				//}
 
-				/* logica aspell
+				/* //logica aspell
 						if(pipe(fdfork1) == -1)
 							printf("ERROR CREATING PIPE!\n");
 						if(pipe(fdfork2) == -1)
@@ -281,8 +290,8 @@ void server(settings * s) {
 			}
 
 		}
-		printf("\nlogged: %d \n", logged);
-
+		//printf("\nlogged: %d \n", logged);
+		//sleep(1);
 
 	//pthread_join(threadCommands, NULL);   //join thread com fim da função, sincronização da thread 
 
