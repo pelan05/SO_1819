@@ -129,15 +129,12 @@ void string2FIFO(char * path, char * String, int  * pid){
 }
 
 
-
-
 ///----------------------------------------
 ///MAIN
 ///
 ///
 ///
 ///----------------------------------------
-
 
 
 
@@ -203,9 +200,12 @@ int main(int argc, char * const argv[]) {
 		exit(1);
 	}
 
+	int i;
+	int rw;
 	int fdSrv, fdCli;
 	int logged = 2;//inicializado com um valor int diferente de 0 ou 1
 	user novo;
+	textoCompleto textoServer;
 
 	fdSrv = open(path, O_RDWR);
 
@@ -251,17 +251,39 @@ int main(int argc, char * const argv[]) {
 	if(mkfifo(pathClient, 0777) != 0)
 		fprintf(stderr, "[ERROR] FIFO couldn't be created !!\n");
 	fdCli = open(pathClient, O_RDWR);
-	
+	//client fifo open
+	//read full text variable	//TODO:
+	//write single edited line	
+	sleep(2);
+	printf("Estou antes do read l258");
+	rw = read(fdCli, &textoServer, sizeof(textoCompleto));
+		if(rw == 0)
+			printf("Nada lido no fifo do cliente");
+
+		printf("Estou antes da atribuição l262");
 
 
+		strcpy(linha[1], textoServer.linha1);
+		strcpy(linha[2], textoServer.linha2);
+		strcpy(linha[3], textoServer.linha3);
+		strcpy(linha[4], textoServer.linha4);
+		strcpy(linha[5], textoServer.linha5);
+		strcpy(linha[6], textoServer.linha6);
+		strcpy(linha[7], textoServer.linha7);
+		strcpy(linha[8], textoServer.linha8);
+		strcpy(linha[9], textoServer.linha9);
+		strcpy(linha[10], textoServer.linha10);
+		strcpy(linha[11], textoServer.linha11);
+		strcpy(linha[12], textoServer.linha12);
+		strcpy(linha[13], textoServer.linha13);
+		strcpy(linha[14], textoServer.linha14);
+		strcpy(linha[15], textoServer.linha15);
 
-
-
-	//unlink(pathClient);//já esta no fim do 'main'
 
 	scanf("%s", &username);
-
-
+	printf("%s");
+	scanf("%s", &username);
+	sleep(5);	
 	//
 	//Inicio Codigo nCurses
 	//
@@ -318,7 +340,7 @@ int main(int argc, char * const argv[]) {
 				mvwprintw(nomes, highlight+1, 1, username);
 				wrefresh(nomes);
 
-				//TODO cursor no canto em editmode, delete é considerado 'default' escreve um 'J'
+				//TODO: cursor no canto em editmode, delete é considerado 'default' escreve um 'J'
 					curs_set(1);
 					
 					//wmove(linhas, highlight + 1, 1);//window, y, x

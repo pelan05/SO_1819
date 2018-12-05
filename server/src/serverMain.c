@@ -2,6 +2,25 @@
 
 int usersLogged = 0;
 
+void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
+		strcpy(texto->linha1, "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(texto->linha2, "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(texto->linha3, "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(texto->linha4, "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(texto->linha5, "Esta linha tem quarenta caracteres e pronto  ");
+		strcpy(texto->linha6, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha7, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha8, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha9, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha10, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha11, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha12, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha13, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha14, "Esta linha tem quarenta caracteres e pronto k");
+		strcpy(texto->linha15, "Esta linha tem quarenta caracteres e pronto k");
+
+}
+
 int findUser(char * username, settings *s) {
 
 
@@ -116,7 +135,8 @@ void* commandsThread(void* args){
 }
 
 
-void server(settings * s) {
+void server(settings * s, textoCompleto * textoServidor) {
+
 
 
 
@@ -124,7 +144,6 @@ void server(settings * s) {
 
 	int fdw;
 	int fdr;
-	int fdg;
 	int fdfork1[2], fdfork2[2];	//unnamed pipes
 	int r, w;
 	user novo;
@@ -137,6 +156,7 @@ void server(settings * s) {
 	pthread_t threadCommands;
 
 	char text[s->e.max_l][s->e.max_c];		//TODO: mudar isto para pointer pointer global e estatico
+	//vale a pena?
 
 
 	struct timeval tempo;
@@ -159,9 +179,6 @@ void server(settings * s) {
 		fdr = open(s->mainPipe, O_RDWR);
 		if (fdr == -1)
 			fprintf(stderr, "[ERROR] Can't read pipe %s!\n", s->mainPipe);
-		fdg = open(s->mainPipe, O_WRONLY);
-		if (fdg == -1)
-			fprintf(stderr, "[ERROR] Can't write pipe %s!\n", s->mainPipe);
 
 
 		pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
@@ -187,14 +204,7 @@ void server(settings * s) {
 			//printf("There's no data.\n"); 
 			fflush(stdout);
 		}
-		if(res>0 && FD_ISSET(0, &fontes)){//comandos (cria thread para correr 'commandsThread() ao mesmo tempo que le fifo)
-			
-		//thread  que corre a função commandsThread();
-
-		//pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
-
-
-		//pthread_join(threadCommands, NULL);
+		if(res>0 && FD_ISSET(0, &fontes)){
 
 		}
 
@@ -209,7 +219,6 @@ void server(settings * s) {
 				if(findUser(novo.nome, s)){
 
 					logged = 1; //se login com sucesso, var logged fica a 1
-					//printf("logged = 1\n\n");
 					pos_c = -1; //posiçao cliente
 					pos_l = -1; //posição livre
 
@@ -232,23 +241,55 @@ void server(settings * s) {
 			}
 			}
 			if(logged == 0){
-				//TODO:
 				// signal de kill cliente por nao existir username
 				w = write(fdr, &logged, sizeof(int));
+				if(w == 0)
+				printf("nothing written");
 				//nao necessario, cliente ja faz verificação
 			
 			}
 			else{
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				/**/
 				w = write(fdr, &logged, sizeof(int));
-				
+				sleep(2);
 				sprintf(pathTemp, FIFO_CLI, novo.pid);
-				//mkfifo(pathTemp, 0777);//TODO o server nao pode criar este fifo
-				fdw = open(pathTemp, O_WRONLY);
-				w = write(fdw, &novo, sizeof(user));
+				fdw = open(pathTemp, O_RDWR);
+				w = write(fdw, &textoServidor, sizeof(textoCompleto));
+				if(w == 0)
+					printf("nao consegui escrever no fifo do cliente");
+				printf("\n\t\t BYTES TEXTO: %d\n\n", w);
+
 				close(fdw);
 				sleep(2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 				//logica fifo
@@ -390,23 +431,30 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 int main(int argc, char * const argv[], char* envp[]) {
 
 	settings *s;
-
-
 	s = malloc(sizeof(settings));
 		if(s == NULL)
 			printf("Erro na alocação memoria para struct 'Settings' \n");
-
+	
+	textoCompleto *texto;
+	texto = malloc(sizeof(textoCompleto));
+		if(texto == NULL)
+			printf("Erro na alocação memória para struct 'textoCompleto' \n");
 
 	initSettings(s, argc, argv, envp);
 
+	inicializarTexto(texto);
 
-	if(access(s->mainPipe, F_OK) == 0){
+	//canalização
+
+	if(access(s->mainPipe, F_OK) == 0){//verifica se ja existe um servidor
         fprintf(stderr, "[ERROR] FIFO exists already!!\n");
         exit(1);}
+
 	if(mkfifo(s->mainPipe, 0777)!=0) // 0666 read write a todos 0777 read write exe a todos
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
-	server(s);
+	//main server function
+	server(s, texto);
 
 
 	

@@ -59,12 +59,31 @@ typedef struct user {
 }user;
 
 
+typedef struct textoCompleto{
+	char linha1[45];
+	char linha2[45];
+	char linha3[45];
+	char linha4[45];
+	char linha5[45];
+	char linha6[45];
+	char linha7[45];
+	char linha8[45];
+	char linha9[45];
+	char linha10[45];
+	char linha11[45];
+	char linha12[45];
+	char linha13[45];
+	char linha14[45];
+	char linha15[45];
+}textoCompleto;
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
+void inicializarTexto(textoCompleto *texto);//inicializa o texto do server side com texto default
 int findUser(char * username, settings *s);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
 void* commandsThread(void *args);
-void server(settings *s);
+void server(settings * s, textoCompleto * textoServidor);
 void initSettings(settings *s, int argc, char * const argv[], char* envp[]);
 
 #endif
