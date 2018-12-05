@@ -204,10 +204,10 @@ int main(int argc, char * const argv[]) {
 	}
 
 	int fdSrv, fdCli;
+	int logged = 2;//inicializado com um valor int diferente de 0 ou 1
 	user novo;
 
 	fdSrv = open(path, O_RDWR);
-	fdCli = open(pathClient, O_RDWR);
 
 
 	
@@ -228,33 +228,36 @@ int main(int argc, char * const argv[]) {
 			}while(!flagUserSuccess);
 	}else strcpy(novo.nome , username);
 
-
-	int logged = 0;
-
-	novo.pid = getpid();
-	write(fdSrv, &novo, sizeof(user));
-	sleep(1);
-	read(fdSrv, &logged, sizeof(int));
-	printf("\nlogged: %d", logged);
-
-	if(logged == 0){
-		printf("Erro a logar no servidor, tente outra vez. (user?)");
+	do{
+		if(logged == 0){
+		printf("Erro a logar no servidor, username incorreto.");
 		exit(1);
-	}
+		}
+
+		logged = 0;
+
+		novo.pid = getpid();
+		write(fdSrv, &novo, sizeof(user));
+		sleep(1);
+		read(fdSrv, &logged, sizeof(int));
+		//printf("\nlogged: %d", logged);
+
+	}while(logged == 0);
+	
 
 	sprintf(pathClient,"../../server/bin/%s%d", FIFO_CLI, getpid());
 	printf("%s", pathClient);
 
 	if(mkfifo(pathClient, 0777) != 0)
 		fprintf(stderr, "[ERROR] FIFO couldn't be created !!\n");
+	fdCli = open(pathClient, O_RDWR);
+	
 
 
 
 
 
-
-
-	//unlink(pathClient);
+	//unlink(pathClient);//já esta no fim do 'main'
 
 	scanf("%s", &username);
 

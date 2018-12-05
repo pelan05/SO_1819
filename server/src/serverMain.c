@@ -209,7 +209,7 @@ void server(settings * s) {
 				if(findUser(novo.nome, s)){
 
 					logged = 1; //se login com sucesso, var logged fica a 1
-					printf("logged = 1\n\n");
+					//printf("logged = 1\n\n");
 					pos_c = -1; //posiçao cliente
 					pos_l = -1; //posição livre
 
@@ -234,7 +234,8 @@ void server(settings * s) {
 			if(logged == 0){
 				//TODO:
 				// signal de kill cliente por nao existir username
-
+				w = write(fdr, &logged, sizeof(int));
+				//nao necessario, cliente ja faz verificação
 			
 			}
 			else{
