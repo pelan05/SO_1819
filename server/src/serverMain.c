@@ -49,7 +49,7 @@ int findUser(char * username, settings *s) {
 }
 
 void* commandsThread(void* args){
-do{
+
 		
 		settings *s = (settings *) args;
 		
@@ -133,7 +133,6 @@ do{
 		return s; //isto cala o warning de nao haver return (void *);
 
 
-}while(1);
 
 }
 
@@ -267,12 +266,17 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 				sleep(2);
 				sprintf(pathTemp, FIFO_CLI, novo.pid);
 				fdw = open(pathTemp, O_RDWR);
-				w = write(fdw, &s , sizeof(settings));
+				w = write(fdw, &(*s) , sizeof(settings));
 				if(w == 0)
 					printf("nao consegui escrever no fifo do cliente");
 				printf("\n\t\t BYTES TEXTO: %d\n\n", w);
 
 				close(fdw);
+
+				
+
+
+
 				sleep(2);
 
 

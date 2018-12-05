@@ -68,6 +68,12 @@ typedef struct user {
 	int pid;
 }user;
 
+typedef struct linha{
+	char linha[MEDIT_MAXLINES];
+	int numLinha;
+}singleLinha;
+
+
 /*//deprecated
 typedef struct textoCompleto{
 	char linha1[45];

@@ -151,6 +151,7 @@ int main(int argc, char * const argv[]) {
 	char path[50] = {"../../server/bin/"};
 	char pathClient[50] = {" "};
 	char file[20] = {"serverPipe"};
+	char c;
 
 	char **linha;
 	
@@ -205,13 +206,7 @@ int main(int argc, char * const argv[]) {
 	int fdSrv, fdCli;
 	int logged = 2;//inicializado com um valor int diferente de 0 ou 1
 	user novo;
-	settings /***/s;
-/*
-	s = malloc(sizeof(settings));
-		if(s == NULL)
-			printf("Erro na alocação memoria para struct 'Settings' \n");
-*/
-
+	settings s;
 
 
 	fdSrv = open(path, O_RDWR);
@@ -244,17 +239,6 @@ int main(int argc, char * const argv[]) {
 		//printf("\nlogged: %d", logged);
 
 	}while(logged == 0);
-	
-
-
-
-
-
-
-
-
-
-
 
 
 	sprintf(pathClient,"../../server/bin/%s%d", FIFO_CLI, getpid());
@@ -264,31 +248,24 @@ int main(int argc, char * const argv[]) {
 
 	fdCli = open(pathClient, O_RDONLY);
 
-	//sleep(2);
+	sleep(2);
 	
 	rw = read(fdCli, &s, sizeof(settings));
 		if(rw == 0)
-			printf("Nada lido no fifo do cliente");
+			printf("\nNada lido no fifo do cliente\n");
 
 
 
-	printf("%s", s.mainPipe);
-
-
-
-
-
+	printf("\n%s\n", s.database);
+	printf("%s\n", s.mainPipe);
 
 
 
 
+	//TODO: remover este scanf no fim
+	scanf("%c", &c);
 
 
-
-	scanf("%s", &username);
-	printf("%s");
-	scanf("%s", &username);
-	sleep(5);	
 	//
 	//Inicio Codigo nCurses
 	//
