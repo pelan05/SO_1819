@@ -213,25 +213,29 @@ int main(int argc, char * const argv[]) {
 	
 	
 	if(!strcmp(username, " ")){//pede por linha de comandos
-		int flagUserSuccess = 0;
 	
-			do{
 				printf("Username: \n");
 				do{ 
 				scanf(" %s", novo.nome);
 				}while(strlen(username) > USERSIZE || strlen(username) < 1);
-				//TODO checkar user no server
-				//flagUserSuccess = check();
-
-				flagUserSuccess = 1;//para testes
-
-			}while(!flagUserSuccess);
+				
 	}else strcpy(novo.nome , username);
 
 	do{
+
 		if(logged == 0){
-		printf("Erro a logar no servidor, username incorreto.");
+		char answ = {""};
+		printf("Erro a logar no servidor, username incorreto.\n Tentar outra vez?\t(s/n)\n");
+		scanf("%c", answ);
+		if(answ == 'n')
 		exit(1);
+		else{
+				printf("Username: \n");
+				do{ 
+				scanf(" %s", novo.nome);
+				}while(strlen(username) > USERSIZE || strlen(username) < 1);
+			
+		}
 		}
 
 		logged = 0;
@@ -250,10 +254,8 @@ int main(int argc, char * const argv[]) {
 
 	if(mkfifo(pathClient, 0777) != 0)
 		fprintf(stderr, "[ERROR] FIFO couldn't be created !!\n");
-	fdCli = open(pathClient, O_RDWR);
-	//client fifo open
-	//read full text variable	//TODO:
-	//write single edited line	
+	printf("Estou antes do open l253");
+	fdCli = open(pathClient, O_RDONLY);
 	sleep(2);
 	printf("Estou antes do read l258");
 	rw = read(fdCli, &textoServer, sizeof(textoCompleto));
