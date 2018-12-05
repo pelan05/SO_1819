@@ -1,6 +1,7 @@
     #include "serverMain.h"
 
 int usersLogged = 0;
+settings *s;
 
 int findUser(char * username, settings *s) {
 
