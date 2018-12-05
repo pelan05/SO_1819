@@ -8,7 +8,7 @@
 #define TAMJANNOMESX (USERSIZE + 2) 
 #define NUMLINHAS (TAMJANY-2)
 
-#define FIFO_CLI "pipe_%d"
+#define FIFO_CLI "pipe_"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,11 +43,7 @@ int adicionaCarat(char * string, char adicao, int val);
 void printLinhas(WINDOW *linhas, WINDOW *nomes, char **linha, int highlight);
 void getUserEnv(int argc, char * const argv[], char * username, char * path);
 void wPrintNumbers(WINDOW *numeros);
-int usernameExists(char * username);
-/*
-char * leFifo(char * path, char * String);
-*/
-void olaFifo(char * path, char * String, int * pid);
+void string2FIFO(char * path, char * String, int * pid);
 
 
 #endif

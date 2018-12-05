@@ -112,34 +112,8 @@ void wPrintNumbers(WINDOW *numeros){
 	}
 	wrefresh(numeros);
 }
-/*
-//TODO USERNAME srvr verification
-int usernameExists(char * username){
 
-//ON Success 
-return 1;
-
-//else return 0;
-
-
-}
-*/
-
-/*
-char * leFifo(char * path, char * String){
-	
-	int fd = open( path , O_RDONLY );
-	if(fd == -1)
-		printf("Erro a abrir o fifo %s \n", path);
-
-	read(fd, String, sizeof(String));
-	read(fd, pid, sizeof(int));
-
-	close(fd);
-	return String;
-}
-*/
-void olaFifo(char * path, char * String, int  * pid){
+void string2FIFO(char * path, char * String, int  * pid){
 	
 	char * teste = " ";
 	int fd = open( path , O_WRONLY); 
@@ -178,6 +152,7 @@ int main(int argc, char * const argv[]) {
 
 	char username[USERSIZE] = {" "};
 	char path[50] = {"../../server/bin/"};
+	char pathClient[50] = {" "};
 	char file[20] = {"serverPipe"};
 
 	char **linha;
@@ -216,7 +191,6 @@ int main(int argc, char * const argv[]) {
 	int choice;//vars para selecionar linha
 	int highlight = 0;//1-15//a linha 1 começa selecionada
 	
-	//int i=0;
 
 	//
 	//Codigo do username
@@ -225,16 +199,15 @@ int main(int argc, char * const argv[]) {
 	getUserEnv(argc, argv, username, file);//-u "nome" e -p "path do main pipe"
 
 	strcpy(path, strcat(path, file));//compila string de path e verifica se pip existe
-	//printf("%s", path);
 	if(!verificaServidor(path)){//se pipe nao existe exit(1);
 		exit(1);
 	}
 
-	int fdsrv;
+	int fdSrv, fdCli;
 	user novo;
 
-	fdsrv = open(path, O_WRONLY);
-
+	fdSrv = open(path, O_RDWR);
+	fdCli = open(pathClient, O_RDWR);
 
 
 	
@@ -259,13 +232,9 @@ int main(int argc, char * const argv[]) {
 	int logged = 0;
 
 	novo.pid = getpid();
-
-	printf("\npre-write");
-	write(fdsrv, &novo, sizeof(user));
-	//olaFifo(path, username, &novo.pid);
-	printf("\npre-read");
-	read(fdsrv, &logged, sizeof(int));
-	printf("\npos-read");
+	write(fdSrv, &novo, sizeof(user));
+	sleep(1);
+	read(fdSrv, &logged, sizeof(int));
 	printf("\nlogged: %d", logged);
 
 	if(logged == 0){
@@ -273,18 +242,21 @@ int main(int argc, char * const argv[]) {
 		exit(1);
 	}
 
+	sprintf(pathClient,"../../server/bin/%s%d", FIFO_CLI, getpid());
+	printf("%s", pathClient);
 
+	if(mkfifo(pathClient, 0777) != 0)
+		fprintf(stderr, "[ERROR] FIFO couldn't be created !!\n");
+
+
+
+
+
+
+
+	//unlink(pathClient);
 
 	scanf("%s", &username);
-
-	/*
-	if(!usernameExists(username)){
-		printf("Username não encontrado!");
-		exit(1);
-	}
-	*/
-
-
 
 
 	//
@@ -416,8 +388,9 @@ int main(int argc, char * const argv[]) {
 	//endGame
 	//
 
-	close(fdsrv);
-
+	close(fdSrv);
+	close(fdCli);
+	unlink(pathClient);
 	free(linha);
 	endwin();//fechar ncurses control
 	

@@ -13,6 +13,7 @@ int findUser(char * username, settings *s) {
 		return 2;
 	}
 
+
 	while (fgets(buffer, TAMBUFFER + 1, f) != NULL){
 		buffer[strlen(buffer)-1] = 0;
 		
@@ -155,12 +156,20 @@ void server(settings * s) {
 		usersPID[i] = -1;
 	}
 
-		fdr = open(s->mainPipe, O_RDONLY);
+		fdr = open(s->mainPipe, O_RDWR);
 		if (fdr == -1)
 			fprintf(stderr, "[ERROR] Can't read pipe %s!\n", s->mainPipe);
 		fdg = open(s->mainPipe, O_WRONLY);
 		if (fdg == -1)
 			fprintf(stderr, "[ERROR] Can't write pipe %s!\n", s->mainPipe);
+
+
+		pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
+
+
+
+
+
 	do{
 		logged = 0;//logged volta a 0
 		FD_ZERO(&fontes);
@@ -182,17 +191,10 @@ void server(settings * s) {
 			
 		//thread  que corre a função commandsThread();
 
-		
-		//printf("antes ptread");
-
-		pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
+		//pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
 
 
-		/*int numeros = */pthread_join(threadCommands, NULL);//tentativa
-		//printf("\n\n\n\t\tVALOR DE PTHREAD: \t %d\n\n\n", numeros); 
-		
-
-
+		//pthread_join(threadCommands, NULL);
 
 		}
 
@@ -200,43 +202,52 @@ void server(settings * s) {
 
 			r = read(fdr, &novo, sizeof(user));
 
+			if(r == 12){//user logged in
 
-			printf("\tBytes: %d\tUSER: %s \tPID: %d\n",r, novo.nome, novo.pid);
+				printf("\tBytes: %d\tUSER: %s \tPID: %d\n",r, novo.nome, novo.pid);
 
-			if(findUser(novo.nome, s)){
+				if(findUser(novo.nome, s)){
 
-				logged = 1; //se login com sucesso, var logged fica a 1
-				pos_c = -1; //posiçao cliente
-				pos_l = -1; //posição livre
+					logged = 1; //se login com sucesso, var logged fica a 1
+					printf("logged = 1\n\n");
+					pos_c = -1; //posiçao cliente
+					pos_l = -1; //posição livre
 
 
-				//TODO se o array estiver cheio? (sig de maximo de clientes conectados)
-				for(i = 0; i < s->maxUsers; i++){
-					if(usersPID[i] == -1 && pos_l == -1)// primeira posiçao livre encontrada 
-						pos_l = i;
-					if(usersPID[i] == novo.pid)	// se user encontrado
-						pos_c = i;
-				}
-				if(pos_c == -1 && pos_l != -1){		// substituir posiçao livre por user recebido
-					usersPID[pos_l] = novo.pid;
-					users[pos_l] = novo;
+					//TODO se o array estiver cheio? (sig de maximo de clientes conectados)
+					for(i = 0; i < s->maxUsers; i++){
+						if(usersPID[i] == -1 && pos_l == -1)// primeira posiçao livre encontrada 
+							pos_l = i;
+						if(usersPID[i] == novo.pid)	// se user encontrado
+							pos_c = i;
+					}
+					if(pos_c == -1 && pos_l != -1){		// substituir posiçao livre por user recebido
+						usersPID[pos_l] = novo.pid;
+						users[pos_l] = novo;
+					}
+			}else{
+				if(r == 4){//server written int
+
 				}
 			}
+			}
 			if(logged == 0){
-				//todo
+				//TODO:
 				// signal de kill cliente por nao existir username
 
 			
 			}
 			else{
-				//printf("Client logged in\n\n");
+
+				/**/
+				w = write(fdr, &logged, sizeof(int));
+				
 				sprintf(pathTemp, FIFO_CLI, novo.pid);
+				//mkfifo(pathTemp, 0777);//TODO o server nao pode criar este fifo
 				fdw = open(pathTemp, O_WRONLY);
 				w = write(fdw, &novo, sizeof(user));
-				//printf("\n\tBytes written: %d\n", w);
 				close(fdw);
-
-
+				sleep(2);
 
 
 				//logica fifo
@@ -295,6 +306,7 @@ void server(settings * s) {
 	}while(1);
 
 
+	pthread_join(threadCommands, NULL);
 
 		
 
