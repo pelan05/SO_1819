@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "(gdb) Launch Client",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/client/bin/client",
@@ -22,11 +22,9 @@
                     "ignoreFailures": true
                 }
             ]
-        }
-    ],
-    [
+        },
         {
-            "name": "(gdb) Launch",
+            "name": "(gdb) Launch Server",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/server/bin/server",
