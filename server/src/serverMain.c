@@ -1,7 +1,7 @@
-    #include "serverMain.h"
+  #include "serverMain.h"
 
 int usersLogged = 0;
-
+/*
 void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
 		strcpy(texto->linha1, "Esta linha tem quarenta caracteres e pronto  ");
 		strcpy(texto->linha2, "Esta linha tem quarenta caracteres e pronto  ");
@@ -19,7 +19,7 @@ void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
 		strcpy(texto->linha14, "Esta linha tem quarenta caracteres e pronto k");
 		strcpy(texto->linha15, "Esta linha tem quarenta caracteres e pronto k");
 
-}
+}*/
 
 int findUser(char * username, settings *s) {
 
@@ -49,7 +49,7 @@ int findUser(char * username, settings *s) {
 }
 
 void* commandsThread(void* args){
-
+do{
 		
 		settings *s = (settings *) args;
 		
@@ -79,8 +79,8 @@ void* commandsThread(void* args){
 			printf("Timeout: %d\n", s->timeout);
 			printf("Maximum amount of pipes: %d\n", s->maxPipes);
 			printf("Maximum amount of users: %d\n", s->maxUsers);
-			printf("Maximum amount of lines: %d\n", s->e.max_l);
-			printf("Maximum amount of columns: %d\n", s->e.max_c);
+			printf("Maximum amount of lines: %d\n", s->max_l);
+			printf("Maximum amount of columns: %d\n", s->max_c);
 			printf("Name of the database: %s\n", s->database);
 			printf("Name of the server pipe: %s\n", s->mainPipe);
 		}
@@ -132,10 +132,13 @@ void* commandsThread(void* args){
 
 		return s; //isto cala o warning de nao haver return (void *);
 
+
+}while(1);
+
 }
 
 
-void server(settings * s, textoCompleto * textoServidor) {
+void server(settings * s/*, textoCompleto * textoServidor*/) {
 
 
 
@@ -155,7 +158,7 @@ void server(settings * s, textoCompleto * textoServidor) {
 
 	pthread_t threadCommands;
 
-	char text[s->e.max_l][s->e.max_c];		//TODO: mudar isto para pointer pointer global e estatico
+	char text[s->max_l][s->max_c];		//TODO: mudar isto para pointer pointer global e estatico
 	//vale a pena?
 
 
@@ -244,18 +247,11 @@ void server(settings * s, textoCompleto * textoServidor) {
 				// signal de kill cliente por nao existir username
 				w = write(fdr, &logged, sizeof(int));
 				if(w == 0)
-				printf("nothing written");
-				//nao necessario, cliente ja faz verificação
-			
+				printf("nothing written");			
 			}
 			else{
 
-
-
-
-
-
-
+				
 
 
 
@@ -266,10 +262,12 @@ void server(settings * s, textoCompleto * textoServidor) {
 
 				/**/
 				w = write(fdr, &logged, sizeof(int));
+
+
 				sleep(2);
 				sprintf(pathTemp, FIFO_CLI, novo.pid);
 				fdw = open(pathTemp, O_RDWR);
-				w = write(fdw, &textoServidor, sizeof(textoCompleto));
+				w = write(fdw, &s , sizeof(settings));
 				if(w == 0)
 					printf("nao consegui escrever no fifo do cliente");
 				printf("\n\t\t BYTES TEXTO: %d\n\n", w);
@@ -368,10 +366,12 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 	s->timeout = MEDIT_TIMEOUT;
 	s->maxUsers = MEDIT_MAXUSERS;
 	s->maxPipes = MEDIT_MAXPIPES;
-	s->e.max_c = MEDIT_MAXCOLUMNS;
-	s->e.max_l = MEDIT_MAXLINES;
-	s->database = MEDIT_DEFAULT_NAME;
-	s->mainPipe = MEDIT_MAIN_PIPE_DEFAULT_NAME;
+	s->max_c = MEDIT_MAXCOLUMNS;
+	s->max_l = MEDIT_MAXLINES;
+	//s->database = MEDIT_DEFAULT_NAME;
+	strcpy(s->database, MEDIT_DEFAULT_NAME);
+	//s->mainPipe = MEDIT_MAIN_PIPE_DEFAULT_NAME;
+	strcpy(s->mainPipe, MEDIT_MAIN_PIPE_DEFAULT_NAME);
 
 	//Substituir pelas variaveis de ambiente caso existam
 
@@ -384,13 +384,13 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 	aux = NULL;
 	aux = getenv("MEDIT_MAXLINES");
 	if (aux != NULL) {
-		s->e.max_l = atoi(aux);
+		s->max_l = atoi(aux);
 	}
 
 	aux = NULL;
 	aux = getenv("MEDIT_MAXCOLUMNS");
 	if (aux != NULL) {
-		s->e.max_c = atoi(aux);
+		s->max_c = atoi(aux);
 	}
 
 	aux = NULL;
@@ -434,15 +434,17 @@ int main(int argc, char * const argv[], char* envp[]) {
 	s = malloc(sizeof(settings));
 		if(s == NULL)
 			printf("Erro na alocação memoria para struct 'Settings' \n");
-	
+	/*
 	textoCompleto *texto;
 	texto = malloc(sizeof(textoCompleto));
 		if(texto == NULL)
 			printf("Erro na alocação memória para struct 'textoCompleto' \n");
-
+	*/
 	initSettings(s, argc, argv, envp);
 
+	/*
 	inicializarTexto(texto);
+	*/
 
 	//canalização
 
@@ -454,7 +456,7 @@ int main(int argc, char * const argv[], char* envp[]) {
 		fprintf(stderr, "[ERROR] FIFO couldn't be created!!\n");
 
 	//main server function
-	server(s, texto);
+	server(s/*, texto*/);
 
 
 	

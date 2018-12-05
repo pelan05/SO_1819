@@ -32,7 +32,31 @@ typedef struct user {
 	char nome[USERSIZE];
 	int pid;
 }user;
+/*
+typedef struct ecra {
+	int max_l;
+	int max_c;
+} ecra;
+typedef struct setting {
+	int timeout;
+	int maxUsers;
+	int maxPipes;
+	ecra e;
+	char* database;
+	char* mainPipe;
+} settings;*/
 
+typedef struct setting {
+	int timeout;
+	int maxUsers;
+	int maxPipes;
+	int max_l;
+	int max_c;
+	char database[20];
+	char mainPipe[20];
+} settings;
+
+/*//deprecated
 typedef struct textoCompleto{
 	char linha1[45];
 	char linha2[45];
@@ -50,7 +74,7 @@ typedef struct textoCompleto{
 	char linha14[45];
 	char linha15[45];
 }textoCompleto;
-
+*/
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

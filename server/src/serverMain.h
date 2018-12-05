@@ -39,11 +39,11 @@
 //---------------------------------------------------------------------------
 //------------------------------Estruturas-----------------------------------
 
+/*
 typedef struct ecra {
 	int max_l;
 	int max_c;
 } ecra;
-
 typedef struct setting {
 	int timeout;
 	int maxUsers;
@@ -51,6 +51,16 @@ typedef struct setting {
 	ecra e;
 	char* database;
 	char* mainPipe;
+} settings;*/
+
+typedef struct setting {
+	int timeout;
+	int maxUsers;
+	int maxPipes;
+	int max_l;
+	int max_c;
+	char database[20];
+	char mainPipe[20];
 } settings;
 
 typedef struct user {
@@ -58,7 +68,7 @@ typedef struct user {
 	int pid;
 }user;
 
-
+/*//deprecated
 typedef struct textoCompleto{
 	char linha1[45];
 	char linha2[45];
@@ -76,14 +86,14 @@ typedef struct textoCompleto{
 	char linha14[45];
 	char linha15[45];
 }textoCompleto;
-
+*/
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
-void inicializarTexto(textoCompleto *texto);//inicializa o texto do server side com texto default
+//void inicializarTexto(textoCompleto *texto);//inicializa o texto do server side com texto default
 int findUser(char * username, settings *s);	// checks user FILE IS SPECIFIED BEFORE ENTERING HERE return 1 if finds 0 otherwise
 void* commandsThread(void *args);
-void server(settings * s, textoCompleto * textoServidor);
+void server(settings * s/*, textoCompleto * textoServidor*/);
 void initSettings(settings *s, int argc, char * const argv[], char* envp[]);
 
 #endif

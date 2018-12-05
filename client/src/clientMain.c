@@ -205,7 +205,14 @@ int main(int argc, char * const argv[]) {
 	int fdSrv, fdCli;
 	int logged = 2;//inicializado com um valor int diferente de 0 ou 1
 	user novo;
-	textoCompleto textoServer;
+	settings /***/s;
+/*
+	s = malloc(sizeof(settings));
+		if(s == NULL)
+			printf("Erro na alocação memoria para struct 'Settings' \n");
+*/
+
+
 
 	fdSrv = open(path, O_RDWR);
 
@@ -224,18 +231,8 @@ int main(int argc, char * const argv[]) {
 	do{
 
 		if(logged == 0){
-		char answ = {""};
-		printf("Erro a logar no servidor, username incorreto.\n Tentar outra vez?\t(s/n)\n");
-		scanf("%c", answ);
-		if(answ == 'n')
+		printf("Erro a logar no servidor, username incorreto.");
 		exit(1);
-		else{
-				printf("Username: \n");
-				do{ 
-				scanf(" %s", novo.nome);
-				}while(strlen(username) > USERSIZE || strlen(username) < 1);
-			
-		}
 		}
 
 		logged = 0;
@@ -249,37 +246,43 @@ int main(int argc, char * const argv[]) {
 	}while(logged == 0);
 	
 
+
+
+
+
+
+
+
+
+
+
+
 	sprintf(pathClient,"../../server/bin/%s%d", FIFO_CLI, getpid());
-	printf("%s", pathClient);
 
 	if(mkfifo(pathClient, 0777) != 0)
 		fprintf(stderr, "[ERROR] FIFO couldn't be created !!\n");
-	printf("Estou antes do open l253");
+
 	fdCli = open(pathClient, O_RDONLY);
-	sleep(2);
-	printf("Estou antes do read l258");
-	rw = read(fdCli, &textoServer, sizeof(textoCompleto));
+
+	//sleep(2);
+	
+	rw = read(fdCli, &s, sizeof(settings));
 		if(rw == 0)
 			printf("Nada lido no fifo do cliente");
 
-		printf("Estou antes da atribuição l262");
 
 
-		strcpy(linha[1], textoServer.linha1);
-		strcpy(linha[2], textoServer.linha2);
-		strcpy(linha[3], textoServer.linha3);
-		strcpy(linha[4], textoServer.linha4);
-		strcpy(linha[5], textoServer.linha5);
-		strcpy(linha[6], textoServer.linha6);
-		strcpy(linha[7], textoServer.linha7);
-		strcpy(linha[8], textoServer.linha8);
-		strcpy(linha[9], textoServer.linha9);
-		strcpy(linha[10], textoServer.linha10);
-		strcpy(linha[11], textoServer.linha11);
-		strcpy(linha[12], textoServer.linha12);
-		strcpy(linha[13], textoServer.linha13);
-		strcpy(linha[14], textoServer.linha14);
-		strcpy(linha[15], textoServer.linha15);
+	printf("%s", s.mainPipe);
+
+
+
+
+
+
+
+
+
+
 
 
 	scanf("%s", &username);
