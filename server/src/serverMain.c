@@ -1,7 +1,6 @@
     #include "serverMain.h"
 
 int usersLogged = 0;
-settings *s;
 
 int findUser(char * username, settings *s) {
 
@@ -29,13 +28,11 @@ int findUser(char * username, settings *s) {
 	return 0;
 }
 
-void* commandsThread(void *args){
+void* commandsThread(void* args){
 
-
-		settings *s;
-		s = (settings *) &args;
-
-		printf("%s %s", s->mainPipe, s->database);
+		
+		settings *s = (settings *) args;
+		
 
 		char input[CMDSIZE], *cmd, *arg;
 		int n;
@@ -95,7 +92,6 @@ void* commandsThread(void *args){
 		if (!strcmp("shutdown", cmd)) {
 			printf("\nShutting down.");
 			unlink(s->mainPipe);
-			printf("\nPIPE1?: %s \n", s->mainPipe);//TODO teste
 			exit(EXIT_SUCCESS);//'0'
 		}
 
@@ -189,7 +185,7 @@ void server(settings * s) {
 		
 		//printf("antes ptread");
 
-		pthread_create(&threadCommands, NULL, commandsThread, s);
+		pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
 
 
 		/*int numeros = */pthread_join(threadCommands, NULL);//tentativa
