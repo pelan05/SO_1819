@@ -34,6 +34,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/select.h>
+#include <sys/wait.h>
 
 
 //---------------------------------------------------------------------------
@@ -62,6 +63,11 @@ typedef struct setting {
 	char database[20];
 	char mainPipe[20];
 } settings;
+
+typedef struct pedido{
+    char texto[15];
+    int rem;
+}PEDIDO;
 
 typedef struct user {
 	char nome[TAMBUFFER];
@@ -101,5 +107,6 @@ int findUser(char * username, settings *s);	// checks user FILE IS SPECIFIED BEF
 void* commandsThread(void *args);
 void server(settings * s/*, textoCompleto * textoServidor*/);
 void initSettings(settings *s, int argc, char * const argv[], char* envp[]);
+void aspell();
 
 #endif

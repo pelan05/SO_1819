@@ -435,6 +435,64 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 }
 
+void aspell(){
+	/*
+	int fdfork1[2];
+    int fdfork2[2];
+    int forkSpell;
+    char respostaDoFilho[100];
+    char ret;
+
+    int i;
+
+    PEDIDO p;
+
+    printf("Texto: "); fflush(stdout);
+    scanf("%s", p.texto);
+
+    printf("\nHere it is: %s\n", p.texto);
+
+
+    if(pipe(fdfork1) == -1)
+		printf("ERROR CREATING PIPE!\n");
+	if(pipe(fdfork2) == -1)
+		printf("ERROR CREATING PIPE!\n");
+
+	forkSpell = fork();
+
+	if(forkSpell<0){
+		printf("Error forking\n");
+		exit(0);
+	}
+    else if(forkSpell > 0){	// pai
+        
+		close(fdfork1[0]);
+        printf("%s", p.texto);
+		write(fdfork1[1], p.texto, sizeof(p.texto));
+		close(fdfork1[1]);
+		wait(NULL); // espera pelo filho
+        close(fdfork2[1]);
+        strcpy(respostaDoFilho, " ");
+        read(fdfork2[0], respostaDoFilho, sizeof(respostaDoFilho));
+        for (i = 0; i < sizeof(respostaDoFilho); i++){
+            if(respostaDoFilho[i] == '*')
+                printf("\nNice!!");
+            else if(respostaDoFilho[i] == '&')
+                printf("\nPalavra errada!!");
+        }
+            }
+		else{		// filho
+		    close(fdfork1[1]);
+		    dup2(fdfork1[0], STDIN_FILENO);
+		    close(fdfork1[0]);
+		    close(fdfork2[0]);
+			dup2(fdfork2[1], STDOUT_FILENO);
+			close(fdfork2[1]);
+			execlp("aspell", "aspell", "-a", NULL);
+            }
+
+	*/
+}
 
 int main(int argc, char * const argv[], char* envp[]) {
 
