@@ -25,10 +25,12 @@ void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
 }*/
 
 void sigintHandler(int sig_num){
+	//o valor de sig_num = 2A -tested
 	signal(SIGINT, sigintHandler);
 	printf("A encerrar tudo..");
 	int i;
 	for(i = 0; i< MEDIT_MAXUSERS; i++)
+		//if(users[i] != -1)//TODO: get this to work //(if not null)
 		kill(users[i].pid , SIGINT);
 	
 	
@@ -263,19 +265,11 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 				// signal de kill cliente por nao existir username
 				w = write(fdr, &logged, sizeof(int));
 				if(w == 0)
-				printf("nothing written");			
+					printf("nothing written");			
 			}
 			else{
 
 				
-
-
-
-
-
-
-
-
 				/**/
 				w = write(fdr, &logged, sizeof(int));
 
@@ -306,49 +300,9 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 				//	}
 				//}
 
-				/* //logica aspell
-						if(pipe(fdfork1) == -1)
-							printf("ERROR CREATING PIPE!\n");
-						if(pipe(fdfork2) == -1)
-							printf("ERROR CREATING PIPE!\n");
-
-						forkSpell = fork();
-
-						if(forkSpell<0){
-							printf("Error forking\n");
-							pthread_exit(0);
-						}
-						else if(forkSpell > 0){	// pai
-							close(fdfork1[0]);
-							close(fdfork2[1]);
-
-							//copiar linha 
-
-							write(fdfork1[1], //linha do cliente, //sizeof(linha) + tamanho da linha copiada);
-							close(fdfork1[1]);
-							wait(NULL); // espera pelo filho
-							if(respostaDoFilho == '*');
-								printf("\nNice!!");
-							else if(respostaDoFilho == '&')
-								printf("\nPalavra errada!!");
-						}
-						else{		// filho
-							close(fdfork1[1]);
-							dup2(fdfork1[0], STDIN_FILENO);
-							close(fdfork1[0]);
-							close(fdfork2[0]);
-							dup(fdfork2[1], STDIN_FILENO);
-							close(fdfork2[1]);
-							execlp("aspell", "aspell", "-a", NULL);
-						}
-				*/
-
 			}
 
 		}
-		//printf("\nlogged: %d \n", logged);
-		//sleep(1);
-
 	//pthread_join(threadCommands, NULL);   //join thread com fim da função, sincronização da thread 
 
 	}while(1);
@@ -436,14 +390,14 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 }
 
 void aspell(){
-	/*
+	
 	int fdfork1[2];
     int fdfork2[2];
     int forkSpell;
     char respostaDoFilho[100];
     char ret;
 
-    int i;
+    long unsigned i;
 
     PEDIDO p;
 
@@ -491,7 +445,6 @@ void aspell(){
 			execlp("aspell", "aspell", "-a", NULL);
             }
 
-	*/
 }
 
 int main(int argc, char * const argv[], char* envp[]) {
