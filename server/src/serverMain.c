@@ -126,7 +126,15 @@ void* commandsThread(void* args){
 		}
 
 		if (!strcmp("text", cmd)) {
-			printf("\nYou've select 'text'.\n");
+			int i = 0;
+			printf("\nYou've selected 'text'.");
+
+			for(i = 0; i < MEDIT_MAXLINES; i++){
+				//printf("\n %d \t %s", );//TODO Complete this all
+			}
+			printf("\n");
+
+
 		}
 
 		if (!strcmp("shutdown", cmd)) {
@@ -389,8 +397,9 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 }
 
-void aspell(){
+void aspell(singleLine line){
 	
+
 	int fdfork1[2];
     int fdfork2[2];
     int forkSpell;
@@ -398,13 +407,16 @@ void aspell(){
     char ret;
 
     long unsigned i;
-
+	//remove this-----------start
     PEDIDO p;
 
     printf("Texto: "); fflush(stdout);
     scanf("%s", p.texto);
 
     printf("\nHere it is: %s\n", p.texto);
+	//remove this...............end
+
+	//TODO dividir frase da linha em palavras, testar palavra a palavra
 
 
     if(pipe(fdfork1) == -1)
@@ -429,10 +441,13 @@ void aspell(){
         strcpy(respostaDoFilho, " ");
         read(fdfork2[0], respostaDoFilho, sizeof(respostaDoFilho));
         for (i = 0; i < sizeof(respostaDoFilho); i++){
-            if(respostaDoFilho[i] == '*')
+            if(respostaDoFilho[i] == '*'){
                 printf("\nNice!!");
-            else if(respostaDoFilho[i] == '&')
-                printf("\nPalavra errada!!");
+				line.isCorrect = 1;//set true
+			}else if(respostaDoFilho[i] == '&'){
+                  	printf("\nPalavra errada!!");
+					line.isCorrect = 0;//set false
+					}	
         }
             }
 		else{		// filho

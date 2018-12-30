@@ -75,30 +75,16 @@ typedef struct user {
 }user;
 
 typedef struct linha{
-	char linha[MEDIT_MAXCOLUMNS];
-	int numLinha;
-}singleLinha;
+	//num linha
+	int lineID;
+	//editada ou n
+	int isBeingEdited;
+	//correta ou nao
+	int isCorrect;
+	//texto
+	char text[MEDIT_MAXCOLUMNS];
+}singleLine;
 
-
-/*//deprecated
-typedef struct textoCompleto{
-	char linha1[45];
-	char linha2[45];
-	char linha3[45];
-	char linha4[45];
-	char linha5[45];
-	char linha6[45];
-	char linha7[45];
-	char linha8[45];
-	char linha9[45];
-	char linha10[45];
-	char linha11[45];
-	char linha12[45];
-	char linha13[45];
-	char linha14[45];
-	char linha15[45];
-}textoCompleto;
-*/
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
