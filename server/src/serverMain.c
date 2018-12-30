@@ -156,7 +156,7 @@ void* commandsThread(void* args){
 		}
 	
 
-
+		// not inside a circle, that's why it won't accept more than one command, I guess
 
 		return s; //isto cala o warning de nao haver return (void *);
 
@@ -360,7 +360,7 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 	aux = NULL;
 	aux = getenv("MEDIT_MAXCOLUMNS");
 	if (aux != NULL) {
-		s->max_c = atoi(aux);
+		s->max_c = atoi(aux); 
 	}
 
 	aux = NULL;
