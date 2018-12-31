@@ -399,12 +399,14 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 void aspell(singleLine line){
 	
+	char delim [] = " "; // para usar num strtok para separar palavras
 
 	int fdfork1[2];
     int fdfork2[2];
     int forkSpell;
     char respostaDoFilho[100];
     char ret;
+	char aux[MEDIT_MAXCOLUMNS]; // isto tem de ser com o valor de max columns das settings
 
     long unsigned i;
 	//remove this-----------start
@@ -416,8 +418,17 @@ void aspell(singleLine line){
     printf("\nHere it is: %s\n", p.texto);
 	//remove this...............end
 
-	//TODO dividir frase da linha em palavras, testar palavra a palavra
+	//TODO usar o que está abaixo efetivamente dentro do esquema de aspell
 
+	strcpy(aux, line.text);
+
+	char *ptr = strtok(aux, delim);	//separa a primeira palavra
+
+	while (ptr != NULL){			//separa as restantes palavras
+		ptr = strtok(NULL, delim);
+	}
+
+	//		words separating ends here
 
     if(pipe(fdfork1) == -1)
 		printf("ERROR CREATING PIPE!\n");
