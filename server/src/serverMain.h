@@ -94,5 +94,6 @@ void* commandsThread(void *args);
 void server(settings * s/*, textoCompleto * textoServidor*/);
 void initSettings(settings *s, int argc, char * const argv[], char* envp[]);
 void aspell(singleLine line);
+void saveInFile(char *arg, settings *s);
 
 #endif

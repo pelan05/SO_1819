@@ -111,6 +111,7 @@ void* commandsThread(void* args){
 
 		if (!strcmp("save", cmd)) {
 			printf("\nYou've select 'save'.\n");
+			saveInFile(arg, s);
 		}
 
 		if (!strcmp("free", cmd)) {
@@ -471,6 +472,24 @@ void aspell(singleLine line){
 			execlp("aspell", "aspell", "-a", NULL);
             }
 
+}
+
+void saveInFile(char *arg, settings *s){
+	int i;
+	
+	FILE *f = fopen(arg, "w");
+	if (f == NULL){
+		printf("Error opening file!\n");
+		return;
+	}
+	
+	for(i = 0; i < s->max_l; i++)
+		//TODO: Checkar a linha com o aspell e só guardar no ficheiro se der bem
+		
+		
+		
+		
+		fclose(f);
 }
 
 int main(int argc, char * const argv[], char* envp[]) {
