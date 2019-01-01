@@ -93,6 +93,6 @@ int findUser(char * username, settings *s);	// checks user FILE IS SPECIFIED BEF
 void* commandsThread(void *args);
 void server(settings * s/*, textoCompleto * textoServidor*/);
 void initSettings(settings *s, int argc, char * const argv[], char* envp[]);
-void aspell();
+void aspell(singleLine line);
 
 #endif
