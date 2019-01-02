@@ -95,5 +95,7 @@ void server(settings * s/*, textoCompleto * textoServidor*/);
 void initSettings(settings *s, int argc, char * const argv[], char* envp[]);
 int aspell(singleLine line);
 void saveInFile(char *arg, settings *s);
+void printText();
+void freeLine(int val);
 
 #endif

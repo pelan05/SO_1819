@@ -117,6 +117,11 @@ void* commandsThread(void* args){
 
 		if (!strcmp("free", cmd)) {
 			printf("\nYou've select 'free'.\n");
+			int lineVal = atoi(arg);	//retorna 0 caso seja inválido
+			if(lineVal <= s->max_l)
+				freeLine(lineVal);		//se passar 1 apaga a primeira linha, etc
+			else
+				printf("\nInvalid argument for 'free'!\n");
 		}
 
 		if (!strcmp("statistics", cmd)) {
@@ -128,13 +133,8 @@ void* commandsThread(void* args){
 		}
 
 		if (!strcmp("text", cmd)) {
-			int i = 0;
-			printf("\nYou've selected 'text'.");
-
-			for(i = 0; i < MEDIT_MAXLINES; i++){
-				//printf("\n %d \t %s", );//TODO Complete this all
-			}
-			printf("\n");
+			printf("\nYou've select 'text'.\n");
+			printText();
 
 
 		}
@@ -487,7 +487,7 @@ void saveInFile(char *arg, settings *s){
 	}
 	
 	for(i = 0; i < s->max_l; i++)
-		//TODO: Checkar a linha com o aspell e só guardar no ficheiro se der bem
+		//TODO: Checkar a linha com o aspell e só guardar no ficheiro se der bem (needs testing only)
 
 		if(aspell(texto[i])==1){
 			fprintf(f, "%s\n", texto[i].text);
@@ -500,6 +500,27 @@ void saveInFile(char *arg, settings *s){
 		
 		
 		fclose(f);
+}
+
+
+
+void printText(){
+	int i;
+
+	for (i=0; i<s->max_l; i++){
+		printf("%s", texto[i].text);
+	}
+}
+
+void freeLine(int val){
+
+	int i, j;
+
+	for(i = 0; i < s->max_l; i++){
+		if(i+1 == val)
+			for(j=0; j< s->max_c; j++)
+				texto[i].text[j] = 0; 
+	}
 }
 
 int main(int argc, char * const argv[], char* envp[]) {
