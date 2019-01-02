@@ -30,7 +30,7 @@ void sigintHandler(int sig_num){
 	signal(SIGINT, sigintHandler);
 	printf("A encerrar tudo..");
 	int i;
-	for(i = 0; i< MEDIT_MAXUSERS; i++)
+	for(i = 0; i< MEDIT_MAXUSERS/*s->maxUsers*/; i++)
 		//if(users[i] != -1)//TODO: get this to work //(if not null)
 		kill(users[i].pid , SIGINT);
 	
@@ -512,6 +512,11 @@ int main(int argc, char * const argv[], char* envp[]) {
 	initSettings(s, argc, argv, envp);
 
 	users = malloc(s->maxUsers * sizeof(user));
+	texto = malloc(s->max_l * sizeof(singleLine));
+
+	int j;
+	for(j = 0; j < s->max_l; j++)
+		texto[j].text = malloc(s->max_c * sizeof(char));
 	
 	sprintf(pathSigint, s->mainPipe);//path do fifo na var. global
 	/*

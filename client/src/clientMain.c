@@ -173,9 +173,9 @@ int main(int argc, char * const argv[]) {
 	if(!linha){
 		printf("Erro a alocar mem linha 191 clientmain\n");
 	}
-	for(int i = 0; i < 15; i++)
+	for(int i = 0; i < 15/*s->max_l*/; i++)
 	{
-		linha[i] = malloc(sizeof(char) * 45);
+		linha[i] = malloc(sizeof(char) * 45)/*s->max_c*/;
 		if(!linha[i])
 		{
 			printf("Erro a alocar mem linha 198 clientmain\n");
