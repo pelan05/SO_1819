@@ -65,7 +65,7 @@ typedef struct setting {
 } settings;
 
 typedef struct pedido{
-    char texto[15];
+    char texto[45];
     int rem;
 }PEDIDO;
 
