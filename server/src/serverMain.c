@@ -3,7 +3,7 @@
 int usersLogged = 0;
 char pathSigint[20] = {""};
 singleLine *texto;
-
+settings *s;
 user *users; //TODO: corrigir isto -vasco
 /*
 void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
@@ -399,7 +399,7 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 }
 
-void aspell(singleLine line){
+int aspell(singleLine line){
 	
 	char delim [] = " "; // para usar num strtok para separar palavras
 
@@ -457,9 +457,11 @@ void aspell(singleLine line){
             if(respostaDoFilho[i] == '*'){
                 printf("\nNice!!");
 				line.isCorrect = 1;//set true
+				return 1;
 			}else if(respostaDoFilho[i] == '&'){
                   	printf("\nPalavra errada!!");
 					line.isCorrect = 0;//set false
+					return 0;
 					}	
         }
             }
@@ -486,6 +488,13 @@ void saveInFile(char *arg, settings *s){
 	
 	for(i = 0; i < s->max_l; i++)
 		//TODO: Checkar a linha com o aspell e só guardar no ficheiro se der bem
+
+		if(aspell(texto[i])==1){
+			fprintf(f, "%s\n", texto[i].text);
+		}
+		else{
+			fprintf(f, "\n");
+		}
 		
 		
 		
@@ -498,8 +507,6 @@ int main(int argc, char * const argv[], char* envp[]) {
 	signal(SIGINT, sigintHandler);
 
 
-
-	settings *s;
 	s = malloc(sizeof(settings));
 		if(s == NULL)
 			printf("Erro na alocação memoria para struct 'Settings' \n");
