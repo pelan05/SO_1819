@@ -499,7 +499,7 @@ void saveInFile(char *arg, settings *s){
 		
 		
 		
-		fclose(f);
+	fclose(f);
 }
 
 
