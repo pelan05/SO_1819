@@ -82,7 +82,7 @@ typedef struct linha{
 	//correta ou nao
 	int isCorrect;
 	//texto
-	char text[MEDIT_MAXCOLUMNS];
+	char *text;
 }singleLine;
 
 //---------------------------------------------------------------------------

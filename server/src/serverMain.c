@@ -2,8 +2,9 @@
 
 int usersLogged = 0;
 char pathSigint[20] = {""};
+singleLine *texto;
 
-user users[MEDIT_MAXUSERS];//TODO: corrigir isto -vasco
+user *users; //TODO: corrigir isto -vasco
 /*
 void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
 		strcpy(texto->linha1, "Esta linha tem quarenta caracteres e pronto  ");
@@ -509,6 +510,8 @@ int main(int argc, char * const argv[], char* envp[]) {
 			printf("Erro na alocação memória para struct 'textoCompleto' \n");
 	*/
 	initSettings(s, argc, argv, envp);
+
+	users = malloc(s->maxUsers * sizeof(user));
 	
 	sprintf(pathSigint, s->mainPipe);//path do fifo na var. global
 	/*

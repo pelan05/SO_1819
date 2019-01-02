@@ -38,7 +38,7 @@ typedef struct user {
 
 
 typedef struct linha{
-	char linha[MEDIT_MAXCOLUMNS];
+	char *linha;
 	int numLinha;
 }singleLinha;
 
