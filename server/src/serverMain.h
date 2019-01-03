@@ -72,6 +72,7 @@ typedef struct pedido{
 typedef struct user {
 	char nome[TAMBUFFER];
 	int pid;
+	//char* pipeID;
 }user;
 
 typedef struct linha{
@@ -97,5 +98,6 @@ int aspell(singleLine line);
 void saveInFile(char *arg, settings *s);
 void printText();
 void freeLine(int val);
+void listUsers();
 
 #endif
