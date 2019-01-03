@@ -261,10 +261,12 @@ int main(int argc, char * const argv[]) {
 
 	if(mkfifo(pathClient, 0777) != 0)
 		fprintf(stderr, "[ERROR] FIFO couldn't be created !!\n");
-
+/*
 	fdCli = open(pathClient, O_RDONLY);
 
 	sprintf(pathSigint, pathClient);//path do fifo na var. global
+
+	/*
 
 	sleep(3);
 	
@@ -278,7 +280,7 @@ int main(int argc, char * const argv[]) {
 
 	printf("\n%s\n", s.database);
 	printf("%s\n", s.mainPipe);
-
+	*/
 
 
 

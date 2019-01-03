@@ -31,9 +31,7 @@ void sigintHandler(int sig_num){
 	printf("\nA encerrar tudo...\n");
 	int i;
 	for(i = 0; i< s->maxUsers; i++)
-		//if(users[i] != -1)//TODO: get this to work //(if not null)
 		kill(users[i].pid , SIGINT);
-	
 	
 	unlink(pathSigint);
 	fflush(stdout);

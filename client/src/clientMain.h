@@ -11,7 +11,7 @@
 #define MEDIT_MAXLINES 15
 #define MEDIT_MAXCOLUMNS 45
 
-#define FIFO_CLI "pipe_%d"
+#define FIFO_CLI "pipe_"
 
 #include <stdio.h>
 #include <stdlib.h>
