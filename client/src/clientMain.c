@@ -13,7 +13,7 @@ int verificaServidor(char * path){
 
 void sigintHandler(int sig_num){
 	signal(SIGINT, sigintHandler);
-	printf("A encerrar tudo..");
+	printf("\nA encerrar tudo...\n");
 
 	unlink(pathSigint);
 	fflush(stdout);
@@ -271,6 +271,8 @@ int main(int argc, char * const argv[]) {
 	rw = read(fdCli, &s, sizeof(settings));
 		if(rw == 0)
 			printf("\nNada lido no fifo do cliente\n");
+
+	printf("%s", s.database);
 
 /*
 
