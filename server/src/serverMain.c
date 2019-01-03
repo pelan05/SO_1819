@@ -28,9 +28,9 @@ void inicializarTexto(textoCompleto *texto){//TODO: alterar frases!!!
 void sigintHandler(int sig_num){
 	//o valor de sig_num = 2A -tested
 	signal(SIGINT, sigintHandler);
-	printf("A encerrar tudo..");
+	printf("\nA encerrar tudo...\n");
 	int i;
-	for(i = 0; i< MEDIT_MAXUSERS/*s->maxUsers*/; i++)
+	for(i = 0; i< s->maxUsers; i++)
 		//if(users[i] != -1)//TODO: get this to work //(if not null)
 		kill(users[i].pid , SIGINT);
 	
