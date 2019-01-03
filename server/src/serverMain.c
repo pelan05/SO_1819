@@ -85,6 +85,10 @@ void* commandsThread(void* args){
 		cmd = strtok(input, " "); //TODO: Corrigir, só aceita comandos de uma palavra caso tenha espaço no fim.
 		arg = strtok(NULL, " ");
 
+		if(arg == NULL)
+			cmd[strlen(cmd)-1] = '\0';
+
+
 		n = 0;
 
 		while (cmd[n]) {
@@ -230,6 +234,19 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 
 
 	do{
+		//todo HERE
+		//kill(pid, 0);
+		for(i = 0; i < MEDIT_MAXUSERS; i++){
+			if(users[i].pid != NULL){				//se user está no array
+				if(kill(users[i].pid, 0) != 0){		//se user não está ativo (==0 é ativo)
+					strcpy(users[i].nome, "");
+					users[i].pid = NULL;
+				}
+			}
+		}
+
+
+
 		pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
 
 
@@ -541,9 +558,10 @@ void freeLine(int val){
 
 void listUsers(){
 	int i;
-	printf("Gonna print all the users!!\n");
-	for(i = 0; i < (sizeof(users) / sizeof(user)); i++){
-		printf("User %d: %s\n", i+1, users[i].nome);
+	printf("Printing Active Users: \n");
+	for(i = 0; i < MEDIT_MAXUSERS; i++){
+		if(users[i].pid != NULL)
+		printf("User %d: \t Name: %s\t Pipe: pipe_%d\n", i+1, users[i].nome, users[i].pid);
 	}
 
 	
