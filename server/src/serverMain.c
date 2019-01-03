@@ -71,7 +71,7 @@ int findUser(char * username, settings *s) {
 
 void* commandsThread(void* args){
 
-		
+		do{
 		settings *s = (settings *) args;
 		
 
@@ -145,7 +145,7 @@ void* commandsThread(void* args){
 			exit(EXIT_SUCCESS);//'0'
 		}
 
-		if (strcmp("help", cmd) == 0) {
+		if (!strcmp("help", cmd)) {
 			printf("\nYou've selected 'help':\n");
 			printf("'settings' will display the current system settings.\n");
 			printf("'load <filename>' will load the content of <filename>.\n");
@@ -162,7 +162,7 @@ void* commandsThread(void* args){
 
 		return s; //isto cala o warning de nao haver return (void *);
 
-
+		}while(1);
 
 }
 
@@ -546,6 +546,10 @@ int main(int argc, char * const argv[], char* envp[]) {
 	for(j = 0; j < s->max_l; j++)
 		texto[j].text = malloc(s->max_c * sizeof(char));
 	
+	for(j = 0; j < s->max_l; j++)
+		strcpy(texto[j].text, "Esta linha tem quarenta caracteres e pronto  ");
+
+
 	sprintf(pathSigint, s->mainPipe);//path do fifo na var. global
 	/*
 	inicializarTexto(texto);
