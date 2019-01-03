@@ -242,7 +242,7 @@ int main(int argc, char * const argv[]) {
 	do{
 
 		if(logged == 0){
-		printf("Erro a logar no servidor, username incorreto.");
+		printf("Erro a logar no servidor, username incorreto ou maximo de users atingido!");
 		exit(1);
 		}
 
