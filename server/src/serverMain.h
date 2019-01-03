@@ -19,7 +19,7 @@
 #define MEDIT_DEFAULT_NAME "medit.db"
 #define MEDIT_MAIN_PIPE_DEFAULT_NAME "serverPipe"
 
-#define FIFO_CLI "pipe_%d"
+#define FIFO_CLI "pipe_"
 
 #include <stdio.h>
 #include <stdlib.h>

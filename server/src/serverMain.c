@@ -111,16 +111,16 @@ void* commandsThread(void* args){
 		} else
 
 		if (!strcmp("load", cmd)) {
-			printf("\nYou've select 'load'.\n");
+			printf("\nYou've selected 'load'.\n");
 		} else
 
 		if (!strcmp("save", cmd)) {
-			printf("\nYou've select 'save'.\n");
+			printf("\nYou've selected 'save'.\n");
 			saveInFile(arg, s);
 		} else
 
 		if (!strcmp("free", cmd)) {
-			printf("\nYou've select 'free'.\n");
+			printf("\nYou've selected 'free'.\n");
 			int lineVal = atoi(arg);	//retorna 0 caso seja inválido
 			if(lineVal <= s->max_l)
 				freeLine(lineVal);		//se passar 1 apaga a primeira linha, etc
@@ -133,12 +133,12 @@ void* commandsThread(void* args){
 		} else
 
 		if (!strcmp("users", cmd)) {
-			printf("\nYou've select 'users'.\n");
+			printf("\nYou've selected 'users'.\n");
 			listUsers();
 		} else
 
 		if (!strcmp("text", cmd)) {
-			printf("\nYou've select 'text'.\n");
+			printf("\nYou've selected 'text'.\n");
 			printText();
 
 
@@ -151,9 +151,9 @@ void* commandsThread(void* args){
 
 		if (!strcmp("aspell", cmd)) {
 			if (aspell(arg) == 1)
-				printf("\nNice\n");
+				printf("\nCorrect!\n");
 			else
-				printf("\nNot nice\n");
+				printf("\nIncorrect\n");
 		} else
 
 		if (!strcmp("help", cmd)) {
@@ -556,10 +556,15 @@ void freeLine(int val){
 
 void listUsers(){
 	int i;
-	printf("Printing Active Users: \n");
-	for(i = 0; i < MEDIT_MAXUSERS; i++){
-		if(users[i].pid != NULL)
-		printf("User %d: \t Name: %s\t Pipe: pipe_%d\n", i+1, users[i].nome, users[i].pid);
+
+	if(usersLogged == 0){
+		printf("There are no active users.");
+	}else{
+		printf("Printing Active Users: \n");
+		for(i = 0; i < MEDIT_MAXUSERS; i++){
+			if(users[i].pid != NULL)
+			printf("User %d: \t Name: %s\t Pipe: pipe_%d\n", i+1, users[i].nome, users[i].pid);
+		}
 	}
 
 	

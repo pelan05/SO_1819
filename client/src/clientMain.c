@@ -266,7 +266,7 @@ int main(int argc, char * const argv[]) {
 
 	sprintf(pathSigint, pathClient);//path do fifo na var. global
 
-	sleep(2);
+	sleep(3);
 	
 	rw = read(fdCli, &s, sizeof(settings));
 		if(rw == 0)
@@ -274,11 +274,11 @@ int main(int argc, char * const argv[]) {
 
 	printf("%s", s.database);
 
-/*
+
 
 	printf("\n%s\n", s.database);
 	printf("%s\n", s.mainPipe);
-*/
+
 
 
 
