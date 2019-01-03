@@ -212,13 +212,18 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 			fprintf(stderr, "[ERROR] Can't read pipe %s!\n", s->mainPipe);
 
 
-		pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
+//		pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
 
 
 
 
 
 	do{
+		pthread_create(&threadCommands, NULL, commandsThread, (void *) s);
+
+
+
+
 		logged = 0;//logged volta a 0
 		FD_ZERO(&fontes);
 		FD_SET(0, &fontes);	//teclado
@@ -318,7 +323,7 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 	}while(1);
 
 
-	pthread_join(threadCommands, NULL);
+	//pthread_join(threadCommands, NULL);
 
 		
 
