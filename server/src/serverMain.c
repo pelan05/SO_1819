@@ -82,7 +82,7 @@ void* commandsThread(void* args){
 
 		fgets(input, CMDSIZE, stdin);
 
-		cmd = strtok(input, " "); //TODO: Corrigir, só aceita comandos de uma palavra caso tenha espaço no fim.
+		cmd = strtok(input, " "); 
 		arg = strtok(NULL, " ");
 
 		if(arg == NULL)
@@ -146,8 +146,7 @@ void* commandsThread(void* args){
 
 		if (!strcmp("shutdown", cmd)) {
 			printf("\nShutting down.");
-			unlink(s->mainPipe);
-			exit(EXIT_SUCCESS);//'0'
+			kill(getpid(), SIGINT);
 		} else
 
 		if (!strcmp("aspell", cmd)) {
@@ -180,7 +179,7 @@ void* commandsThread(void* args){
 		}
 	
 
-		// not inside a circle, that's why it won't accept more than one command, I guess
+		
 
 		return s; //isto cala o warning de nao haver return (void *);
 
@@ -248,6 +247,7 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 				if(kill(users[i].pid, 0) != 0){		//se user não está ativo (==0 é ativo)
 					strcpy(users[i].nome, "");
 					users[i].pid = NULL;
+					usersLogged--;
 				}
 			}
 		}
@@ -285,10 +285,13 @@ void server(settings * s/*, textoCompleto * textoServidor*/) {
 
 			if(r == 12){//user logged in
 
-				printf("\tBytes: %d\tUSER: %s \tPID: %d\n",r, novo.nome, novo.pid);
 
-				if(findUser(novo.nome, s)){
+				if(findUser(novo.nome, s) && usersLogged < 3){
 
+
+					printf("\tBytes: %d\tUSER: %s \tPID: %d\n",r, novo.nome, novo.pid);
+					usersLogged++;
+					
 					logged = 1; //se login com sucesso, var logged fica a 1
 					pos_c = -1; //posiçao cliente
 					pos_l = -1; //posição livre
