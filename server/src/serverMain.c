@@ -104,16 +104,16 @@ void* commandsThread(void* args){
 			printf("Maximum amount of columns: %d\n", s->max_c);
 			printf("Name of the database: %s\n", s->database);
 			printf("Name of the server pipe: %s\n", s->mainPipe);
-		}
+		} else
 
 		if (!strcmp("load", cmd)) {
 			printf("\nYou've select 'load'.\n");
-		}
+		} else
 
 		if (!strcmp("save", cmd)) {
 			printf("\nYou've select 'save'.\n");
 			saveInFile(arg, s);
-		}
+		} else
 
 		if (!strcmp("free", cmd)) {
 			printf("\nYou've select 'free'.\n");
@@ -122,31 +122,42 @@ void* commandsThread(void* args){
 				freeLine(lineVal);		//se passar 1 apaga a primeira linha, etc
 			else
 				printf("\nInvalid argument for 'free'!\n");
-		}
+		} else
 
 		if (!strcmp("statistics", cmd)) {
 			printf("\nYou've selected 'statistics'.\n");
-		}
+		} else
 
 		if (!strcmp("users", cmd)) {
 			printf("\nYou've select 'users'.\n");
-		}
+			listUsers();
+		} else
 
 		if (!strcmp("text", cmd)) {
 			printf("\nYou've select 'text'.\n");
 			printText();
 
 
-		}
+		} else
 
 		if (!strcmp("shutdown", cmd)) {
 			printf("\nShutting down.");
 			unlink(s->mainPipe);
 			exit(EXIT_SUCCESS);//'0'
-		}
+		} else
 
 		if (!strcmp("help", cmd)) {
-			printf("\nYou've selected 'help':\n");
+			printf("You've selected 'help':\n");
+			printf("'settings' will display the current system settings.\n");
+			printf("'load <filename>' will load the content of <filename>.\n");
+			printf("'save <filename>' will save what's being editted in <filename>.\n");
+			printf("'free <linenumber>' erase contents of <linenumber>.\n");
+			printf("'statistics' will display some statistics by the second whilst waiting for another command.\n");
+			printf("'users' will a list of what users are logged in, by order of arrival.\n");
+			printf("'text' will the current text on client side.\n");
+			printf("'shutdown' will quit without saving.\n");
+		} else{
+			printf("INVALID COMMAND!\n");
 			printf("'settings' will display the current system settings.\n");
 			printf("'load <filename>' will load the content of <filename>.\n");
 			printf("'save <filename>' will save what's being editted in <filename>.\n");
@@ -526,6 +537,16 @@ void freeLine(int val){
 			for(j=0; j< s->max_c; j++)
 				texto[i].text[j] = 0; 
 	}
+}
+
+void listUsers(){
+	int i;
+	printf("Gonna print all the users!!\n");
+	for(i = 0; i < (sizeof(users) / sizeof(user)); i++){
+		printf("User %d: %s\n", i+1, users[i].nome);
+	}
+
+	
 }
 
 int main(int argc, char * const argv[], char* envp[]) {

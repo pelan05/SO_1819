@@ -3,7 +3,7 @@
 
 char pathSigint[20] = {""};
 
-int verificaServidor(char * path){
+int verificaServidor(char * path){ 
 
 	if(!access( path , F_OK ) == 0){
         printf("\n \nServidor não foi executado! \n");
