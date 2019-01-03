@@ -150,6 +150,13 @@ void* commandsThread(void* args){
 			exit(EXIT_SUCCESS);//'0'
 		} else
 
+		if (!strcmp("aspell", cmd)) {
+			if (aspell(arg) == 1)
+				printf("\nNice\n");
+			else
+				printf("\nNot nice\n");
+		} else
+
 		if (!strcmp("help", cmd)) {
 			printf("You've selected 'help':\n");
 			printf("'settings' will display the current system settings.\n");
@@ -432,37 +439,27 @@ void initSettings(settings * s, int argc, char * const argv[], char* envp[]) {
 
 }
 
-int aspell(singleLine line){
+int aspell(char *word){
 	
-	char delim [] = " "; // para usar num strtok para separar palavras
-
 	int fdfork1[2];
     int fdfork2[2];
     int forkSpell;
     char respostaDoFilho[100];
     char ret;
-	char aux[MEDIT_MAXCOLUMNS]; // isto tem de ser com o valor de max columns das settings
+	char aux[MEDIT_MAXCOLUMNS/*s->max_c*/]; // isto tem de ser com o valor de max columns das settings
 
     long unsigned i;
-	//remove this-----------start
-    PEDIDO p;
-
-    printf("Texto: "); fflush(stdout);
-    scanf("%s", p.texto);
-
-    printf("\nHere it is: %s\n", p.texto);
-	//remove this...............end
 
 	//TODO usar o que está abaixo efetivamente dentro do esquema de aspell
-
-	strcpy(aux, line.text);
+/*
+	strcpy(aux, word);
 
 	char *ptr = strtok(aux, delim);	//separa a primeira palavra
 
 	while (ptr != NULL){			//separa as restantes palavras
 		ptr = strtok(NULL, delim);
 	}
-
+*/
 	//		words separating ends here
 
     if(pipe(fdfork1) == -1)
@@ -479,25 +476,22 @@ int aspell(singleLine line){
     else if(forkSpell > 0){	// pai
         
 		close(fdfork1[0]);
-        printf("%s", p.texto);
-		write(fdfork1[1], p.texto, sizeof(p.texto));
+        printf("%s", word);
+		write(fdfork1[1], word, sizeof(word));
 		close(fdfork1[1]);
-		wait(NULL); // espera pelo filho
+		wait(NULL); // espera pelo filho 
         close(fdfork2[1]);
         strcpy(respostaDoFilho, " ");
         read(fdfork2[0], respostaDoFilho, sizeof(respostaDoFilho));
-        for (i = 0; i < sizeof(respostaDoFilho); i++){
-            if(respostaDoFilho[i] == '*'){
-                printf("\nNice!!");
-				line.isCorrect = 1;//set true
-				return 1;
-			}else if(respostaDoFilho[i] == '&'){
-                  	printf("\nPalavra errada!!");
-					line.isCorrect = 0;//set false
-					return 0;
-					}	
-        }
-            }
+			for(i = 0; i < sizeof(respostaDoFilho); i++)
+				if(respostaDoFilho[i] == '*'){
+					//printf("\nNice!!");
+					return 1;
+				}else if(respostaDoFilho[i] == '&'){
+						//printf("\nPalavra errada!!");
+						return 0;
+						}
+	}	
 		else{		// filho
 		    close(fdfork1[1]);
 		    dup2(fdfork1[0], STDIN_FILENO);
@@ -507,10 +501,11 @@ int aspell(singleLine line){
 			close(fdfork2[1]);
 			execlp("aspell", "aspell", "-a", NULL);
             }
-
 }
 
-void saveInFile(char *arg, settings *s){
+void saveInFile(char *arg, settings *s)
+{
+
 	int i;
 	
 	FILE *f = fopen(arg, "w");
@@ -522,12 +517,12 @@ void saveInFile(char *arg, settings *s){
 	for(i = 0; i < s->max_l; i++)
 		//TODO: Checkar a linha com o aspell e só guardar no ficheiro se der bem (needs testing only)
 
-		if(aspell(texto[i])==1){
+		/*if(aspell(texto[i])==1){
 			fprintf(f, "%s\n", texto[i].text);
 		}
 		else{
 			fprintf(f, "\n");
-		}
+		}*/
 		
 		
 		
